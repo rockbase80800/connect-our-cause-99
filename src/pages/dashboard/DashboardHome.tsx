@@ -33,7 +33,7 @@ export default function DashboardHome() {
   const roleBadge = primaryRole.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
-    <div className="space-y-8">
+    <PageWrapper><div className="space-y-8">
       <div>
         <h1 className="text-display text-2xl md:text-3xl text-foreground mb-1">
           Welcome back, {profile?.name || "User"}
