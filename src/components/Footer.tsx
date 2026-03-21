@@ -14,6 +14,7 @@ export function Footer() {
     <footer id="contact" className="bg-primary py-16 section-padding">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-3 gap-12">
+          {/* Column 1: About */}
           <div>
             <div className="flex items-center gap-2 mb-4">
               {logoUrl ? (
@@ -30,18 +31,20 @@ export function Footer() {
             </p>
           </div>
 
+          {/* Column 2: Quick Links */}
           <div>
             <h4 className="font-semibold text-primary-foreground mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-primary-foreground/70">
+            <ul className="space-y-3 text-sm text-primary-foreground/70">
               <li><a href="#projects" className="hover:text-primary-foreground transition-colors">Our Projects</a></li>
               <li><a href="#about" className="hover:text-primary-foreground transition-colors">About Us</a></li>
               <li><a href="/auth" className="hover:text-primary-foreground transition-colors">Join as Volunteer</a></li>
             </ul>
           </div>
 
+          {/* Column 3: Contact */}
           <div>
             <h4 className="font-semibold text-primary-foreground mb-4">Contact</h4>
-            <ul className="space-y-2 text-sm text-primary-foreground/70">
+            <ul className="space-y-3 text-sm text-primary-foreground/70">
               {contact.split("\n").map((line: string, i: number) => (
                 <li key={i}>{line}</li>
               ))}
