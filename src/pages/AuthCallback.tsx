@@ -23,7 +23,7 @@ export default function AuthCallback() {
         return;
       }
 
-      // Find referrer
+      // Find referrer and prevent self-referral
       const { data: referrer } = await supabase
         .from("profiles")
         .select("id")
@@ -31,10 +31,19 @@ export default function AuthCallback() {
         .single();
 
       if (referrer && referrer.id !== user.id) {
-        await supabase
+        // Only set if not already referred
+        const { data: currentProfile } = await supabase
           .from("profiles")
-          .update({ referred_by: referrer.id })
-          .eq("id", user.id);
+          .select("referred_by")
+          .eq("id", user.id)
+          .single();
+
+        if (currentProfile && !currentProfile.referred_by) {
+          await supabase
+            .from("profiles")
+            .update({ referred_by: referrer.id })
+            .eq("id", user.id);
+        }
       }
 
       navigate("/dashboard", { replace: true });

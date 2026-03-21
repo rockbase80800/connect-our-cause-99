@@ -135,6 +135,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           block: string | null
           created_at: string
           district: string | null
@@ -149,6 +150,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          address?: string | null
           block?: string | null
           created_at?: string
           district?: string | null
@@ -163,6 +165,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          address?: string | null
           block?: string | null
           created_at?: string
           district?: string | null
