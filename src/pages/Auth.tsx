@@ -60,12 +60,8 @@ const Auth = () => {
 
         // Validate referral code if provided
         if (finalRefCode) {
-          const { data: referrer } = await supabase
-            .from("profiles")
-            .select("id")
-            .eq("referral_code", finalRefCode)
-            .single();
-          if (!referrer) {
+          const { data: referrerRows } = await supabase.rpc("lookup_referral_code", { _code: finalRefCode });
+          if (!referrerRows || referrerRows.length === 0) {
             toast.error("Invalid referral code");
             setSubmitting(false);
             return;
