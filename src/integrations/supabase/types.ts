@@ -308,6 +308,13 @@ export type Database = {
         }
         Returns: boolean
       }
+      lookup_referral_code: {
+        Args: { _code: string }
+        Returns: {
+          referrer_id: string
+          referrer_name: string
+        }[]
+      }
     }
     Enums: {
       app_role:

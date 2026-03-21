@@ -39,12 +39,8 @@ const Auth = () => {
       return;
     }
     const timeout = setTimeout(async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("name")
-        .eq("referral_code", code)
-        .single();
-      setReferrerName(data?.name ?? null);
+      const { data } = await supabase.rpc("lookup_referral_code", { _code: code });
+      setReferrerName(data && data.length > 0 ? data[0].referrer_name : null);
     }, 400);
     return () => clearTimeout(timeout);
   }, [referralCode]);
@@ -64,12 +60,8 @@ const Auth = () => {
 
         // Validate referral code if provided
         if (finalRefCode) {
-          const { data: referrer } = await supabase
-            .from("profiles")
-            .select("id")
-            .eq("referral_code", finalRefCode)
-            .single();
-          if (!referrer) {
+          const { data: referrerRows } = await supabase.rpc("lookup_referral_code", { _code: finalRefCode });
+          if (!referrerRows || referrerRows.length === 0) {
             toast.error("Invalid referral code");
             setSubmitting(false);
             return;
