@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,9 +25,10 @@ interface FormField {
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [project, setProject] = useState<any>(null);
   const [fields, setFields] = useState<FormField[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -35,18 +37,15 @@ export default function ProjectDetail() {
 
   useEffect(() => {
     if (!id) return;
-
     const fetchData = async () => {
-      const [{ data: proj }, { data: schema }] = await Promise.all([
+      const [{ data: proj }, { data: schema }, { data: imgs }] = await Promise.all([
         supabase.from("projects").select("*").eq("id", id).single(),
         supabase.from("form_schemas").select("fields").eq("project_id", id).single(),
+        supabase.from("project_images").select("image_url").eq("project_id", id).order("created_at"),
       ]);
-
       setProject(proj);
-      if (schema?.fields) {
-        setFields(schema.fields as unknown as FormField[]);
-      }
-
+      if (schema?.fields) setFields(schema.fields as unknown as FormField[]);
+      setImages((imgs ?? []).map((i: any) => i.image_url));
       if (user) {
         const { count } = await supabase
           .from("applications")
@@ -55,31 +54,32 @@ export default function ProjectDetail() {
           .eq("project_id", id);
         if (count && count > 0) setAlreadyApplied(true);
       }
-
       setLoading(false);
     };
-
     fetchData();
   }, [id, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !id) {
-      toast.error("Please sign in to apply");
-      return;
-    }
+    if (!user || !id) { toast.error("Please sign in to apply"); return; }
     setSubmitting(true);
+
+    // Save as lead too
+    await supabase.from("leads").insert({
+      name: profile?.name || formData["full_name"] || null,
+      email: profile?.email || formData["email"] || null,
+      phone: profile?.phone || formData["phone"] || null,
+      project_id: id,
+      form_data: formData,
+    });
+
     const { error } = await supabase.from("applications").insert({
       user_id: user.id,
       project_id: id,
       form_data: formData,
     });
-    if (error) {
-      toast.error(error.message);
-    } else {
-      setSubmitted(true);
-      toast.success("Application submitted!");
-    }
+    if (error) { toast.error(error.message); }
+    else { setSubmitted(true); toast.success("Application submitted!"); }
     setSubmitting(false);
   };
 
@@ -104,9 +104,7 @@ export default function ProjectDetail() {
         <Navbar />
         <div className="flex flex-col items-center justify-center min-h-screen gap-4">
           <p className="text-muted-foreground">Project not found</p>
-          <Link to="/">
-            <Button variant="outline">Go Home</Button>
-          </Link>
+          <Link to="/"><Button variant="outline">Go Home</Button></Link>
         </div>
       </div>
     );
@@ -116,7 +114,7 @@ export default function ProjectDetail() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Banner */}
+      {/* 1. Banner */}
       {project.image_url && (
         <div className="relative h-64 md:h-80 mt-16">
           <img src={project.image_url} alt={project.title} className="w-full h-full object-cover" />
@@ -130,6 +128,7 @@ export default function ProjectDetail() {
       )}
 
       <div className="max-w-4xl mx-auto px-6 py-12">
+        {/* 2. Title (if no banner) */}
         {!project.image_url && (
           <>
             <Link to="/" className="text-sm text-muted-foreground hover:text-foreground mb-6 inline-flex items-center gap-1">
@@ -139,16 +138,30 @@ export default function ProjectDetail() {
           </>
         )}
 
+        {/* 3. About section */}
         <p className="text-muted-foreground text-lg leading-relaxed mb-4">{project.description}</p>
-
         {project.about && (
-          <div className="prose prose-sm max-w-none text-foreground mb-12">
+          <div className="prose prose-sm max-w-none text-foreground mb-8">
             <h2 className="text-display text-xl text-foreground mb-3">About This Project</h2>
             <p className="text-muted-foreground leading-relaxed">{project.about}</p>
           </div>
         )}
 
-        {/* Application Form */}
+        {/* 4. Gallery */}
+        {images.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-display text-xl text-foreground mb-4">Gallery</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {images.map((url, i) => (
+                <div key={i} className="rounded-xl overflow-hidden aspect-[4/3]">
+                  <img src={url} alt="" className="w-full h-full object-cover" loading="lazy" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 5. Application Form (LAST) */}
         {submitted || alreadyApplied ? (
           <Card className="border-success/30">
             <CardContent className="py-8 text-center">
@@ -158,8 +171,8 @@ export default function ProjectDetail() {
               </h3>
               <p className="text-muted-foreground text-sm">
                 {alreadyApplied && !submitted
-                  ? "You have already applied to this project. Check your dashboard for status updates."
-                  : "Your application is now under review. We'll notify you of the outcome."}
+                  ? "You have already applied to this project."
+                  : "Your application is now under review."}
               </p>
               <Link to="/dashboard/applications" className="mt-4 inline-block">
                 <Button variant="outline" size="sm">View My Applications</Button>
@@ -168,16 +181,12 @@ export default function ProjectDetail() {
           </Card>
         ) : fields.length > 0 ? (
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Apply Now</CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle className="text-lg">Apply Now</CardTitle></CardHeader>
             <CardContent>
               {!user ? (
                 <div className="text-center py-6">
                   <p className="text-muted-foreground mb-4">Sign in to apply for this project</p>
-                  <Link to={`/auth?redirect=/project/${id}`}>
-                    <Button>Sign In</Button>
-                  </Link>
+                  <Link to={`/auth?redirect=/project/${id}`}><Button>Sign In</Button></Link>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -188,46 +197,19 @@ export default function ProjectDetail() {
                         {field.required && <span className="text-destructive ml-1">*</span>}
                       </Label>
                       {field.type === "textarea" ? (
-                        <Textarea
-                          id={field.name}
-                          placeholder={field.placeholder}
-                          required={field.required}
-                          value={formData[field.name] || ""}
-                          onChange={(e) => updateField(field.name, e.target.value)}
-                        />
+                        <Textarea id={field.name} placeholder={field.placeholder} required={field.required} value={formData[field.name] || ""} onChange={(e) => updateField(field.name, e.target.value)} />
                       ) : field.type === "select" ? (
-                        <Select
-                          value={formData[field.name] || ""}
-                          onValueChange={(v) => updateField(field.name, v)}
-                          required={field.required}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder={field.placeholder || "Select..."} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {field.options?.map((opt) => (
-                              <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-                            ))}
-                          </SelectContent>
+                        <Select value={formData[field.name] || ""} onValueChange={(v) => updateField(field.name, v)} required={field.required}>
+                          <SelectTrigger><SelectValue placeholder={field.placeholder || "Select..."} /></SelectTrigger>
+                          <SelectContent>{field.options?.map((opt) => (<SelectItem key={opt} value={opt}>{opt}</SelectItem>))}</SelectContent>
                         </Select>
                       ) : field.type === "checkbox" ? (
                         <div className="flex items-center gap-2 mt-1">
-                          <Checkbox
-                            id={field.name}
-                            checked={formData[field.name] || false}
-                            onCheckedChange={(v) => updateField(field.name, v)}
-                          />
+                          <Checkbox id={field.name} checked={formData[field.name] || false} onCheckedChange={(v) => updateField(field.name, v)} />
                           <label htmlFor={field.name} className="text-sm">{field.placeholder}</label>
                         </div>
                       ) : (
-                        <Input
-                          id={field.name}
-                          type={field.type}
-                          placeholder={field.placeholder}
-                          required={field.required}
-                          value={formData[field.name] || ""}
-                          onChange={(e) => updateField(field.name, e.target.value)}
-                        />
+                        <Input id={field.name} type={field.type} placeholder={field.placeholder} required={field.required} value={formData[field.name] || ""} onChange={(e) => updateField(field.name, e.target.value)} />
                       )}
                     </div>
                   ))}
@@ -246,6 +228,8 @@ export default function ProjectDetail() {
           </Card>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 }

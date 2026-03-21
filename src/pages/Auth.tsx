@@ -39,7 +39,7 @@ const Auth = () => {
       return;
     }
     const timeout = setTimeout(async () => {
-      const { data } = await supabase.rpc("lookup_referral_code", { _code: code });
+      const { data } = await supabase.rpc("lookup_referral_code", { _code: code.toUpperCase() });
       setReferrerName(data && data.length > 0 ? data[0].referrer_name : null);
     }, 400);
     return () => clearTimeout(timeout);
@@ -56,7 +56,7 @@ const Auth = () => {
     try {
       if (isSignUp) {
         // Determine referral code: input field takes priority over URL param
-        const finalRefCode = referralCode.trim() || searchParams.get("ref") || "";
+        const finalRefCode = (referralCode.trim() || searchParams.get("ref") || "").toUpperCase().trim();
 
         // Validate referral code if provided
         if (finalRefCode) {
@@ -81,7 +81,7 @@ const Auth = () => {
           },
         });
         if (error) throw error;
-        toast.success("Check your email to confirm your account!");
+        toast.success("Account created! You can now sign in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,

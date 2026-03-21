@@ -8,6 +8,9 @@ import {
   UserCheck,
   Settings,
   Image,
+  Home,
+  ImageIcon,
+  Contact,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -55,6 +58,27 @@ const menuItems: MenuItem[] = [
     description: "Create and manage dashboard banners",
     icon: Image,
     path: "/dashboard/admin/banners",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Homepage Settings",
+    description: "Edit hero, about, and homepage content",
+    icon: Home,
+    path: "/dashboard/admin/homepage",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Photo Gallery",
+    description: "Manage the public photo gallery",
+    icon: ImageIcon,
+    path: "/dashboard/admin/gallery",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Leads",
+    description: "View all form submissions",
+    icon: Contact,
+    path: "/dashboard/admin/leads",
     minRole: ["super_admin"],
   },
   {
