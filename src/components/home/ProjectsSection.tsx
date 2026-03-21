@@ -1,11 +1,13 @@
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import projectEducation from "@/assets/project-education.jpg";
 import projectWater from "@/assets/project-water.jpg";
 import projectHealth from "@/assets/project-health.jpg";
 
-const projects = [
+const fallbackProjects = [
   {
     id: "education",
     title: "Rural Education Initiative",
@@ -34,6 +36,29 @@ const projects = [
 
 export function ProjectsSection() {
   const { ref, isVisible } = useScrollReveal(0.15);
+  const [projects, setProjects] = useState(fallbackProjects);
+
+  useEffect(() => {
+    supabase
+      .from("projects")
+      .select("id, title, description, image_url, status")
+      .eq("status", "active")
+      .order("created_at", { ascending: false })
+      .limit(3)
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setProjects(
+            data.map((p: any) => ({
+              id: p.id,
+              title: p.title,
+              description: p.description ?? "",
+              image: p.image_url,
+              status: p.status === "active" ? "Active" : "Inactive",
+            }))
+          );
+        }
+      });
+  }, []);
 
   return (
     <section id="projects" className="py-24 md:py-32 section-padding bg-background">
@@ -66,12 +91,18 @@ export function ProjectsSection() {
               style={{ animationDelay: `${300 + i * 120}ms` }}
             >
               <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-muted flex items-center justify-center">
+                    <span className="text-muted-foreground text-sm">No image</span>
+                  </div>
+                )}
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-3">
