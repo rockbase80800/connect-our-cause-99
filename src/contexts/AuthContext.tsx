@@ -9,6 +9,7 @@ interface Profile {
   name: string | null;
   email: string | null;
   phone: string | null;
+  address: string | null;
   state: string | null;
   district: string | null;
   block: string | null;
