@@ -34,7 +34,7 @@ export default function Profile() {
   if (!profile) return null;
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <PageWrapper><div className="space-y-6 max-w-2xl">
       <h1 className="text-display text-2xl text-foreground">My Profile</h1>
 
       <Card>
