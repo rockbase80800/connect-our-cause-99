@@ -73,13 +73,10 @@ export default function AssignRoles() {
       await supabase.from("profiles").update(profileUpdate).eq("id", selectedUser.id);
     }
 
-    // Upsert role
+    // Insert role (ignore if already exists)
     const { error } = await supabase
       .from("user_roles")
-      .upsert(
-        { user_id: selectedUser.id, role: selectedRole },
-        { onConflict: "user_id,role" }
-      );
+      .insert({ user_id: selectedUser.id, role: selectedRole as any });
 
     if (error) toast.error(error.message);
     else {
