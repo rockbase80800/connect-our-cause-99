@@ -10,8 +10,10 @@ import {
   Share2,
   LogOut,
   Heart,
+  Settings,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {

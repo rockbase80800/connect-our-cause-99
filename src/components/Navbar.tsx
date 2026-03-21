@@ -2,17 +2,26 @@ import { Link } from "react-router-dom";
 import { Heart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { settings } = useWebsiteSettings();
+
+  const siteName = settings?.site_name || "JanSeva";
+  const logoUrl = settings?.logo_url;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/40">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
         <Link to="/" className="flex items-center gap-2">
-          <Heart className="h-7 w-7 text-primary fill-primary/20" />
+          {logoUrl ? (
+            <img src={logoUrl} alt={siteName} className="h-8 w-auto object-contain" />
+          ) : (
+            <Heart className="h-7 w-7 text-primary fill-primary/20" />
+          )}
           <span className="font-display text-xl font-semibold text-foreground">
-            JanSeva
+            {siteName}
           </span>
         </Link>
 
