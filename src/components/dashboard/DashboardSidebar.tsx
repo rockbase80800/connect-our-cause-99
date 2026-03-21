@@ -10,8 +10,10 @@ import {
   Share2,
   LogOut,
   Heart,
+  Settings,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -33,6 +35,9 @@ export function DashboardSidebar() {
   const collapsed = state === "collapsed";
   const location = useLocation();
   const { primaryRole, profile, signOut } = useAuth();
+  const { settings } = useWebsiteSettings();
+  const siteName = settings?.site_name || "JanSeva";
+  const logoUrl = settings?.logo_url;
 
   const mainItems = [
     { title: "Dashboard", url: "/dashboard", icon: Home },
@@ -54,6 +59,7 @@ export function DashboardSidebar() {
       ? [
           { title: "Manage Projects", url: "/dashboard/admin/projects", icon: FolderOpen },
           { title: "Assign Roles", url: "/dashboard/admin/roles", icon: Shield },
+          { title: "Website Settings", url: "/dashboard/admin/settings", icon: Settings },
         ]
       : []),
     ...(primaryRole === "state_admin"
@@ -77,10 +83,14 @@ export function DashboardSidebar() {
       <SidebarContent>
         {/* Brand */}
         <div className="flex items-center gap-2 px-4 py-4 border-b border-sidebar-border">
-          <Heart className="h-6 w-6 text-sidebar-primary shrink-0" />
+          {logoUrl ? (
+            <img src={logoUrl} alt={siteName} className="h-6 w-auto object-contain shrink-0" />
+          ) : (
+            <Heart className="h-6 w-6 text-sidebar-primary shrink-0" />
+          )}
           {!collapsed && (
             <span className="font-display text-lg font-semibold text-sidebar-foreground">
-              JanSeva
+              {siteName}
             </span>
           )}
         </div>

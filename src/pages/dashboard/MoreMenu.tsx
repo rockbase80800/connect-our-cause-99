@@ -6,6 +6,7 @@ import {
   BarChart3,
   MapPin,
   UserCheck,
+  Settings,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -39,6 +40,13 @@ const menuItems: MenuItem[] = [
     description: "Create, edit, and manage projects",
     icon: FolderKanban,
     path: "/dashboard/admin/projects",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Website Settings",
+    description: "Manage branding, logo, and site content",
+    icon: Settings,
+    path: "/dashboard/admin/settings",
     minRole: ["super_admin"],
   },
   {

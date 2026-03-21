@@ -287,6 +287,39 @@ export type Database = {
           },
         ]
       }
+      website_settings: {
+        Row: {
+          description: string | null
+          favicon_url: string | null
+          footer_content: Json | null
+          header_content: Json | null
+          id: string
+          logo_url: string | null
+          site_name: string
+          updated_at: string
+        }
+        Insert: {
+          description?: string | null
+          favicon_url?: string | null
+          footer_content?: Json | null
+          header_content?: Json | null
+          id?: string
+          logo_url?: string | null
+          site_name?: string
+          updated_at?: string
+        }
+        Update: {
+          description?: string | null
+          favicon_url?: string | null
+          footer_content?: Json | null
+          header_content?: Json | null
+          id?: string
+          logo_url?: string | null
+          site_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
