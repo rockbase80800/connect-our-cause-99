@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,7 +48,7 @@ export default function Referrals() {
   if (loading) return <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
 
   return (
-    <div className="space-y-6">
+    <PageWrapper><div className="space-y-6">
       <h1 className="text-display text-2xl text-foreground">My Referrals</h1>
 
       <Card>
@@ -95,6 +96,6 @@ export default function Referrals() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </div></PageWrapper>
   );
 }

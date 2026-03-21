@@ -16,6 +16,7 @@ import MyApplications from "./pages/dashboard/MyApplications";
 import Notifications from "./pages/dashboard/Notifications";
 import Profile from "./pages/dashboard/Profile";
 import Referrals from "./pages/dashboard/Referrals";
+import MoreMenu from "./pages/dashboard/MoreMenu";
 import ManageUsers from "./pages/dashboard/admin/ManageUsers";
 import ManageApplications from "./pages/dashboard/admin/ManageApplications";
 import ManageProjects from "./pages/dashboard/admin/ManageProjects";
@@ -54,6 +55,7 @@ const App = () => (
               <Route path="notifications" element={<Notifications />} />
               <Route path="profile" element={<Profile />} />
               <Route path="referrals" element={<Referrals />} />
+              <Route path="more" element={<MoreMenu />} />
               <Route path="admin/users" element={<ManageUsers />} />
               <Route path="admin/applications" element={<ManageApplications />} />
               <Route path="admin/projects" element={<ManageProjects />} />

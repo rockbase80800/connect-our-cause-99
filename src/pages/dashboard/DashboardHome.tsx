@@ -1,4 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
+import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, FolderOpen, Users, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -32,7 +33,7 @@ export default function DashboardHome() {
   const roleBadge = primaryRole.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
-    <div className="space-y-8">
+    <PageWrapper><div className="space-y-8">
       <div>
         <h1 className="text-display text-2xl md:text-3xl text-foreground mb-1">
           Welcome back, {profile?.name || "User"}
@@ -77,6 +78,6 @@ export default function DashboardHome() {
           </Card>
         </Link>
       </div>
-    </div>
+    </div></PageWrapper>
   );
 }

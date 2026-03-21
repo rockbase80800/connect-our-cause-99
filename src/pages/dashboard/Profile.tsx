@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ export default function Profile() {
   if (!profile) return null;
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <PageWrapper><div className="space-y-6 max-w-2xl">
       <h1 className="text-display text-2xl text-foreground">My Profile</h1>
 
       <Card>
@@ -70,6 +71,6 @@ export default function Profile() {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </div></PageWrapper>
   );
 }

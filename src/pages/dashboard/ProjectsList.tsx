@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -31,7 +32,7 @@ export default function ProjectsList() {
   if (loading) return <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
 
   return (
-    <div className="space-y-6">
+    <PageWrapper><div className="space-y-6">
       <h1 className="text-display text-2xl text-foreground">Active Projects</h1>
       {projects.length === 0 ? (
         <p className="text-muted-foreground">No active projects at the moment.</p>
@@ -57,6 +58,6 @@ export default function ProjectsList() {
           ))}
         </div>
       )}
-    </div>
+    </div></PageWrapper>
   );
 }
