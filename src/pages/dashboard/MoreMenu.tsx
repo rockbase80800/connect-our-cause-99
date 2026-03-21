@@ -43,6 +43,13 @@ const menuItems: MenuItem[] = [
     minRole: ["super_admin"],
   },
   {
+    label: "Website Settings",
+    description: "Manage branding, logo, and site content",
+    icon: Settings,
+    path: "/dashboard/admin/settings",
+    minRole: ["super_admin"],
+  },
+  {
     label: "Assign Roles",
     description: "Assign roles to users across the hierarchy",
     icon: ShieldCheck,
