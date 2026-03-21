@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      about_settings: {
+        Row: {
+          description: string | null
+          description2: string | null
+          eyebrow: string | null
+          id: string
+          image_url: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          description?: string | null
+          description2?: string | null
+          eyebrow?: string | null
+          id?: string
+          image_url?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          description?: string | null
+          description2?: string | null
+          eyebrow?: string | null
+          id?: string
+          image_url?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       applications: {
         Row: {
           created_at: string
@@ -128,6 +158,101 @@ export type Database = {
           },
         ]
       }
+      gallery: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+        }
+        Relationships: []
+      }
+      homepage_settings: {
+        Row: {
+          button_link: string | null
+          button_text: string | null
+          button2_link: string | null
+          button2_text: string | null
+          hero_bg: string | null
+          hero_eyebrow: string | null
+          hero_subtext: string | null
+          hero_title: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          button_link?: string | null
+          button_text?: string | null
+          button2_link?: string | null
+          button2_text?: string | null
+          hero_bg?: string | null
+          hero_eyebrow?: string | null
+          hero_subtext?: string | null
+          hero_title?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          button_link?: string | null
+          button_text?: string | null
+          button2_link?: string | null
+          button2_text?: string | null
+          hero_bg?: string | null
+          hero_eyebrow?: string | null
+          hero_subtext?: string | null
+          hero_title?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          created_at: string
+          email: string | null
+          form_data: Json | null
+          id: string
+          name: string | null
+          phone: string | null
+          project_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          form_data?: Json | null
+          id?: string
+          name?: string | null
+          phone?: string | null
+          project_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          form_data?: Json | null
+          id?: string
+          name?: string | null
+          phone?: string | null
+          project_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string
@@ -212,6 +337,35 @@ export type Database = {
             columns: ["referred_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_images: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          project_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          project_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
