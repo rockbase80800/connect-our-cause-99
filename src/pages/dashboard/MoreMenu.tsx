@@ -61,6 +61,27 @@ const menuItems: MenuItem[] = [
     minRole: ["super_admin"],
   },
   {
+    label: "Homepage Settings",
+    description: "Edit hero, about, and homepage content",
+    icon: Home,
+    path: "/dashboard/admin/homepage",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Photo Gallery",
+    description: "Manage the public photo gallery",
+    icon: ImageIcon,
+    path: "/dashboard/admin/gallery",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Leads",
+    description: "View all form submissions",
+    icon: Contact,
+    path: "/dashboard/admin/leads",
+    minRole: ["super_admin"],
+  },
+  {
     label: "Assign Roles",
     description: "Assign roles to users across the hierarchy",
     icon: ShieldCheck,
