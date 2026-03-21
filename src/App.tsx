@@ -36,40 +36,43 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/project/:id" element={<ProjectDetail />} />
-            
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<DashboardHome />} />
-              <Route path="projects" element={<ProjectsList />} />
-              <Route path="applications" element={<MyApplications />} />
-              <Route path="notifications" element={<Notifications />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="referrals" element={<Referrals />} />
-              <Route path="more" element={<MoreMenu />} />
-              <Route path="admin/users" element={<ManageUsers />} />
-              <Route path="admin/applications" element={<ManageApplications />} />
-              <Route path="admin/projects" element={<ManageProjects />} />
-              <Route path="admin/roles" element={<AssignRoles />} />
-              <Route path="admin/analytics" element={<Analytics />} />
-              <Route path="coordinator/users" element={<CoordinatorUsers />} />
-              <Route path="coordinator/members" element={<CoordinatorMembers />} />
-            </Route>
-            
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
+        <WebsiteSettingsProvider>
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/project/:id" element={<ProjectDetail />} />
+              
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<DashboardHome />} />
+                <Route path="projects" element={<ProjectsList />} />
+                <Route path="applications" element={<MyApplications />} />
+                <Route path="notifications" element={<Notifications />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="referrals" element={<Referrals />} />
+                <Route path="more" element={<MoreMenu />} />
+                <Route path="admin/users" element={<ManageUsers />} />
+                <Route path="admin/applications" element={<ManageApplications />} />
+                <Route path="admin/projects" element={<ManageProjects />} />
+                <Route path="admin/roles" element={<AssignRoles />} />
+                <Route path="admin/analytics" element={<Analytics />} />
+                <Route path="admin/settings" element={<WebsiteSettings />} />
+                <Route path="coordinator/users" element={<CoordinatorUsers />} />
+                <Route path="coordinator/members" element={<CoordinatorMembers />} />
+              </Route>
+              
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthProvider>
+        </WebsiteSettingsProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
