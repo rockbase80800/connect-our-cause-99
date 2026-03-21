@@ -11,6 +11,7 @@ import {
   LogOut,
   Heart,
   Settings,
+  Image,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
@@ -58,6 +59,7 @@ export function DashboardSidebar() {
     ...(primaryRole === "super_admin"
       ? [
           { title: "Manage Projects", url: "/dashboard/admin/projects", icon: FolderOpen },
+          { title: "Manage Banners", url: "/dashboard/admin/banners", icon: Image },
           { title: "Assign Roles", url: "/dashboard/admin/roles", icon: Shield },
           { title: "Website Settings", url: "/dashboard/admin/settings", icon: Settings },
         ]

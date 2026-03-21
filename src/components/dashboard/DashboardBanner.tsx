@@ -18,9 +18,8 @@ export function DashboardBanner() {
       .eq("is_active", true)
       .order("created_at", { ascending: false })
       .limit(1)
-      .single()
       .then(({ data }) => {
-        if (data) setBanner(data as Banner);
+        if (data && data.length > 0) setBanner(data[0] as Banner);
       });
   }, []);
 
@@ -34,9 +33,9 @@ export function DashboardBanner() {
         <div className="w-full h-36 sm:h-48 bg-gradient-to-r from-primary/20 to-primary/5" />
       )}
       <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-4 sm:p-6">
-        <h2 className="text-white text-lg sm:text-xl font-bold mix-blend-difference">{banner.title}</h2>
+        <h2 className="text-white text-lg sm:text-xl font-bold">{banner.title}</h2>
         {banner.description && (
-          <p className="text-white/80 text-sm mt-1 line-clamp-2 mix-blend-difference">{banner.description}</p>
+          <p className="text-white/80 text-sm mt-1 line-clamp-2">{banner.description}</p>
         )}
       </div>
     </div>
