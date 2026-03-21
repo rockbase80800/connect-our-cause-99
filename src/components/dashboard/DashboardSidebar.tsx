@@ -11,6 +11,7 @@ import {
   LogOut,
   Heart,
   Settings,
+  Image,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
