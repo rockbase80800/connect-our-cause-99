@@ -59,6 +59,7 @@ export function DashboardSidebar() {
       ? [
           { title: "Manage Projects", url: "/dashboard/admin/projects", icon: FolderOpen },
           { title: "Assign Roles", url: "/dashboard/admin/roles", icon: Shield },
+          { title: "Website Settings", url: "/dashboard/admin/settings", icon: Settings },
         ]
       : []),
     ...(primaryRole === "state_admin"
