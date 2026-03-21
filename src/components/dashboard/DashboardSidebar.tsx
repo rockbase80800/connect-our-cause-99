@@ -35,6 +35,9 @@ export function DashboardSidebar() {
   const collapsed = state === "collapsed";
   const location = useLocation();
   const { primaryRole, profile, signOut } = useAuth();
+  const { settings } = useWebsiteSettings();
+  const siteName = settings?.site_name || "JanSeva";
+  const logoUrl = settings?.logo_url;
 
   const mainItems = [
     { title: "Dashboard", url: "/dashboard", icon: Home },
