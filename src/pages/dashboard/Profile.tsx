@@ -13,6 +13,7 @@ export default function Profile() {
   const { profile, refreshProfile } = useAuth();
   const [name, setName] = useState(profile?.name ?? "");
   const [phone, setPhone] = useState(profile?.phone ?? "");
+  const [address, setAddress] = useState(profile?.address ?? "");
   const [saving, setSaving] = useState(false);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -21,7 +22,7 @@ export default function Profile() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ name, phone })
+      .update({ name, phone, address })
       .eq("id", profile.id);
     if (error) toast.error(error.message);
     else {
@@ -54,6 +55,10 @@ export default function Profile() {
             <div>
               <Label>Phone</Label>
               <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91..." />
+            </div>
+            <div>
+              <Label>Address</Label>
+              <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Your full address" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>

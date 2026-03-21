@@ -51,6 +51,13 @@ const menuItems: MenuItem[] = [
     minRole: ["super_admin"],
   },
   {
+    label: "Manage Banners",
+    description: "Create and manage dashboard banners",
+    icon: Image,
+    path: "/dashboard/admin/banners",
+    minRole: ["super_admin"],
+  },
+  {
     label: "Assign Roles",
     description: "Assign roles to users across the hierarchy",
     icon: ShieldCheck,

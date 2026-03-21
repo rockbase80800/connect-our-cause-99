@@ -35,6 +35,7 @@ export default function DashboardHome() {
 
   return (
     <PageWrapper><div className="space-y-8">
+      <DashboardBanner />
       <div>
         <h1 className="text-display text-2xl md:text-3xl text-foreground mb-1">
           Welcome back, {profile?.name || "User"}
