@@ -39,12 +39,8 @@ const Auth = () => {
       return;
     }
     const timeout = setTimeout(async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("name")
-        .eq("referral_code", code)
-        .single();
-      setReferrerName(data?.name ?? null);
+      const { data } = await supabase.rpc("lookup_referral_code", { _code: code });
+      setReferrerName(data && data.length > 0 ? data[0].referrer_name : null);
     }, 400);
     return () => clearTimeout(timeout);
   }, [referralCode]);
