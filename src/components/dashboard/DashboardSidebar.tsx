@@ -13,6 +13,7 @@ import {
   Settings,
   Image,
 } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { NavLink } from "@/components/NavLink";
 import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
 import { useLocation } from "react-router-dom";
@@ -175,9 +176,17 @@ export function DashboardSidebar() {
       <SidebarFooter>
         <div className="px-3 py-3 border-t border-sidebar-border">
           {!collapsed && profile && (
-            <p className="text-xs text-sidebar-foreground/60 mb-2 truncate">
-              {profile.email}
-            </p>
+            <div className="flex items-center gap-2 mb-2">
+              <Avatar className="h-8 w-8 shrink-0">
+                <AvatarImage src={profile.avatar_url ?? undefined} alt={profile.name ?? ""} className="object-cover" />
+                <AvatarFallback className="text-xs bg-primary/10 text-primary">
+                  {(profile.name || profile.email || "U").split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2)}
+                </AvatarFallback>
+              </Avatar>
+              <p className="text-xs text-sidebar-foreground/60 truncate">
+                {profile.name || profile.email}
+              </p>
+            </div>
           )}
           <Button
             variant="ghost"

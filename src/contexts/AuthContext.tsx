@@ -16,6 +16,7 @@ interface Profile {
   panchayat: string | null;
   referral_code: string | null;
   referred_by: string | null;
+  avatar_url: string | null;
 }
 
 interface AuthContextType {
