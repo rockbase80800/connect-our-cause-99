@@ -129,7 +129,7 @@ const Auth = () => {
           console.error("Login error:", error);
           throw error;
         }
-        navigate("/dashboard");
+        navigate("/registration-payment");
       }
     } catch (err: any) {
       console.error("Auth error:", err);
