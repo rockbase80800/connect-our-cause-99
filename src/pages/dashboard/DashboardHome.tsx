@@ -30,64 +30,61 @@ export default function DashboardHome() {
 
   useEffect(() => {
     if (!profile) return;
+    let cancelled = false;
 
-    const fetchUser = async () => {
+    const fetchAll = async () => {
+      // User stats - always fetch
       const [{ count: projCount }, { count: appCount }, { count: refCount }] =
         await Promise.all([
           supabase.from("projects").select("*", { count: "exact", head: true }).eq("status", "active"),
           supabase.from("applications").select("*", { count: "exact", head: true }).eq("user_id", profile.id),
           supabase.from("profiles").select("*", { count: "exact", head: true }).eq("referred_by", profile.id),
         ]);
+      if (cancelled) return;
       setStats({ projects: projCount ?? 0, applications: appCount ?? 0, referrals: refCount ?? 0 });
-    };
 
-    const fetchAdmin = async () => {
-      if (!isAdmin) return;
-      const [{ count: total }, { count: pending }, { count: underReview }, { count: approved }, { count: rejected }, { count: users }] =
-        await Promise.all([
-          supabase.from("applications").select("*", { count: "exact", head: true }),
-          supabase.from("applications").select("*", { count: "exact", head: true }).eq("status", "pending"),
-          supabase.from("applications").select("*", { count: "exact", head: true }).eq("status", "under_review"),
-          supabase.from("applications").select("*", { count: "exact", head: true }).eq("status", "approved"),
-          supabase.from("applications").select("*", { count: "exact", head: true }).eq("status", "rejected"),
-          supabase.from("profiles").select("*", { count: "exact", head: true }),
+      // Admin stats
+      if (isAdmin) {
+        const [{ count: total }, { count: pending }, { count: underReview }, { count: approved }, { count: rejected }, { count: users }] =
+          await Promise.all([
+            supabase.from("applications").select("*", { count: "exact", head: true }),
+            supabase.from("applications").select("*", { count: "exact", head: true }).eq("status", "pending"),
+            supabase.from("applications").select("*", { count: "exact", head: true }).eq("status", "under_review"),
+            supabase.from("applications").select("*", { count: "exact", head: true }).eq("status", "approved"),
+            supabase.from("applications").select("*", { count: "exact", head: true }).eq("status", "rejected"),
+            supabase.from("profiles").select("*", { count: "exact", head: true }),
+          ]);
+        if (cancelled) return;
+        setAdminStats({
+          total: total ?? 0, pending: pending ?? 0, under_review: underReview ?? 0,
+          approved: approved ?? 0, rejected: rejected ?? 0, users: users ?? 0,
+        });
+      }
+
+      // Super admin wallet & pending pages
+      if (isSuperAdmin) {
+        const [{ data: walletData }, { count: pagesCount }] = await Promise.all([
+          supabase.from("wallet").select("balance, total_earned"),
+          supabase.from("user_profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
         ]);
-      setAdminStats({
-        total: total ?? 0, pending: pending ?? 0, under_review: underReview ?? 0,
-        approved: approved ?? 0, rejected: rejected ?? 0, users: users ?? 0,
-      });
-    };
+        if (cancelled) return;
+        if (walletData && walletData.length > 0) {
+          setWalletBalance(walletData.reduce((s, w) => s + Number((w as any).balance), 0));
+          setTotalEarnings(walletData.reduce((s, w) => s + Number((w as any).total_earned), 0));
+        }
+        setPendingPages(pagesCount ?? 0);
+      }
 
-    const fetchWallet = async () => {
-      if (!isSuperAdmin) return;
-      // Sum all wallets for admin view
-      const { data } = await supabase.from("wallet").select("balance, total_earned");
-      if (data && data.length > 0) {
-        const totalBal = data.reduce((s, w) => s + Number((w as any).balance), 0);
-        const totalEarn = data.reduce((s, w) => s + Number((w as any).total_earned), 0);
-        setWalletBalance(totalBal);
-        setTotalEarnings(totalEarn);
+      // Own page status
+      if (hasOwnPage) {
+        const { data } = await supabase.from("user_profiles").select("status").eq("user_id", profile.id).maybeSingle();
+        if (!cancelled && data) setMyPageStatus((data as any).status);
       }
     };
 
-    const fetchMyPage = async () => {
-      if (!hasOwnPage) return;
-      const { data } = await supabase.from("user_profiles").select("status").eq("user_id", profile.id).maybeSingle();
-      if (data) setMyPageStatus((data as any).status);
-    };
-
-    const fetchPendingPages = async () => {
-      if (!isSuperAdmin) return;
-      const { count } = await supabase.from("user_profiles").select("*", { count: "exact", head: true }).eq("status", "pending");
-      setPendingPages(count ?? 0);
-    };
-
-    fetchUser();
-    fetchAdmin();
-    fetchWallet();
-    fetchMyPage();
-    fetchPendingPages();
-  }, [profile, isAdmin, isSuperAdmin, hasOwnPage]);
+    fetchAll();
+    return () => { cancelled = true; };
+  }, [profile?.id]);
 
   const roleBadge = primaryRole.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
