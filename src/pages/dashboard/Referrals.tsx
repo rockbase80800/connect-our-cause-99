@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+
 import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,11 +19,28 @@ interface TreeNode {
 }
 
 export default function Referrals() {
-  const { profile } = useAuth();
+  const { profile, refreshProfile } = useAuth();
   const [tree, setTree] = useState<TreeNode[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+
+  // Fallback: generate referral code if missing
+  useEffect(() => {
+    const ensureCode = async () => {
+      if (profile && !profile.referral_code) {
+        const { data } = await supabase.rpc("generate_referral_code");
+        if (data) {
+          await supabase
+            .from("profiles")
+            .update({ referral_code: data })
+            .eq("id", profile.id);
+          await refreshProfile();
+        }
+      }
+    };
+    ensureCode();
+  }, [profile, refreshProfile]);
 
   const referralLink = profile?.referral_code
     ? `${window.location.origin}/auth?ref=${profile.referral_code}`
