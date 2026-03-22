@@ -3,7 +3,7 @@ import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, ExternalLink } from "lucide-react";
 
 interface Project {
   id: string;
@@ -11,6 +11,7 @@ interface Project {
   description: string | null;
   image_url: string | null;
   status: string;
+  about: string | null;
 }
 
 export default function ProjectsList() {
