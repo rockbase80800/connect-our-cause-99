@@ -26,7 +26,11 @@ export function AboutCardSection() {
       .select("*")
       .limit(1)
       .maybeSingle()
-      .then(({ data: row }) => {
+      .then(({ data: row, error }) => {
+        if (error) {
+          console.error("AboutCardSection fetch error:", error);
+          return;
+        }
         if (row) {
           setData({
             title: row.title ?? "",
