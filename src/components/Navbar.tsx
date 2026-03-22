@@ -36,6 +36,9 @@ export function Navbar() {
           <Link to="/gallery" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Gallery
           </Link>
+          <Link to="/videos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Videos
+          </Link>
           <a href="/#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Contact
           </a>
