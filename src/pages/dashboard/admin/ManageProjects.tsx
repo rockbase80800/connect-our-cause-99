@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X, ChevronUp, ChevronDown, RotateCcw, Eye } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X, ChevronUp, ChevronDown, RotateCcw, Eye, Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 
 const DEFAULT_HINDI_FIELDS: FormField[] = [
@@ -42,6 +42,7 @@ interface Project {
   status: string;
   created_at: string;
   form_link: string | null;
+  download_file_url: string | null;
 }
 
 interface FormField {
@@ -73,6 +74,8 @@ export default function ManageProjects() {
   const [about, setAbout] = useState("");
   const [status, setStatus] = useState("active");
   const [formLink, setFormLink] = useState("");
+  const [downloadFileUrl, setDownloadFileUrl] = useState("");
+  const [uploadingDownloadFile, setUploadingDownloadFile] = useState(false);
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
@@ -98,7 +101,7 @@ export default function ManageProjects() {
 
   const openCreate = () => {
     setEditing(null);
-    setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active"); setFormLink("");
+    setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active"); setFormLink(""); setDownloadFileUrl("");
     setFormFields(DEFAULT_HINDI_FIELDS.map(f => ({ ...f })));
     setGalleryImages([]);
     setDialogOpen(true);
@@ -107,7 +110,7 @@ export default function ManageProjects() {
   const openEdit = async (proj: Project) => {
     setEditing(proj);
     setTitle(proj.title); setDescription(proj.description ?? ""); setImageUrl(proj.image_url ?? "");
-    setAbout(proj.about ?? ""); setStatus(proj.status); setFormLink(proj.form_link ?? "");
+    setAbout(proj.about ?? ""); setStatus(proj.status); setFormLink(proj.form_link ?? ""); setDownloadFileUrl(proj.download_file_url ?? "");
     const { data } = await supabase.from("form_schemas").select("fields").eq("project_id", proj.id).single();
     setFormFields((data?.fields as unknown as FormField[]) ?? []);
     await fetchGalleryImages(proj.id);
@@ -169,7 +172,7 @@ export default function ManageProjects() {
     if (editing) {
       const { error } = await supabase
         .from("projects")
-        .update({ title, description, image_url: imageUrl || null, about, status: status as any, form_link: formLink || null } as any)
+        .update({ title, description, image_url: imageUrl || null, about, status: status as any, form_link: formLink || null, download_file_url: downloadFileUrl || null } as any)
         .eq("id", editing.id);
       if (error) { toast.error(error.message); setSaving(false); return; }
       await supabase.from("form_schemas").delete().eq("project_id", editing.id);
@@ -178,7 +181,7 @@ export default function ManageProjects() {
     } else {
       const { data: newProj, error } = await supabase
         .from("projects")
-        .insert({ title, description, image_url: imageUrl || null, about, status: status as any, form_link: formLink || null } as any)
+        .insert({ title, description, image_url: imageUrl || null, about, status: status as any, form_link: formLink || null, download_file_url: downloadFileUrl || null } as any)
         .select().single();
       if (error) { toast.error(error.message); setSaving(false); return; }
       if (newProj) {
@@ -355,6 +358,44 @@ export default function ManageProjects() {
                   <SelectItem value="inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Download File Upload */}
+            <div className="border-t border-border pt-4">
+              <Label className="text-base font-semibold">Download File (for users)</Label>
+              <p className="text-xs text-muted-foreground mb-2">यूज़र के लिए डाउनलोड करने योग्य फ़ाइल अपलोड करें (PDF, Image, Doc आदि)। यह Project Detail page पर Download बटन में दिखेगा।</p>
+              <div className="space-y-2">
+                {downloadFileUrl && (
+                  <div className="flex items-center gap-2 p-2 bg-success/10 border border-success/30 rounded-lg text-sm">
+                    <FileText className="h-4 w-4 text-success shrink-0" />
+                    <a href={downloadFileUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate flex-1">{downloadFileUrl.split("/").pop()}</a>
+                    <Button type="button" variant="ghost" size="sm" className="text-xs shrink-0" onClick={() => setDownloadFileUrl("")}>Remove</Button>
+                  </div>
+                )}
+                <Button type="button" variant="outline" size="sm" className="relative" disabled={uploadingDownloadFile}>
+                  {uploadingDownloadFile ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Upload className="h-4 w-4 mr-1" />}
+                  {uploadingDownloadFile ? "Uploading..." : "Upload File"}
+                  <input
+                    type="file"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      if (file.size > 10 * 1024 * 1024) { toast.error("File must be under 10MB"); return; }
+                      setUploadingDownloadFile(true);
+                      const ext = file.name.split(".").pop();
+                      const path = `downloads/${Date.now()}_${Math.random().toString(36).slice(2, 6)}.${ext}`;
+                      const { error } = await supabase.storage.from("project-images").upload(path, file);
+                      if (error) { toast.error(error.message); setUploadingDownloadFile(false); return; }
+                      const { data: urlData } = supabase.storage.from("project-images").getPublicUrl(path);
+                      setDownloadFileUrl(urlData.publicUrl);
+                      setUploadingDownloadFile(false);
+                      toast.success("File uploaded");
+                      e.target.value = "";
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </Button>
+              </div>
             </div>
 
             {/* Form Link */}

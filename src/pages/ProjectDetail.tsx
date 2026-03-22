@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, ArrowLeft, CheckCircle, ChevronDown, ArrowRight, Image as ImageIcon, Upload, ExternalLink } from "lucide-react";
+import { Loader2, ArrowLeft, CheckCircle, ChevronDown, ArrowRight, Image as ImageIcon, Upload, ExternalLink, Download } from "lucide-react";
 import { toast } from "sonner";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -178,12 +178,19 @@ export default function ProjectDetail() {
               {project.description}
             </p>
           )}
-          <div className="mt-8 animate-reveal-up" style={{ animationDelay: "400ms" }}>
+          <div className="mt-8 flex flex-wrap gap-3 animate-reveal-up" style={{ animationDelay: "400ms" }}>
             <a href="#apply">
               <Button size="lg" className="bg-accent text-accent-foreground font-semibold hover:bg-accent/90 active:scale-[0.97] transition-all shadow-lg text-base px-8 py-6">
                 Apply Now <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </a>
+            {project.download_file_url && (
+              <a href={project.download_file_url} target="_blank" rel="noopener noreferrer" download>
+                <Button size="lg" variant="outline" className="font-semibold active:scale-[0.97] transition-all shadow-lg text-base px-8 py-6 border-white/30 text-white hover:bg-white/10 hover:text-white">
+                  <Download className="h-4 w-4 mr-2" /> Download File
+                </Button>
+              </a>
+            )}
           </div>
         </div>
         {/* scroll hint */}
