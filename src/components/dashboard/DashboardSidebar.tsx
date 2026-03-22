@@ -14,6 +14,8 @@ import {
   Image,
   Video,
   CreditCard,
+  Globe,
+  Scale,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { NavLink } from "@/components/NavLink";
@@ -66,8 +68,8 @@ export function DashboardSidebar() {
           { title: "Homepage Settings", url: "/dashboard/admin/homepage", icon: Home },
           { title: "Photo Gallery", url: "/dashboard/admin/gallery", icon: Image },
           { title: "Videos", url: "/dashboard/admin/videos", icon: Video },
-          { title: "Legal Documents", url: "/dashboard/admin/legal-documents", icon: FileText },
-          { title: "Manage Websites", url: "/dashboard/admin/websites", icon: Settings },
+          { title: "Legal Documents", url: "/dashboard/admin/legal-documents", icon: Scale },
+          { title: "Our Websites", url: "/dashboard/admin/websites", icon: Globe },
           { title: "Payment Settings", url: "/dashboard/admin/payment", icon: CreditCard },
           { title: "Leads", url: "/dashboard/admin/leads", icon: FileText },
           { title: "Assign Roles", url: "/dashboard/admin/roles", icon: Shield },
