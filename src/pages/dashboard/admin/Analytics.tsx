@@ -64,8 +64,8 @@ export default function Analytics() {
         setWeeklyTrend(weeklyData);
       }
 
-      // Monthly user registration trend (last 6 months)
-      const { data: profiles } = await supabase.from("profiles").select("created_at");
+      // Monthly user registration trend + geographic breakdown
+      const { data: profiles } = await supabase.from("profiles").select("created_at, state, district");
       if (profiles) {
         const now = new Date();
         const months = eachMonthOfInterval({ start: subMonths(now, 5), end: now });
@@ -78,6 +78,18 @@ export default function Analytics() {
           return { month: format(monthStart, "MMM yyyy"), users: count };
         });
         setMonthlyUsers(monthlyData);
+
+        // State breakdown
+        const sMap = new Map<string, number>();
+        const dMap = new Map<string, number>();
+        profiles.forEach((p: any) => {
+          const s = p.state?.trim();
+          const d = p.district?.trim();
+          if (s) sMap.set(s, (sMap.get(s) || 0) + 1);
+          if (d) dMap.set(d, (dMap.get(d) || 0) + 1);
+        });
+        setStateStats(Array.from(sMap.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count));
+        setDistrictStats(Array.from(dMap.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 15));
       }
 
       setLoading(false);
