@@ -8,9 +8,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { settings } = useWebsiteSettings();
+  const { language, setLanguage, t } = useLanguage();
 
   const siteName = settings?.site_name || "JanSeva";
   const logoUrl = settings?.logo_url;
+
+  const toggleLang = () => setLanguage(language === "en" ? "hi" : "en");
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/40">
