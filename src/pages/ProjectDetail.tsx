@@ -90,13 +90,15 @@ export default function ProjectDetail() {
       project_id: id,
       form_data: formData,
     });
-    const { error } = await supabase.from("applications").insert({
+    const { data: appData, error } = await supabase.from("applications").insert({
       user_id: user.id,
       project_id: id,
       form_data: formData,
-    });
-    if (error) { toast.error(error.message); }
-    else { setSubmitted(true); toast.success("Application submitted!"); }
+    }).select("id").single();
+    if (error) { toast.error(error.message); setSubmitting(false); return; }
+    // Redirect to payment page
+    toast.info("अब भुगतान करें");
+    navigate(`/payment/${appData.id}`);
     setSubmitting(false);
   };
 
