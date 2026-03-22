@@ -471,6 +471,39 @@ export type Database = {
           },
         ]
       }
+      videos: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          thumbnail_url: string | null
+          title: string
+          youtube_id: string
+          youtube_url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          thumbnail_url?: string | null
+          title?: string
+          youtube_id: string
+          youtube_url: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          thumbnail_url?: string | null
+          title?: string
+          youtube_id?: string
+          youtube_url?: string
+        }
+        Relationships: []
+      }
       website_settings: {
         Row: {
           description: string | null

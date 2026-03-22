@@ -11,6 +11,7 @@ import {
   Home,
   ImageIcon,
   Contact,
+  Video,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -72,6 +73,13 @@ const menuItems: MenuItem[] = [
     description: "Manage the public photo gallery",
     icon: ImageIcon,
     path: "/dashboard/admin/gallery",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Videos",
+    description: "Manage YouTube videos",
+    icon: Video,
+    path: "/dashboard/admin/videos",
     minRole: ["super_admin"],
   },
   {

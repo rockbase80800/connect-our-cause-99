@@ -28,9 +28,11 @@ import ManageBanners from "./pages/dashboard/admin/ManageBanners";
 import ManageHomepage from "./pages/dashboard/admin/ManageHomepage";
 import ManageGallery from "./pages/dashboard/admin/ManageGallery";
 import ManageLeads from "./pages/dashboard/admin/ManageLeads";
+import ManageVideos from "./pages/dashboard/admin/ManageVideos";
 import CoordinatorUsers from "./pages/dashboard/coordinator/CoordinatorUsers";
 import CoordinatorMembers from "./pages/dashboard/coordinator/CoordinatorMembers";
 import Gallery from "./pages/Gallery";
+import Videos from "./pages/Videos";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +51,7 @@ const App = () => (
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/project/:id" element={<ProjectDetail />} />
               <Route path="/gallery" element={<Gallery />} />
+              <Route path="/videos" element={<Videos />} />
               
               <Route
                 path="/dashboard"
@@ -75,6 +78,7 @@ const App = () => (
                 <Route path="admin/homepage" element={<ManageHomepage />} />
                 <Route path="admin/gallery" element={<ManageGallery />} />
                 <Route path="admin/leads" element={<ManageLeads />} />
+                <Route path="admin/videos" element={<ManageVideos />} />
                 <Route path="coordinator/users" element={<CoordinatorUsers />} />
                 <Route path="coordinator/members" element={<CoordinatorMembers />} />
               </Route>

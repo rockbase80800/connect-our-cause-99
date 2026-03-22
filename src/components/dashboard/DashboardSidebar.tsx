@@ -12,6 +12,7 @@ import {
   Heart,
   Settings,
   Image,
+  Video,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { NavLink } from "@/components/NavLink";
@@ -63,6 +64,7 @@ export function DashboardSidebar() {
           { title: "Manage Banners", url: "/dashboard/admin/banners", icon: Image },
           { title: "Homepage Settings", url: "/dashboard/admin/homepage", icon: Home },
           { title: "Photo Gallery", url: "/dashboard/admin/gallery", icon: Image },
+          { title: "Videos", url: "/dashboard/admin/videos", icon: Video },
           { title: "Leads", url: "/dashboard/admin/leads", icon: FileText },
           { title: "Assign Roles", url: "/dashboard/admin/roles", icon: Shield },
           { title: "Website Settings", url: "/dashboard/admin/settings", icon: Settings },
