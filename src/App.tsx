@@ -94,6 +94,7 @@ const App = () => (
                 <Route path="admin/project/:projectId" element={<ProjectDashboard />} />
                 <Route path="coordinator/users" element={<CoordinatorUsers />} />
                 <Route path="coordinator/members" element={<CoordinatorMembers />} />
+                <Route path="admin/legal-documents" element={<ManageLegalDocuments />} />
               </Route>
               
               <Route path="*" element={<NotFound />} />

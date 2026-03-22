@@ -90,6 +90,13 @@ const menuItems: MenuItem[] = [
     minRole: ["super_admin"],
   },
   {
+    label: "Legal Documents",
+    description: "Manage legal documents for users",
+    icon: FileText,
+    path: "/dashboard/admin/legal-documents",
+    minRole: ["super_admin"],
+  },
+  {
     label: "Assign Roles",
     description: "Assign roles to users across the hierarchy",
     icon: ShieldCheck,
