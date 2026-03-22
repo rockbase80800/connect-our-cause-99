@@ -82,6 +82,7 @@ export default function ManageVideos() {
       setYoutubeUrl("");
       setMeta(null);
       setEditDesc("");
+      setSelectedCategory("General");
       fetchVideos();
     }
     setSaving(false);
