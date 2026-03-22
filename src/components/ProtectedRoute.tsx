@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading, profile } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -15,11 +15,6 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   if (!user) {
     return <Navigate to="/auth" replace />;
-  }
-
-  // Redirect to registration payment if not yet paid/approved
-  if (profile && (profile as any).payment_status === "unpaid") {
-    return <Navigate to="/registration-payment" replace />;
   }
 
   return <>{children}</>;

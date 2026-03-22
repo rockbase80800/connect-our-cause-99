@@ -75,7 +75,6 @@ export function DashboardSidebar() {
           { title: "Our Websites", url: "/dashboard/admin/websites", icon: Globe },
            { title: "Payment Settings", url: "/dashboard/admin/payment", icon: CreditCard },
            { title: "User Profile Pages", url: "/dashboard/admin/user-profiles", icon: UserCheck },
-           { title: "Homepage Admins", url: "/dashboard/admin/homepage-admins", icon: Users },
           { title: "Leads", url: "/dashboard/admin/leads", icon: FileText },
           { title: "Assign Roles", url: "/dashboard/admin/roles", icon: Shield },
           { title: "Website Settings", url: "/dashboard/admin/settings", icon: Settings },

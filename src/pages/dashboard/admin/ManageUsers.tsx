@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, Search, Download, CheckCircle, XCircle } from "lucide-react";
+import { Loader2, Search, Download } from "lucide-react";
 import { toast } from "sonner";
 
 interface UserRow {
@@ -18,9 +18,6 @@ interface UserRow {
   block: string | null;
   panchayat: string | null;
   created_at: string;
-  payment_status: string;
-  user_status: string;
-  registration_transaction_id: string | null;
   user_roles: { role: string }[];
 }
 
@@ -31,42 +28,23 @@ export default function ManageUsers() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  const fetchUsers = async () => {
-    let query = supabase
-      .from("profiles")
-      .select("*, user_roles(role)")
-      .order("created_at", { ascending: false });
+  useEffect(() => {
+    const fetchUsers = async () => {
+      let query = supabase
+        .from("profiles")
+        .select("*, user_roles(role)")
+        .order("created_at", { ascending: false });
 
-    if (primaryRole === "state_admin" && profile?.state) {
-      query = query.eq("state", profile.state);
-    }
+      if (primaryRole === "state_admin" && profile?.state) {
+        query = query.eq("state", profile.state);
+      }
 
-    const { data } = await query;
-    setUsers((data as unknown as UserRow[]) ?? []);
-    setLoading(false);
-  };
-
-  useEffect(() => { fetchUsers(); }, [primaryRole, profile]);
-
-  const handleApprove = async (userId: string) => {
-    const { error } = await supabase
-      .from("profiles")
-      .update({ payment_status: "paid", user_status: "approved" } as any)
-      .eq("id", userId);
-    if (error) { toast.error(error.message); return; }
-    toast.success("User approved");
+      const { data } = await query;
+      setUsers((data as unknown as UserRow[]) ?? []);
+      setLoading(false);
+    };
     fetchUsers();
-  };
-
-  const handleReject = async (userId: string) => {
-    const { error } = await supabase
-      .from("profiles")
-      .update({ payment_status: "rejected", user_status: "rejected" } as any)
-      .eq("id", userId);
-    if (error) { toast.error(error.message); return; }
-    toast.success("User rejected");
-    fetchUsers();
-  };
+  }, [primaryRole, profile]);
 
   const filtered = users.filter(
     (u) =>
@@ -81,9 +59,9 @@ export default function ManageUsers() {
     if (type === "phone") {
       csv = "Phone\n" + filtered.map((u) => u.phone || "").filter(Boolean).join("\n");
     } else {
-      csv = "Name,Email,Phone,State,District,Block,Panchayat,Payment,Status,Joined\n" +
+      csv = "Name,Email,Phone,State,District,Block,Panchayat,Joined\n" +
         filtered.map((u) =>
-          [u.name, u.email, u.phone, u.state, u.district, u.block, u.panchayat, u.payment_status, u.user_status, new Date(u.created_at).toLocaleDateString()]
+          [u.name, u.email, u.phone, u.state, u.district, u.block, u.panchayat, new Date(u.created_at).toLocaleDateString()]
             .map((v) => `"${v || ""}"`)
             .join(",")
         ).join("\n");
@@ -127,12 +105,8 @@ export default function ManageUsers() {
                 <TableHead>Email</TableHead>
                 <TableHead>Phone</TableHead>
                 <TableHead>Roles</TableHead>
-                <TableHead>Payment</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Transaction ID</TableHead>
                 <TableHead>Location</TableHead>
                 <TableHead>Joined</TableHead>
-                {isSuperAdmin && <TableHead>Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -150,40 +124,12 @@ export default function ManageUsers() {
                       ))}
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <Badge variant={u.payment_status === "paid" ? "default" : u.payment_status === "pending" ? "secondary" : "outline"} className="text-xs">
-                      {u.payment_status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={u.user_status === "approved" ? "default" : u.user_status === "pending" ? "secondary" : "destructive"} className="text-xs">
-                      {u.user_status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-sm font-mono">{u.registration_transaction_id || "—"}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">
                     {[u.state, u.district, u.block, u.panchayat].filter(Boolean).join(", ") || "—"}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
                     {new Date(u.created_at).toLocaleDateString()}
                   </TableCell>
-                  {isSuperAdmin && (
-                    <TableCell>
-                      {u.user_status !== "approved" && (
-                        <div className="flex gap-1">
-                          <Button size="sm" variant="outline" onClick={() => handleApprove(u.id)} className="text-emerald-600 hover:text-emerald-700 active:scale-[0.97]">
-                            <CheckCircle className="h-3.5 w-3.5" />
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => handleReject(u.id)} className="text-destructive hover:text-destructive active:scale-[0.97]">
-                            <XCircle className="h-3.5 w-3.5" />
-                          </Button>
-                        </div>
-                      )}
-                      {u.user_status === "approved" && (
-                        <span className="text-xs text-emerald-600">✓ Approved</span>
-                      )}
-                    </TableCell>
-                  )}
                 </TableRow>
               ))}
             </TableBody>
