@@ -2,11 +2,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { DashboardBanner } from "@/components/dashboard/DashboardBanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, FolderOpen, Users, Share2, Clock, CheckCircle, XCircle, Eye, Wallet, FilePlus, UserCheck } from "lucide-react";
+import { FileText, FolderOpen, Users, Share2, Clock, CheckCircle, XCircle, Eye, Wallet, FilePlus, UserCheck, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
