@@ -270,7 +270,20 @@ export default function ProjectDetail() {
         <RevealSection className="max-w-2xl mx-auto">
           <h2 className="text-display text-2xl md:text-3xl text-foreground mb-8 text-center">Apply for This Project</h2>
 
-          {submitted || alreadyApplied ? (
+          {user && profile && (profile as any).user_status !== "approved" ? (
+            <Card className="border-amber-500/30 shadow-lg">
+              <CardContent className="py-10 text-center">
+                <AlertCircle className="h-14 w-14 text-amber-500 mx-auto mb-4" />
+                <h3 className="font-semibold text-xl text-foreground mb-2">Registration Approval Required</h3>
+                <p className="text-muted-foreground">
+                  Complete your registration payment and get admin approval before applying to projects.
+                </p>
+                <Link to="/registration-payment" className="mt-6 inline-block">
+                  <Button>Complete Registration</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ) : submitted || alreadyApplied ? (
             <Card className="border-success/30 shadow-lg">
               <CardContent className="py-10 text-center">
                 <CheckCircle className="h-14 w-14 text-success mx-auto mb-4" />
