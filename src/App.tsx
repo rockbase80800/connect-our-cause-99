@@ -78,6 +78,7 @@ const App = () => (
                 <Route path="admin/homepage" element={<ManageHomepage />} />
                 <Route path="admin/gallery" element={<ManageGallery />} />
                 <Route path="admin/leads" element={<ManageLeads />} />
+                <Route path="admin/videos" element={<ManageVideos />} />
                 <Route path="coordinator/users" element={<CoordinatorUsers />} />
                 <Route path="coordinator/members" element={<CoordinatorMembers />} />
               </Route>
