@@ -339,16 +339,20 @@ export type Database = {
       profiles: {
         Row: {
           address: string | null
+          address_line2: string | null
           avatar_url: string | null
           block: string | null
           created_at: string
+          designation: string | null
           district: string | null
           email: string | null
           id: string
           name: string | null
           panchayat: string | null
+          payment_screenshot_url: string | null
           payment_status: string
           phone: string | null
+          pincode: string | null
           referral_code: string | null
           referred_by: string | null
           registration_transaction_id: string | null
@@ -358,16 +362,20 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          address_line2?: string | null
           avatar_url?: string | null
           block?: string | null
           created_at?: string
+          designation?: string | null
           district?: string | null
           email?: string | null
           id: string
           name?: string | null
           panchayat?: string | null
+          payment_screenshot_url?: string | null
           payment_status?: string
           phone?: string | null
+          pincode?: string | null
           referral_code?: string | null
           referred_by?: string | null
           registration_transaction_id?: string | null
@@ -377,16 +385,20 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          address_line2?: string | null
           avatar_url?: string | null
           block?: string | null
           created_at?: string
+          designation?: string | null
           district?: string | null
           email?: string | null
           id?: string
           name?: string | null
           panchayat?: string | null
+          payment_screenshot_url?: string | null
           payment_status?: string
           phone?: string | null
+          pincode?: string | null
           referral_code?: string | null
           referred_by?: string | null
           registration_transaction_id?: string | null
