@@ -17,13 +17,16 @@ const cardVariants = {
 };
 
 export default function DashboardHome() {
-  const { profile, primaryRole, isAtLeast } = useAuth();
+  const { profile, primaryRole, isAtLeast, hasRole } = useAuth();
   const isAdmin = isAtLeast("admin");
   const isSuperAdmin = primaryRole === "super_admin";
+  const hasOwnPage = hasRole("own_page");
   const [stats, setStats] = useState({ projects: 0, applications: 0, referrals: 0 });
   const [adminStats, setAdminStats] = useState({ total: 0, pending: 0, under_review: 0, approved: 0, rejected: 0, users: 0 });
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [totalEarnings, setTotalEarnings] = useState<number | null>(null);
+  const [myPageStatus, setMyPageStatus] = useState<string | null>(null);
+  const [pendingPages, setPendingPages] = useState(0);
 
   useEffect(() => {
     if (!profile) return;
