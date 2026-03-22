@@ -66,7 +66,7 @@ export default function ManageUserProfiles() {
     s === "rejected" ? "bg-red-100 text-red-700" :
     "bg-yellow-100 text-yellow-700";
 
-  if (loading) return <PageWrapper title="User Profile Pages"><p>Loading...</p></PageWrapper>;
+  if (loading) return <PageWrapper><p>Loading...</p></PageWrapper>;
 
   return (
     <PageWrapper title="User Profile Pages">
