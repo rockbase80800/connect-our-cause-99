@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import AuthCallback from "./pages/AuthCallback";
 import ProjectDetail from "./pages/ProjectDetail";
+import Payment from "./pages/Payment";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import ProjectsList from "./pages/dashboard/ProjectsList";
 import MyApplications from "./pages/dashboard/MyApplications";
