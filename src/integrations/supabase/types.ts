@@ -182,33 +182,6 @@ export type Database = {
         }
         Relationships: []
       }
-      homepage_about_card: {
-        Row: {
-          about_text: string | null
-          description: string | null
-          id: string
-          images: Json | null
-          title: string | null
-          updated_at: string
-        }
-        Insert: {
-          about_text?: string | null
-          description?: string | null
-          id?: string
-          images?: Json | null
-          title?: string | null
-          updated_at?: string
-        }
-        Update: {
-          about_text?: string | null
-          description?: string | null
-          id?: string
-          images?: Json | null
-          title?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       homepage_settings: {
         Row: {
           button_link: string | null
