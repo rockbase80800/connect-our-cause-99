@@ -297,9 +297,25 @@ export default function ProjectDetail() {
                             <SelectContent>{field.options?.map((opt) => (<SelectItem key={opt} value={opt}>{opt}</SelectItem>))}</SelectContent>
                           </Select>
                         ) : field.type === "checkbox" ? (
-                          <div className="flex items-center gap-2 mt-1">
+                          <div className="flex items-start gap-2 mt-1">
                             <Checkbox id={field.name} checked={formData[field.name] || false} onCheckedChange={(v) => updateField(field.name, v)} />
-                            <label htmlFor={field.name} className="text-sm">{field.placeholder}</label>
+                            <label htmlFor={field.name} className="text-sm leading-snug">{field.label}</label>
+                          </div>
+                        ) : field.type === "file" ? (
+                          <div className="mt-1">
+                            {fileUploads[field.name] ? (
+                              <div className="flex items-center gap-2 p-2 bg-success/10 border border-success/30 rounded-lg text-sm">
+                                <CheckCircle className="h-4 w-4 text-success shrink-0" />
+                                <span className="truncate">{fileUploads[field.name].name}</span>
+                                <Button type="button" variant="ghost" size="sm" className="ml-auto text-xs" onClick={() => { setFileUploads((p) => { const n = { ...p }; delete n[field.name]; return n; }); updateField(field.name, ""); }}>Change</Button>
+                              </div>
+                            ) : (
+                              <Button type="button" variant="outline" size="sm" className="relative w-full justify-start" disabled={uploadingField === field.name}>
+                                {uploadingField === field.name ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Upload className="h-4 w-4 mr-2" />}
+                                {uploadingField === field.name ? "Uploading..." : "Choose File"}
+                                <input type="file" accept="image/*,.pdf" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFileUpload(field.name, f); }} />
+                              </Button>
+                            )}
                           </div>
                         ) : (
                           <Input id={field.name} type={field.type} placeholder={field.placeholder} required={field.required} value={formData[field.name] || ""} onChange={(e) => updateField(field.name, e.target.value)} />
@@ -308,6 +324,7 @@ export default function ProjectDetail() {
                     ))}
                     <Button type="submit" disabled={submitting} size="lg" className="w-full active:scale-[0.97] transition-all">
                       {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Submit Application"}
+                    </Button>
                     </Button>
                   </form>
                 )}
