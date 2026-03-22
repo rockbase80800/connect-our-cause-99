@@ -47,7 +47,23 @@ export function HeroSection() {
     );
   }
 
-  if (!s) return null;
+  if (!s) {
+    console.log("hero: no data, showing fallback");
+    return (
+      <section className="relative min-h-[92vh] flex items-center bg-primary">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 md:py-40">
+          <div className="max-w-2xl">
+            <h1 className="text-display text-4xl md:text-6xl lg:text-7xl mb-6" style={{ color: "hsl(40 33% 98%)" }}>
+              Building Stronger Communities Together
+            </h1>
+            <p className="text-lg md:text-xl leading-relaxed mb-10" style={{ color: "hsl(40 20% 82%)" }}>
+              Empowering rural communities through sustainable development programs.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative min-h-[92vh] flex items-center overflow-hidden">

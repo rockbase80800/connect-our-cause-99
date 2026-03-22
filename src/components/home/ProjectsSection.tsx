@@ -66,7 +66,18 @@ export function ProjectsSection() {
     );
   }
 
-  if (projects.length === 0) return null;
+  if (projects.length === 0) {
+    console.log("projects: no data, showing fallback");
+    return (
+      <section id="projects" className="py-24 md:py-32 section-padding bg-background">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-accent font-semibold text-sm uppercase tracking-widest mb-3">Our Work</p>
+          <h2 className="text-display text-3xl md:text-5xl text-foreground mb-4">Active Projects</h2>
+          <p className="text-muted-foreground text-lg">No projects available at this time.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="projects" className="py-24 md:py-32 section-padding bg-background">

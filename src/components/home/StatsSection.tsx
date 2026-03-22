@@ -31,13 +31,19 @@ export function StatsSection() {
 
   useEffect(() => {
     const load = async () => {
-      const [{ count: users }, { count: projects }, { data: dists }] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("projects").select("*", { count: "exact", head: true }).eq("status", "active"),
-        supabase.from("profiles").select("district").not("district", "is", null),
-      ]);
-      const uniqueDistricts = new Set((dists ?? []).map((d: any) => d.district).filter(Boolean));
-      setStats({ users: users ?? 0, projects: projects ?? 0, districts: uniqueDistricts.size });
+      try {
+        const [{ count: users }, { count: projects }, { data: dists }] = await Promise.all([
+          supabase.from("profiles").select("*", { count: "exact", head: true }),
+          supabase.from("projects").select("*", { count: "exact", head: true }).eq("status", "active"),
+          supabase.from("profiles").select("district").not("district", "is", null),
+        ]);
+        const uniqueDistricts = new Set((dists ?? []).map((d: any) => d.district).filter(Boolean));
+        console.log("stats:", { users, projects, districts: uniqueDistricts.size });
+        setStats({ users: users ?? 0, projects: projects ?? 0, districts: uniqueDistricts.size });
+      } catch (e) {
+        console.error("Stats fetch error:", e);
+        setStats({ users: 0, projects: 0, districts: 0 });
+      }
     };
     load();
   }, []);
