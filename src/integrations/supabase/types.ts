@@ -478,6 +478,7 @@ export type Database = {
           description: string | null
           id: string
           is_active: boolean
+          is_featured: boolean
           thumbnail_url: string | null
           title: string
           youtube_id: string
@@ -489,6 +490,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean
+          is_featured?: boolean
           thumbnail_url?: string | null
           title?: string
           youtube_id: string
@@ -500,6 +502,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean
+          is_featured?: boolean
           thumbnail_url?: string | null
           title?: string
           youtube_id?: string

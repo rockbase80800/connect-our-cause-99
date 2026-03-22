@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Plus, Trash2, ExternalLink } from "lucide-react";
+import { Loader2, Plus, Trash2, ExternalLink, Star } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const VIDEO_CATEGORIES = [
@@ -22,6 +22,7 @@ interface Video {
   description: string | null;
   thumbnail_url: string | null;
   is_active: boolean;
+  is_featured: boolean;
   category: string | null;
   created_at: string;
 }
@@ -90,6 +91,15 @@ export default function ManageVideos() {
 
   const toggleActive = async (id: string, current: boolean) => {
     await supabase.from("videos").update({ is_active: !current } as any).eq("id", id);
+    fetchVideos();
+  };
+
+  const toggleFeatured = async (id: string, current: boolean) => {
+    if (!current) {
+      // Unfeature all others first
+      await supabase.from("videos").update({ is_featured: false } as any).neq("id", id);
+    }
+    await supabase.from("videos").update({ is_featured: !current } as any).eq("id", id);
     fetchVideos();
   };
 
@@ -184,7 +194,16 @@ export default function ManageVideos() {
                   <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{v.description}</p>
                 </div>
                 <div className="flex flex-col items-end gap-2 shrink-0">
-                  <Switch checked={v.is_active} onCheckedChange={() => toggleActive(v.id, v.is_active)} />
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => toggleFeatured(v.id, v.is_featured)}
+                      className={`p-1.5 rounded-md transition-colors ${v.is_featured ? 'text-yellow-500 bg-yellow-500/10' : 'text-muted-foreground hover:text-yellow-500'}`}
+                      title={v.is_featured ? "Unfeature" : "Set as featured"}
+                    >
+                      <Star className="h-4 w-4" fill={v.is_featured ? "currentColor" : "none"} />
+                    </button>
+                    <Switch checked={v.is_active} onCheckedChange={() => toggleActive(v.id, v.is_active)} />
+                  </div>
                   <div className="flex gap-1">
                     <a href={v.youtube_url} target="_blank" rel="noopener noreferrer">
                       <Button variant="ghost" size="icon" className="h-8 w-8"><ExternalLink className="h-4 w-4" /></Button>
