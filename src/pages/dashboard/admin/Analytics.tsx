@@ -13,6 +13,7 @@ export default function Analytics() {
   });
   const [projectStats, setProjectStats] = useState<{ name: string; applications: number }[]>([]);
   const [weeklyTrend, setWeeklyTrend] = useState<{ week: string; applications: number }[]>([]);
+  const [monthlyUsers, setMonthlyUsers] = useState<{ month: string; users: number }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
