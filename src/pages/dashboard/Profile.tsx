@@ -146,11 +146,11 @@ export default function Profile() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>State</Label>
-                  <Input value={profile.state ?? ""} disabled className="bg-muted" />
+                  <Input value={state} onChange={(e) => setState(e.target.value)} placeholder="राज्य" />
                 </div>
                 <div>
                   <Label>District</Label>
-                  <Input value={profile.district ?? ""} disabled className="bg-muted" />
+                  <Input value={district} onChange={(e) => setDistrict(e.target.value)} placeholder="जिला" />
                 </div>
               </div>
               <Button type="submit" disabled={saving} className="active:scale-[0.97]">
