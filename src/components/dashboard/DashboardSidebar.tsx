@@ -61,11 +61,13 @@ export function DashboardSidebar() {
       : []),
     ...(primaryRole === "super_admin"
       ? [
-          { title: "Manage Projects", url: "/dashboard/admin/projects", icon: FolderOpen },
+           { title: "Manage Projects", url: "/dashboard/admin/projects", icon: FolderOpen },
           { title: "Manage Banners", url: "/dashboard/admin/banners", icon: Image },
           { title: "Homepage Settings", url: "/dashboard/admin/homepage", icon: Home },
           { title: "Photo Gallery", url: "/dashboard/admin/gallery", icon: Image },
           { title: "Videos", url: "/dashboard/admin/videos", icon: Video },
+          { title: "Legal Documents", url: "/dashboard/admin/legal-documents", icon: FileText },
+          { title: "Manage Websites", url: "/dashboard/admin/websites", icon: Settings },
           { title: "Payment Settings", url: "/dashboard/admin/payment", icon: CreditCard },
           { title: "Leads", url: "/dashboard/admin/leads", icon: FileText },
           { title: "Assign Roles", url: "/dashboard/admin/roles", icon: Shield },

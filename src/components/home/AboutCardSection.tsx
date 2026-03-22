@@ -42,7 +42,7 @@ export function AboutCardSection() {
       });
   }, []);
 
-  if (!data) return null;
+  if (!data) return <section className="py-20 md:py-28 section-padding bg-background"><div className="max-w-7xl mx-auto text-center text-muted-foreground">Loading about section...</div></section>;
 
   return (
     <section className="py-20 md:py-28 section-padding bg-background">
