@@ -186,7 +186,7 @@ export default function ProjectDetail() {
             </a>
             {project.download_file_url && (
               <a href={project.download_file_url} target="_blank" rel="noopener noreferrer" download>
-                <Button size="lg" variant="outline" className="font-semibold active:scale-[0.97] transition-all shadow-lg text-base px-8 py-6 border-white/30 text-white hover:bg-white/10 hover:text-white">
+                <Button size="lg" variant="outline" className="font-semibold active:scale-[0.97] transition-all shadow-lg text-base px-8 py-6 border-emerald-400/50 bg-emerald-500 text-white hover:bg-emerald-600 hover:text-white">
                   <Download className="h-4 w-4 mr-2" /> Download File
                 </Button>
               </a>
