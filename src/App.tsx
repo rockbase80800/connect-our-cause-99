@@ -77,6 +77,7 @@ const App = () => (
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/project/:id" element={<ProjectDetail />} />
               <Route path="/payment/:applicationId" element={<Payment />} />
+              <Route path="/registration-payment" element={<RegistrationPayment />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/videos" element={<Videos />} />
               <Route path="/msme-auditor-hiring" element={<MSMEAuditorHiring />} />
