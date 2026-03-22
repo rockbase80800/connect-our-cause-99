@@ -40,6 +40,8 @@ import Videos from "./pages/Videos";
 import MSMEAuditorHiring from "./pages/MSMEAuditorHiring";
 import LegalDocuments from "./pages/LegalDocuments";
 import ManageLegalDocuments from "./pages/dashboard/admin/ManageLegalDocuments";
+import OurWebsites from "./pages/OurWebsites";
+import ManageWebsites from "./pages/dashboard/admin/ManageWebsites";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
