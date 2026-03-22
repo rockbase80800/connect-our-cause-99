@@ -70,10 +70,24 @@ export default function DashboardHome() {
       }
     };
 
+    const fetchMyPage = async () => {
+      if (!hasOwnPage) return;
+      const { data } = await supabase.from("user_profiles").select("status").eq("user_id", profile.id).maybeSingle();
+      if (data) setMyPageStatus((data as any).status);
+    };
+
+    const fetchPendingPages = async () => {
+      if (!isSuperAdmin) return;
+      const { count } = await supabase.from("user_profiles").select("*", { count: "exact", head: true }).eq("status", "pending");
+      setPendingPages(count ?? 0);
+    };
+
     fetchUser();
     fetchAdmin();
     fetchWallet();
-  }, [profile, isAdmin, isSuperAdmin]);
+    fetchMyPage();
+    fetchPendingPages();
+  }, [profile, isAdmin, isSuperAdmin, hasOwnPage]);
 
   const roleBadge = primaryRole.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
