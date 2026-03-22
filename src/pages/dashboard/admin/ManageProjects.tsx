@@ -8,8 +8,29 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X, ChevronUp, ChevronDown, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
+
+const DEFAULT_HINDI_FIELDS: FormField[] = [
+  { name: "full_name", label: "पूरा नाम (Full Name)", type: "text", required: true, placeholder: "अपना पूरा नाम लिखें" },
+  { name: "father_mother_name", label: "पिता/माता का नाम (Father/Mother Name)", type: "text", required: true, placeholder: "पिता या माता का नाम लिखें" },
+  { name: "age", label: "उम्र (Age)", type: "number", required: true, placeholder: "आपकी उम्र" },
+  { name: "gender", label: "लिंग (Gender)", type: "select", required: true, options: ["पुरुष (Male)", "महिला (Female)", "अन्य (Other)"] },
+  { name: "mobile_number", label: "मोबाइल नंबर (Mobile Number)", type: "text", required: true, placeholder: "10 अंकों का मोबाइल नंबर" },
+  { name: "whatsapp_number", label: "व्हाट्सएप नंबर (WhatsApp Number)", type: "text", required: false, placeholder: "व्हाट्सएप नंबर (वैकल्पिक)" },
+  { name: "email", label: "ईमेल आईडी (Email ID)", type: "email", required: false, placeholder: "example@email.com" },
+  { name: "full_address", label: "पूरा पता (Full Address)", type: "textarea", required: true, placeholder: "अपना पूरा पता लिखें" },
+  { name: "state", label: "राज्य (State)", type: "text", required: true, placeholder: "राज्य का नाम" },
+  { name: "district", label: "जिला (District)", type: "text", required: true, placeholder: "जिले का नाम" },
+  { name: "block", label: "ब्लॉक (Block)", type: "text", required: true, placeholder: "ब्लॉक का नाम" },
+  { name: "panchayat_village", label: "पंचायत/गाँव (Panchayat/Village)", type: "text", required: true, placeholder: "पंचायत या गाँव का नाम" },
+  { name: "qualification", label: "शैक्षिक योग्यता (Qualification)", type: "select", required: true, options: ["10वीं (10th)", "12वीं (12th)", "स्नातक (Graduate)", "स्नातकोत्तर (Post Graduate)", "अन्य (Other)"] },
+  { name: "position_applied", label: "आवेदित पद (Position Applied For)", type: "select", required: true, options: ["स्वयंसेवक (Volunteer)", "समन्वयक (Coordinator)", "पर्यवेक्षक (Supervisor)", "अन्य (Other)"] },
+  { name: "photo", label: "फोटो अपलोड करें (Upload Photo)", type: "file", required: true },
+  { name: "aadhar_card", label: "आधार कार्ड अपलोड करें (Upload Aadhar Card)", type: "file", required: true },
+  { name: "bank_passbook", label: "बैंक पासबुक अपलोड करें (Upload Bank Passbook)", type: "file", required: true },
+  { name: "declaration", label: "मैं पुष्टि करता/करती हूँ कि सभी जानकारी सही है और मैं दिशानिर्देशों का पालन करने के लिए सहमत हूँ।", type: "checkbox", required: true },
+];
 
 interface Project {
   id: string;
@@ -75,26 +96,7 @@ export default function ManageProjects() {
   const openCreate = () => {
     setEditing(null);
     setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active");
-    setFormFields([
-      { name: "full_name", label: "पूरा नाम (Full Name)", type: "text", required: true, placeholder: "अपना पूरा नाम लिखें" },
-      { name: "father_mother_name", label: "पिता/माता का नाम (Father/Mother Name)", type: "text", required: true, placeholder: "पिता या माता का नाम लिखें" },
-      { name: "age", label: "उम्र (Age)", type: "number", required: true, placeholder: "आपकी उम्र" },
-      { name: "gender", label: "लिंग (Gender)", type: "select", required: true, options: ["पुरुष (Male)", "महिला (Female)", "अन्य (Other)"] },
-      { name: "mobile_number", label: "मोबाइल नंबर (Mobile Number)", type: "text", required: true, placeholder: "10 अंकों का मोबाइल नंबर" },
-      { name: "whatsapp_number", label: "व्हाट्सएप नंबर (WhatsApp Number)", type: "text", required: false, placeholder: "व्हाट्सएप नंबर (वैकल्पिक)" },
-      { name: "email", label: "ईमेल आईडी (Email ID)", type: "email", required: false, placeholder: "example@email.com" },
-      { name: "full_address", label: "पूरा पता (Full Address)", type: "textarea", required: true, placeholder: "अपना पूरा पता लिखें" },
-      { name: "state", label: "राज्य (State)", type: "text", required: true, placeholder: "राज्य का नाम" },
-      { name: "district", label: "जिला (District)", type: "text", required: true, placeholder: "जिले का नाम" },
-      { name: "block", label: "ब्लॉक (Block)", type: "text", required: true, placeholder: "ब्लॉक का नाम" },
-      { name: "panchayat_village", label: "पंचायत/गाँव (Panchayat/Village)", type: "text", required: true, placeholder: "पंचायत या गाँव का नाम" },
-      { name: "qualification", label: "शैक्षिक योग्यता (Qualification)", type: "select", required: true, options: ["10वीं (10th)", "12वीं (12th)", "स्नातक (Graduate)", "स्नातकोत्तर (Post Graduate)", "अन्य (Other)"] },
-      { name: "position_applied", label: "आवेदित पद (Position Applied For)", type: "select", required: true, options: ["स्वयंसेवक (Volunteer)", "समन्वयक (Coordinator)", "पर्यवेक्षक (Supervisor)", "अन्य (Other)"] },
-      { name: "photo", label: "फोटो अपलोड करें (Upload Photo)", type: "file", required: true },
-      { name: "aadhar_card", label: "आधार कार्ड अपलोड करें (Upload Aadhar Card)", type: "file", required: true },
-      { name: "bank_passbook", label: "बैंक पासबुक अपलोड करें (Upload Bank Passbook)", type: "file", required: true },
-      { name: "declaration", label: "मैं पुष्टि करता/करती हूँ कि सभी जानकारी सही है और मैं दिशानिर्देशों का पालन करने के लिए सहमत हूँ। (I confirm that all information is correct and I agree to follow the guidelines.)", type: "checkbox", required: true },
-    ]);
+    setFormFields(DEFAULT_HINDI_FIELDS.map(f => ({ ...f })));
     setGalleryImages([]);
     setDialogOpen(true);
   };
@@ -203,6 +205,20 @@ export default function ManageProjects() {
   };
 
   const removeField = (idx: number) => setFormFields(formFields.filter((_, i) => i !== idx));
+
+  const moveField = (idx: number, dir: -1 | 1) => {
+    const newIdx = idx + dir;
+    if (newIdx < 0 || newIdx >= formFields.length) return;
+    const updated = [...formFields];
+    [updated[idx], updated[newIdx]] = [updated[newIdx], updated[idx]];
+    setFormFields(updated);
+  };
+
+  const loadDefaultFields = () => {
+    if (formFields.length > 0 && !confirm("यह मौजूदा फील्ड्स को बदल देगा। क्या आप जारी रखना चाहते हैं?")) return;
+    setFormFields(DEFAULT_HINDI_FIELDS.map(f => ({ ...f })));
+    toast.success("डिफ़ॉल्ट हिंदी फील्ड्स लोड हो गई");
+  };
 
   if (loading) return <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
 
@@ -336,16 +352,32 @@ export default function ManageProjects() {
             </div>
 
             <div className="border-t border-border pt-4">
-              <div className="flex items-center justify-between mb-3">
-                <Label className="text-base">Application Form Fields</Label>
-                <Button type="button" variant="outline" size="sm" onClick={addField}><Plus className="h-3 w-3 mr-1" /> Add Field</Button>
+              <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                <Label className="text-base font-semibold">Application Form Fields ({formFields.length})</Label>
+                <div className="flex gap-2">
+                  <Button type="button" variant="outline" size="sm" onClick={loadDefaultFields}>
+                    <RotateCcw className="h-3 w-3 mr-1" /> डिफ़ॉल्ट फील्ड्स लोड करें
+                  </Button>
+                  <Button type="button" variant="outline" size="sm" onClick={addField}>
+                    <Plus className="h-3 w-3 mr-1" /> Add Field
+                  </Button>
+                </div>
               </div>
+              {formFields.length === 0 && (
+                <div className="text-center py-6 border border-dashed border-border rounded-lg">
+                  <p className="text-muted-foreground text-sm mb-2">कोई फील्ड नहीं है</p>
+                  <Button type="button" variant="outline" size="sm" onClick={loadDefaultFields}>
+                    <RotateCcw className="h-3 w-3 mr-1" /> डिफ़ॉल्ट हिंदी फॉर्म लोड करें
+                  </Button>
+                </div>
+              )}
               {formFields.map((f, i) => (
-                <div key={i} className="mb-3">
-                  <div className="grid grid-cols-[1fr_auto_auto_auto] gap-2 items-end">
-                    <Input placeholder="Field label" value={f.label} onChange={(e) => updateFormField(i, "label", e.target.value)} />
+                <div key={i} className="mb-3 p-3 border border-border rounded-lg bg-secondary/20">
+                  <div className="flex items-center gap-1 mb-2">
+                    <span className="text-xs text-muted-foreground font-mono w-6 shrink-0">{i + 1}.</span>
+                    <Input placeholder="Field label" value={f.label} onChange={(e) => updateFormField(i, "label", e.target.value)} className="text-sm" />
                     <Select value={f.type} onValueChange={(v) => updateFormField(i, "type", v)}>
-                      <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="w-28 shrink-0"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="text">Text</SelectItem>
                         <SelectItem value="email">Email</SelectItem>
@@ -356,28 +388,30 @@ export default function ManageProjects() {
                         <SelectItem value="file">File Upload</SelectItem>
                       </SelectContent>
                     </Select>
-                    <Button type="button" variant={f.required ? "default" : "outline"} size="sm" onClick={() => updateFormField(i, "required", !f.required)} className="text-xs">Req</Button>
-                    <Button type="button" variant="ghost" size="sm" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
+                    <Button type="button" variant={f.required ? "default" : "outline"} size="icon" className="h-8 w-8 shrink-0 text-xs" onClick={() => updateFormField(i, "required", !f.required)} title={f.required ? "Required" : "Optional"}>
+                      {f.required ? "R" : "O"}
+                    </Button>
+                    <div className="flex flex-col shrink-0">
+                      <Button type="button" variant="ghost" size="icon" className="h-4 w-8" onClick={() => moveField(i, -1)} disabled={i === 0}><ChevronUp className="h-3 w-3" /></Button>
+                      <Button type="button" variant="ghost" size="icon" className="h-4 w-8" onClick={() => moveField(i, 1)} disabled={i === formFields.length - 1}><ChevronDown className="h-3 w-3" /></Button>
+                    </div>
+                    <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
                   </div>
                   {f.type === "select" && (
-                    <div className="ml-2 mt-1">
-                      <Input
-                        placeholder="Options (comma separated, e.g. Option 1, Option 2)"
-                        value={(f.options || []).join(", ")}
-                        onChange={(e) => updateFormField(i, "options", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
-                        className="text-xs"
-                      />
-                    </div>
+                    <Input
+                      placeholder="Options (comma separated)"
+                      value={(f.options || []).join(", ")}
+                      onChange={(e) => updateFormField(i, "options", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
+                      className="text-xs mt-1"
+                    />
                   )}
                   {f.type !== "select" && f.type !== "checkbox" && f.type !== "file" && (
-                    <div className="ml-2 mt-1">
-                      <Input
-                        placeholder="Placeholder text"
-                        value={f.placeholder || ""}
-                        onChange={(e) => updateFormField(i, "placeholder", e.target.value)}
-                        className="text-xs"
-                      />
-                    </div>
+                    <Input
+                      placeholder="Placeholder text"
+                      value={f.placeholder || ""}
+                      onChange={(e) => updateFormField(i, "placeholder", e.target.value)}
+                      className="text-xs mt-1"
+                    />
                   )}
                 </div>
               ))}
