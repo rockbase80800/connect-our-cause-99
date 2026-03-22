@@ -96,9 +96,8 @@ export default function ProjectDetail() {
       form_data: formData,
     }).select("id").single();
     if (error) { toast.error(error.message); setSubmitting(false); return; }
-    // Redirect to payment page
-    toast.info("अब भुगतान करें");
-    navigate(`/payment/${appData.id}`);
+    setSubmitted(true);
+    toast.success("Application submitted successfully!");
     setSubmitting(false);
   };
 
