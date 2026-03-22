@@ -103,7 +103,11 @@ export default function AssignRoles() {
   };
 
   const openEdit = (user: any, roleEntry: any) => {
-    setEditingRole({ userId: user.id, roleId: roleEntry.id, userName: user.name });
+    if (roleEntry.role === "super_admin") {
+      toast.error("Super Admin role cannot be edited");
+      return;
+    }
+    setEditingRole({ userId: user.id, roleId: roleEntry.id, userName: user.name, originalRole: roleEntry.role });
     setEditRole(roleEntry.role);
     setEditState(user.state ?? "");
     setEditDistrict(user.district ?? "");
@@ -114,6 +118,10 @@ export default function AssignRoles() {
 
   const handleEditSave = async () => {
     if (!editingRole || !editRole) return;
+    if (editingRole.originalRole === "super_admin" && editRole !== "super_admin") {
+      toast.error("Super Admin role cannot be changed");
+      return;
+    }
     setSaving(true);
 
     // Update role
