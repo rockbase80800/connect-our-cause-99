@@ -37,6 +37,7 @@ export function Navbar() {
           <Link to="/videos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Videos")}</Link>
           <Link to="/legal-documents" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Legal Docs")}</Link>
           <Link to="/our-websites" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Our Websites")}</Link>
+          <Link to="/team" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Team")}</Link>
           <a href="/#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Contact")}</a>
           <button onClick={toggleLang} className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors active:scale-[0.95]">
             <Globe className="h-4 w-4" /> {language === "en" ? "हिंदी" : "EN"}
