@@ -41,6 +41,7 @@ interface Project {
   about: string | null;
   status: string;
   created_at: string;
+  form_link: string | null;
 }
 
 interface FormField {
