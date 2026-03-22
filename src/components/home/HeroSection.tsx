@@ -22,6 +22,7 @@ export function HeroSection() {
   useEffect(() => {
     supabase.from("homepage_settings").select("*").limit(1).maybeSingle().then(({ data, error }) => {
       if (error) console.error("Hero fetch error:", error);
+      console.log("hero:", data);
       if (data) setS(data as HeroSettings);
       setLoading(false);
     });
