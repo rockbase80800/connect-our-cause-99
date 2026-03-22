@@ -47,6 +47,8 @@ import Team from "./pages/Team";
 import PublicProfile from "./pages/PublicProfile";
 import CreateMyPage from "./pages/dashboard/CreateMyPage";
 import ManageUserProfiles from "./pages/dashboard/admin/ManageUserProfiles";
+import ManageHomepageAdmins from "./pages/dashboard/admin/ManageHomepageAdmins";
+import RegistrationPayment from "./pages/RegistrationPayment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
