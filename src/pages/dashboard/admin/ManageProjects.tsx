@@ -98,7 +98,7 @@ export default function ManageProjects() {
 
   const openCreate = () => {
     setEditing(null);
-    setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active");
+    setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active"); setFormLink("");
     setFormFields(DEFAULT_HINDI_FIELDS.map(f => ({ ...f })));
     setGalleryImages([]);
     setDialogOpen(true);
