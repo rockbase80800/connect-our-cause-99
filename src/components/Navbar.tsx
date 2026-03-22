@@ -69,6 +69,7 @@ export function Navbar() {
             <a href="/#about" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>About</a>
             <Link to="/gallery" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Gallery</Link>
             <Link to="/videos" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Videos</Link>
+            <Link to="/legal-documents" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Legal Docs</Link>
             <a href="/#contact" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Contact</a>
             <Link to="/auth" onClick={() => setMobileOpen(false)}>
               <Button size="sm" className="w-full bg-primary text-primary-foreground">Join Now</Button>

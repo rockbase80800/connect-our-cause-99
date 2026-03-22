@@ -68,7 +68,7 @@ export default function Payment() {
     const { error: err } = await supabase
       .from("applications")
       .update({
-        payment_status: "paid",
+        payment_status: "pending",
         transaction_id: transactionId.trim(),
       } as any)
       .eq("id", applicationId)
