@@ -1,14 +1,13 @@
-import { Heart } from "lucide-react";
+import { Heart, Phone, Mail, MapPin, Building2 } from "lucide-react";
 import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
 
 export function Footer() {
   const { settings } = useWebsiteSettings();
 
-  const siteName = settings?.site_name || "JanSeva";
+  const siteName = settings?.site_name || "Meri Pahal Fast Help";
   const logoUrl = settings?.logo_url;
   const copyright = settings?.footer_content?.copyright || `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
-  const contact = settings?.footer_content?.contact || "info@janseva.org\n+91 98765 43210\nDistrict Office, Ranchi, Jharkhand";
-  const siteDescription = settings?.description || "Empowering rural communities through sustainable development, education, and healthcare initiatives since 2018.";
+  const siteDescription = settings?.description || "Meri Pahal Fast Help Artists Welfare Association (Trust) — Empowering communities through sustainable development, education, and healthcare initiatives.";
 
   return (
     <footer id="contact" className="bg-primary py-16 section-padding">
@@ -31,23 +30,44 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Column 2: Quick Links */}
+          {/* Column 2: Contact Us */}
           <div>
-            <h4 className="font-semibold text-primary-foreground mb-4">Quick Links</h4>
+            <h4 className="font-semibold text-primary-foreground mb-4">Contact Us</h4>
             <ul className="space-y-3 text-sm text-primary-foreground/70">
-              <li><a href="#projects" className="hover:text-primary-foreground transition-colors">Our Projects</a></li>
-              <li><a href="#about" className="hover:text-primary-foreground transition-colors">About Us</a></li>
-              <li><a href="/auth" className="hover:text-primary-foreground transition-colors">Join as Volunteer</a></li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 shrink-0" />
+                <a href="tel:+917073741421" className="hover:text-primary-foreground transition-colors">+91 7073741421</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 shrink-0" />
+                <a href="tel:+919351018521" className="hover:text-primary-foreground transition-colors">+91 9351018521</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 shrink-0" />
+                <a href="tel:+916376492883" className="hover:text-primary-foreground transition-colors">+91 6376492883</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 shrink-0" />
+                <a href="mailto:info@meripahafasthelp.org" className="hover:text-primary-foreground transition-colors">info@meripahafasthelp.org</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 shrink-0" />
+                <span>Jaipur, Rajasthan, India</span>
+              </li>
             </ul>
           </div>
 
-          {/* Column 3: Contact */}
+          {/* Column 3: Donate Now */}
           <div>
-            <h4 className="font-semibold text-primary-foreground mb-4">Contact</h4>
-            <ul className="space-y-3 text-sm text-primary-foreground/70">
-              {contact.split("\n").map((line: string, i: number) => (
-                <li key={i}>{line}</li>
-              ))}
+            <h4 className="font-semibold text-primary-foreground mb-4">Donate Now</h4>
+            <ul className="space-y-2 text-sm text-primary-foreground/70">
+              <li className="flex items-center gap-2">
+                <Building2 className="h-4 w-4 shrink-0" />
+                <span className="font-medium text-primary-foreground">YES BANK</span>
+              </li>
+              <li>Branch: C-Scheme, Jaipur – 302001</li>
+              <li>A/C No: <span className="font-mono text-primary-foreground">002488700000981</span></li>
+              <li>IFSC: <span className="font-mono text-primary-foreground">YESB0000024</span></li>
             </ul>
           </div>
         </div>
