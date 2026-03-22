@@ -107,7 +107,7 @@ export default function ManageProjects() {
   const openEdit = async (proj: Project) => {
     setEditing(proj);
     setTitle(proj.title); setDescription(proj.description ?? ""); setImageUrl(proj.image_url ?? "");
-    setAbout(proj.about ?? ""); setStatus(proj.status);
+    setAbout(proj.about ?? ""); setStatus(proj.status); setFormLink(proj.form_link ?? "");
     const { data } = await supabase.from("form_schemas").select("fields").eq("project_id", proj.id).single();
     setFormFields((data?.fields as unknown as FormField[]) ?? []);
     await fetchGalleryImages(proj.id);
