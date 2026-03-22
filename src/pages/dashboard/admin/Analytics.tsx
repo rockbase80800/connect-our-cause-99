@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, FileText, CheckCircle, XCircle, FolderOpen, Loader2 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
-import { format, subWeeks, endOfWeek, eachWeekOfInterval } from "date-fns";
+import { format, subWeeks, subMonths, endOfWeek, endOfMonth, eachWeekOfInterval, eachMonthOfInterval } from "date-fns";
 
 const COLORS = ["hsl(158, 35%, 25%)", "hsl(36, 85%, 55%)", "hsl(0, 72%, 51%)", "hsl(200, 70%, 50%)"];
 
