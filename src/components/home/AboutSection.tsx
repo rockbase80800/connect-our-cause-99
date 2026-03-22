@@ -73,7 +73,7 @@ export function AboutSection() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-5">
-            {values.map((item, i) => (
+            {(values || []).map((item, i) => (
               <div key={item.title} className={`glass-card rounded-xl p-6 transition-all duration-500 ${isVisible ? "animate-reveal-up" : "opacity-0"}`} style={{ animationDelay: `${400 + i * 100}ms` }}>
                 <item.icon className="h-8 w-8 text-primary mb-3" />
                 <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>

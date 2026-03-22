@@ -94,7 +94,7 @@ export function ProjectsSection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, i) => (
+          {(projects || []).map((project, i) => (
             <Link
               key={project.id}
               to={project.customLink || `/project/${project.id}`}
