@@ -43,6 +43,10 @@ import LegalDocuments from "./pages/LegalDocuments";
 import ManageLegalDocuments from "./pages/dashboard/admin/ManageLegalDocuments";
 import OurWebsites from "./pages/OurWebsites";
 import ManageWebsites from "./pages/dashboard/admin/ManageWebsites";
+import Team from "./pages/Team";
+import PublicProfile from "./pages/PublicProfile";
+import CreateMyPage from "./pages/dashboard/CreateMyPage";
+import ManageUserProfiles from "./pages/dashboard/admin/ManageUserProfiles";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
