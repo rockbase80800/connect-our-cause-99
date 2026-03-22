@@ -471,6 +471,7 @@ export type Database = {
           about: string | null
           created_at: string
           description: string | null
+          download_file_url: string | null
           form_link: string | null
           id: string
           image_url: string | null
@@ -482,6 +483,7 @@ export type Database = {
           about?: string | null
           created_at?: string
           description?: string | null
+          download_file_url?: string | null
           form_link?: string | null
           id?: string
           image_url?: string | null
@@ -493,6 +495,7 @@ export type Database = {
           about?: string | null
           created_at?: string
           description?: string | null
+          download_file_url?: string | null
           form_link?: string | null
           id?: string
           image_url?: string | null

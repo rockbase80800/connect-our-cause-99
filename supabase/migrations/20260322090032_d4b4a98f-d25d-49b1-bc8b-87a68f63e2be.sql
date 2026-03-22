@@ -1,0 +1,1 @@
+ALTER TABLE public.projects ADD COLUMN download_file_url text DEFAULT NULL;
