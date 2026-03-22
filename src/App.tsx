@@ -54,6 +54,7 @@ const App = () => (
       <Sonner />
         <BrowserRouter>
           <ScrollToTop />
+          <LanguageProvider>
           <WebsiteSettingsProvider>
           <AuthProvider>
             <Routes>
