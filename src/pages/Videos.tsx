@@ -125,52 +125,53 @@ export default function Videos() {
             {filtered.length === 0 ? (
               <p className="text-muted-foreground text-center py-20">No videos in this category.</p>
             ) : (
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((v) => (
-              <div
-                key={v.id}
-                className="group rounded-xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md transition-shadow"
-              >
-                <button
-                  onClick={() => setPlaying(v)}
-                  className="relative w-full aspect-video overflow-hidden"
-                >
-                  <img
-                    src={v.thumbnail_url || `https://img.youtube.com/vi/${v.youtube_id}/hqdefault.jpg`}
-                    alt={v.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="h-14 w-14 rounded-full bg-primary/90 flex items-center justify-center shadow-lg">
-                      <Play className="h-7 w-7 text-primary-foreground ml-1" fill="currentColor" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filtered.map((v) => (
+                  <div
+                    key={v.id}
+                    className="group rounded-xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <button
+                      onClick={() => setPlaying(v)}
+                      className="relative w-full aspect-video overflow-hidden"
+                    >
+                      <img
+                        src={v.thumbnail_url || `https://img.youtube.com/vi/${v.youtube_id}/hqdefault.jpg`}
+                        alt={v.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="h-14 w-14 rounded-full bg-primary/90 flex items-center justify-center shadow-lg">
+                          <Play className="h-7 w-7 text-primary-foreground ml-1" fill="currentColor" />
+                        </div>
+                      </div>
+                    </button>
+
+                    <div className="p-4 space-y-2">
+                      <Badge variant="secondary" className="text-[10px]">
+                        {v.category || "General"}
+                      </Badge>
+                      <h3 className="font-semibold text-sm line-clamp-2 text-foreground">{v.title}</h3>
+                      {v.description && (
+                        <p className="text-xs text-muted-foreground line-clamp-3">{v.description}</p>
+                      )}
+                      <div className="flex items-center gap-2 pt-1">
+                        <Button size="sm" variant="outline" className="text-xs" onClick={() => setPlaying(v)}>
+                          <Play className="h-3 w-3 mr-1" /> Play
+                        </Button>
+                        <a href={v.youtube_url} target="_blank" rel="noopener noreferrer">
+                          <Button size="sm" variant="ghost" className="text-xs">
+                            <ExternalLink className="h-3 w-3 mr-1" /> YouTube
+                          </Button>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </button>
-
-                <div className="p-4 space-y-2">
-                  <Badge variant="secondary" className="text-[10px]">
-                    {v.category || "General"}
-                  </Badge>
-                  <h3 className="font-semibold text-sm line-clamp-2 text-foreground">{v.title}</h3>
-                  {v.description && (
-                    <p className="text-xs text-muted-foreground line-clamp-3">{v.description}</p>
-                  )}
-                  <div className="flex items-center gap-2 pt-1">
-                    <Button size="sm" variant="outline" className="text-xs" onClick={() => setPlaying(v)}>
-                      <Play className="h-3 w-3 mr-1" /> Play
-                    </Button>
-                    <a href={v.youtube_url} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="ghost" className="text-xs">
-                        <ExternalLink className="h-3 w-3 mr-1" /> YouTube
-                      </Button>
-                    </a>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </main>
       <Footer />
