@@ -105,7 +105,7 @@ export default function CreateMyPage() {
     setSaving(false);
   };
 
-  if (loading) return <PageWrapper title="My Page"><p>Loading...</p></PageWrapper>;
+  if (loading) return <PageWrapper><p>Loading...</p></PageWrapper>;
 
   return (
     <PageWrapper title="Create My Page">
