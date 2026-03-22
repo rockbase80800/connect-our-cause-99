@@ -178,7 +178,7 @@ export default function ManageProjects() {
     } else {
       const { data: newProj, error } = await supabase
         .from("projects")
-        .insert({ title, description, image_url: imageUrl || null, about, status: status as any })
+        .insert({ title, description, image_url: imageUrl || null, about, status: status as any, form_link: formLink || null } as any)
         .select().single();
       if (error) { toast.error(error.message); setSaving(false); return; }
       if (newProj) {
