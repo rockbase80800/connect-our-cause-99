@@ -529,6 +529,59 @@ export type Database = {
         }
         Relationships: []
       }
+      user_profiles: {
+        Row: {
+          bio: string | null
+          contact: string | null
+          created_at: string
+          description: string | null
+          designation: string | null
+          id: string
+          name: string
+          photo_url: string | null
+          show_in_slider: boolean
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          contact?: string | null
+          created_at?: string
+          description?: string | null
+          designation?: string | null
+          id?: string
+          name: string
+          photo_url?: string | null
+          show_in_slider?: boolean
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          contact?: string | null
+          created_at?: string
+          description?: string | null
+          designation?: string | null
+          id?: string
+          name?: string
+          photo_url?: string | null
+          show_in_slider?: boolean
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -713,6 +766,7 @@ export type Database = {
         | "block_coordinator"
         | "panchayat_coordinator"
         | "user"
+        | "own_page"
       application_status: "pending" | "under_review" | "approved" | "rejected"
       project_status: "active" | "inactive"
     }
@@ -850,6 +904,7 @@ export const Constants = {
         "block_coordinator",
         "panchayat_coordinator",
         "user",
+        "own_page",
       ],
       application_status: ["pending", "under_review", "approved", "rejected"],
       project_status: ["active", "inactive"],
