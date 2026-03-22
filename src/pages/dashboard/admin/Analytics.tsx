@@ -62,6 +62,22 @@ export default function Analytics() {
         setWeeklyTrend(weeklyData);
       }
 
+      // Monthly user registration trend (last 6 months)
+      const { data: profiles } = await supabase.from("profiles").select("created_at");
+      if (profiles) {
+        const now = new Date();
+        const months = eachMonthOfInterval({ start: subMonths(now, 5), end: now });
+        const monthlyData = months.map((monthStart) => {
+          const mEnd = endOfMonth(monthStart);
+          const count = profiles.filter((p: any) => {
+            const d = new Date(p.created_at);
+            return d >= monthStart && d <= mEnd;
+          }).length;
+          return { month: format(monthStart, "MMM yyyy"), users: count };
+        });
+        setMonthlyUsers(monthlyData);
+      }
+
       setLoading(false);
     };
     fetchStats();
