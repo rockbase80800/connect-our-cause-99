@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ManageHomepage() {
@@ -31,11 +31,20 @@ export default function ManageHomepage() {
   const [aboutDesc, setAboutDesc] = useState("");
   const [aboutDesc2, setAboutDesc2] = useState("");
 
+  // About Card
+  const [cardId, setCardId] = useState<string | null>(null);
+  const [cardTitle, setCardTitle] = useState("");
+  const [cardDesc, setCardDesc] = useState("");
+  const [cardAboutText, setCardAboutText] = useState("");
+  const [cardImages, setCardImages] = useState<string[]>([]);
+  const [cardUploading, setCardUploading] = useState(false);
+
   useEffect(() => {
-    const fetch = async () => {
-      const [{ data: hero }, { data: about }] = await Promise.all([
+    const fetchAll = async () => {
+      const [{ data: hero }, { data: about }, { data: card }] = await Promise.all([
         supabase.from("homepage_settings").select("*").limit(1).maybeSingle(),
         supabase.from("about_settings").select("*").limit(1).maybeSingle(),
+        supabase.from("homepage_about_card").select("*").limit(1).maybeSingle(),
       ]);
       if (hero) {
         setSettingsId(hero.id);
@@ -55,9 +64,16 @@ export default function ManageHomepage() {
         setAboutDesc(about.description ?? "");
         setAboutDesc2(about.description2 ?? "");
       }
+      if (card) {
+        setCardId(card.id);
+        setCardTitle(card.title ?? "");
+        setCardDesc(card.description ?? "");
+        setCardAboutText(card.about_text ?? "");
+        setCardImages(Array.isArray(card.images) ? (card.images as string[]) : []);
+      }
       setLoading(false);
     };
-    fetch();
+    fetchAll();
   }, []);
 
   const handleBgUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,6 +89,27 @@ export default function ManageHomepage() {
     toast.success("Background uploaded");
   };
 
+  const handleCardImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setCardUploading(true);
+    const newUrls: string[] = [];
+    for (const file of Array.from(files)) {
+      const path = `about-card-${Date.now()}-${Math.random().toString(36).slice(2)}.${file.name.split(".").pop()}`;
+      const { error } = await supabase.storage.from("website-assets").upload(path, file);
+      if (error) { toast.error(error.message); continue; }
+      const { data } = supabase.storage.from("website-assets").getPublicUrl(path);
+      newUrls.push(data.publicUrl);
+    }
+    setCardImages(prev => [...prev, ...newUrls]);
+    setCardUploading(false);
+    if (newUrls.length > 0) toast.success(`${newUrls.length} image(s) uploaded`);
+  };
+
+  const removeCardImage = (index: number) => {
+    setCardImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSave = async () => {
     setSaving(true);
     const heroPayload = {
@@ -82,20 +119,31 @@ export default function ManageHomepage() {
       button2_text: button2Text, button2_link: button2Link,
       updated_at: new Date().toISOString(),
     };
-    const { error: e1 } = await supabase.from("homepage_settings").upsert(heroPayload, { onConflict: "id" });
-    
     const aboutPayload = {
       id: aboutId || "00000000-0000-0000-0000-000000000003",
       title: aboutTitle, eyebrow: aboutEyebrow, description: aboutDesc, description2: aboutDesc2,
       updated_at: new Date().toISOString(),
     };
-    const { error: e2 } = await supabase.from("about_settings").upsert(aboutPayload, { onConflict: "id" });
-    
-    if (e1 || e2) {
-      console.error("Save errors:", e1, e2);
-      toast.error("Error saving: " + (e1?.message || e2?.message));
+    const cardPayload = {
+      id: cardId || "00000000-0000-0000-0000-000000000004",
+      title: cardTitle, description: cardDesc, about_text: cardAboutText,
+      images: cardImages,
+      updated_at: new Date().toISOString(),
+    };
+
+    const [{ error: e1 }, { error: e2 }, { error: e3 }] = await Promise.all([
+      supabase.from("homepage_settings").upsert(heroPayload, { onConflict: "id" }),
+      supabase.from("about_settings").upsert(aboutPayload, { onConflict: "id" }),
+      supabase.from("homepage_about_card").upsert(cardPayload, { onConflict: "id" }),
+    ]);
+
+    const err = e1 || e2 || e3;
+    if (err) {
+      console.error("Save errors:", e1, e2, e3);
+      toast.error("Error saving: " + err.message);
     } else {
       toast.success("Homepage settings saved!");
+      if (!cardId) setCardId("00000000-0000-0000-0000-000000000004");
     }
     setSaving(false);
   };
@@ -128,6 +176,39 @@ export default function ManageHomepage() {
                 {uploading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Upload className="h-4 w-4 mr-1" />}
                 {uploading ? "Uploading..." : "Upload Background"}
                 <input type="file" accept="image/*" onChange={handleBgUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle>About Card Section</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div><Label>Title</Label><Input value={cardTitle} onChange={e => setCardTitle(e.target.value)} /></div>
+            <div><Label>Short Description</Label><Textarea value={cardDesc} onChange={e => setCardDesc(e.target.value)} rows={2} /></div>
+            <div><Label>About Text (Detailed)</Label><Textarea value={cardAboutText} onChange={e => setCardAboutText(e.target.value)} rows={4} /></div>
+            <div>
+              <Label>Images</Label>
+              {cardImages.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mt-2 mb-3">
+                  {cardImages.map((url, i) => (
+                    <div key={i} className="relative group">
+                      <img src={url} alt="" className="h-24 w-full object-cover rounded-lg" />
+                      <button
+                        type="button"
+                        onClick={() => removeCardImage(i)}
+                        className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <Button variant="outline" size="sm" className="relative" disabled={cardUploading}>
+                {cardUploading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Upload className="h-4 w-4 mr-1" />}
+                {cardUploading ? "Uploading..." : "Upload Images"}
+                <input type="file" accept="image/*" multiple onChange={handleCardImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
               </Button>
             </div>
           </CardContent>
