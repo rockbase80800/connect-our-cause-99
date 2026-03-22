@@ -19,7 +19,9 @@ const cardVariants = {
 
 export default function DashboardHome() {
   const { profile, primaryRole, isAtLeast, hasRole } = useAuth();
+  const navigate = useNavigate();
   const isAdmin = isAtLeast("admin");
+  const isApproved = profile?.user_status === "approved" || isAdmin;
   const isSuperAdmin = primaryRole === "super_admin";
   const hasOwnPage = hasRole("own_page");
   const [stats, setStats] = useState({ projects: 0, applications: 0, referrals: 0 });
