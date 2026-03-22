@@ -44,18 +44,17 @@ export function ProjectsSection() {
       .select("id, title, description, image_url, status")
       .eq("status", "active")
       .order("created_at", { ascending: false })
-      .limit(3)
       .then(({ data }) => {
         if (data && data.length > 0) {
-          setProjects(
-            data.map((p: any) => ({
-              id: p.id,
-              title: p.title,
-              description: p.description ?? "",
-              image: p.image_url,
-              status: p.status === "active" ? "Active" : "Inactive",
-            }))
-          );
+          const dbProjects = data.map((p: any) => ({
+            id: p.id,
+            title: p.title,
+            description: p.description ?? "",
+            image: p.image_url,
+            status: p.status === "active" ? "Active" : "Inactive",
+            customLink: undefined as string | undefined,
+          }));
+          setProjects(dbProjects);
         }
       });
   }, []);
@@ -80,11 +79,11 @@ export function ProjectsSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, i) => (
             <Link
               key={project.id}
-              to={`/project/${project.id}`}
+              to={(project as any).customLink || `/project/${project.id}`}
               className={`group glass-card rounded-xl overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] ${
                 isVisible ? "animate-reveal-up" : "opacity-0"
               }`}
