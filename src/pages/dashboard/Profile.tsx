@@ -16,6 +16,8 @@ export default function Profile() {
   const [name, setName] = useState(profile?.name ?? "");
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [address, setAddress] = useState(profile?.address ?? "");
+  const [state, setState] = useState(profile?.state ?? "");
+  const [district, setDistrict] = useState(profile?.district ?? "");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -61,7 +63,7 @@ export default function Profile() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ name, phone, address })
+      .update({ name, phone, address, state, district })
       .eq("id", profile.id);
     if (error) toast.error(error.message);
     else {
@@ -144,11 +146,11 @@ export default function Profile() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>State</Label>
-                  <Input value={profile.state ?? ""} disabled className="bg-muted" />
+                  <Input value={state} onChange={(e) => setState(e.target.value)} placeholder="राज्य" />
                 </div>
                 <div>
                   <Label>District</Label>
-                  <Input value={profile.district ?? ""} disabled className="bg-muted" />
+                  <Input value={district} onChange={(e) => setDistrict(e.target.value)} placeholder="जिला" />
                 </div>
               </div>
               <Button type="submit" disabled={saving} className="active:scale-[0.97]">
