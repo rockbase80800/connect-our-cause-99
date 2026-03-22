@@ -111,6 +111,7 @@ const App = () => (
                 <Route path="admin/legal-documents" element={<ManageLegalDocuments />} />
                 <Route path="admin/websites" element={<ManageWebsites />} />
                 <Route path="admin/user-profiles" element={<ManageUserProfiles />} />
+                <Route path="admin/homepage-admins" element={<ManageHomepageAdmins />} />
                 <Route path="my-page" element={<CreateMyPage />} />
               </Route>
               
