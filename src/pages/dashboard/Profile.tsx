@@ -16,6 +16,8 @@ export default function Profile() {
   const [name, setName] = useState(profile?.name ?? "");
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [address, setAddress] = useState(profile?.address ?? "");
+  const [state, setState] = useState(profile?.state ?? "");
+  const [district, setDistrict] = useState(profile?.district ?? "");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
