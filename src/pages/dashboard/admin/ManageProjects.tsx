@@ -75,7 +75,26 @@ export default function ManageProjects() {
   const openCreate = () => {
     setEditing(null);
     setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active");
-    setFormFields([{ name: "full_name", label: "Full Name", type: "text", required: true }]);
+    setFormFields([
+      { name: "full_name", label: "पूरा नाम (Full Name)", type: "text", required: true, placeholder: "अपना पूरा नाम लिखें" },
+      { name: "father_mother_name", label: "पिता/माता का नाम (Father/Mother Name)", type: "text", required: true, placeholder: "पिता या माता का नाम लिखें" },
+      { name: "age", label: "उम्र (Age)", type: "number", required: true, placeholder: "आपकी उम्र" },
+      { name: "gender", label: "लिंग (Gender)", type: "select", required: true, options: ["पुरुष (Male)", "महिला (Female)", "अन्य (Other)"] },
+      { name: "mobile_number", label: "मोबाइल नंबर (Mobile Number)", type: "text", required: true, placeholder: "10 अंकों का मोबाइल नंबर" },
+      { name: "whatsapp_number", label: "व्हाट्सएप नंबर (WhatsApp Number)", type: "text", required: false, placeholder: "व्हाट्सएप नंबर (वैकल्पिक)" },
+      { name: "email", label: "ईमेल आईडी (Email ID)", type: "email", required: false, placeholder: "example@email.com" },
+      { name: "full_address", label: "पूरा पता (Full Address)", type: "textarea", required: true, placeholder: "अपना पूरा पता लिखें" },
+      { name: "state", label: "राज्य (State)", type: "text", required: true, placeholder: "राज्य का नाम" },
+      { name: "district", label: "जिला (District)", type: "text", required: true, placeholder: "जिले का नाम" },
+      { name: "block", label: "ब्लॉक (Block)", type: "text", required: true, placeholder: "ब्लॉक का नाम" },
+      { name: "panchayat_village", label: "पंचायत/गाँव (Panchayat/Village)", type: "text", required: true, placeholder: "पंचायत या गाँव का नाम" },
+      { name: "qualification", label: "शैक्षिक योग्यता (Qualification)", type: "select", required: true, options: ["10वीं (10th)", "12वीं (12th)", "स्नातक (Graduate)", "स्नातकोत्तर (Post Graduate)", "अन्य (Other)"] },
+      { name: "position_applied", label: "आवेदित पद (Position Applied For)", type: "select", required: true, options: ["स्वयंसेवक (Volunteer)", "समन्वयक (Coordinator)", "पर्यवेक्षक (Supervisor)", "अन्य (Other)"] },
+      { name: "photo", label: "फोटो अपलोड करें (Upload Photo)", type: "file", required: true },
+      { name: "aadhar_card", label: "आधार कार्ड अपलोड करें (Upload Aadhar Card)", type: "file", required: true },
+      { name: "bank_passbook", label: "बैंक पासबुक अपलोड करें (Upload Bank Passbook)", type: "file", required: true },
+      { name: "declaration", label: "मैं पुष्टि करता/करती हूँ कि सभी जानकारी सही है और मैं दिशानिर्देशों का पालन करने के लिए सहमत हूँ। (I confirm that all information is correct and I agree to follow the guidelines.)", type: "checkbox", required: true },
+    ]);
     setGalleryImages([]);
     setDialogOpen(true);
   };
@@ -322,21 +341,44 @@ export default function ManageProjects() {
                 <Button type="button" variant="outline" size="sm" onClick={addField}><Plus className="h-3 w-3 mr-1" /> Add Field</Button>
               </div>
               {formFields.map((f, i) => (
-                <div key={i} className="grid grid-cols-[1fr_auto_auto_auto] gap-2 mb-2 items-end">
-                  <Input placeholder="Field label" value={f.label} onChange={(e) => updateFormField(i, "label", e.target.value)} />
-                  <Select value={f.type} onValueChange={(v) => updateFormField(i, "type", v)}>
-                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="text">Text</SelectItem>
-                      <SelectItem value="email">Email</SelectItem>
-                      <SelectItem value="number">Number</SelectItem>
-                      <SelectItem value="textarea">Textarea</SelectItem>
-                      <SelectItem value="select">Select</SelectItem>
-                      <SelectItem value="checkbox">Checkbox</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button type="button" variant={f.required ? "default" : "outline"} size="sm" onClick={() => updateFormField(i, "required", !f.required)} className="text-xs">Req</Button>
-                  <Button type="button" variant="ghost" size="sm" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
+                <div key={i} className="mb-3">
+                  <div className="grid grid-cols-[1fr_auto_auto_auto] gap-2 items-end">
+                    <Input placeholder="Field label" value={f.label} onChange={(e) => updateFormField(i, "label", e.target.value)} />
+                    <Select value={f.type} onValueChange={(v) => updateFormField(i, "type", v)}>
+                      <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="text">Text</SelectItem>
+                        <SelectItem value="email">Email</SelectItem>
+                        <SelectItem value="number">Number</SelectItem>
+                        <SelectItem value="textarea">Textarea</SelectItem>
+                        <SelectItem value="select">Select</SelectItem>
+                        <SelectItem value="checkbox">Checkbox</SelectItem>
+                        <SelectItem value="file">File Upload</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button type="button" variant={f.required ? "default" : "outline"} size="sm" onClick={() => updateFormField(i, "required", !f.required)} className="text-xs">Req</Button>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
+                  </div>
+                  {f.type === "select" && (
+                    <div className="ml-2 mt-1">
+                      <Input
+                        placeholder="Options (comma separated, e.g. Option 1, Option 2)"
+                        value={(f.options || []).join(", ")}
+                        onChange={(e) => updateFormField(i, "options", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
+                        className="text-xs"
+                      />
+                    </div>
+                  )}
+                  {f.type !== "select" && f.type !== "checkbox" && f.type !== "file" && (
+                    <div className="ml-2 mt-1">
+                      <Input
+                        placeholder="Placeholder text"
+                        value={f.placeholder || ""}
+                        onChange={(e) => updateFormField(i, "placeholder", e.target.value)}
+                        className="text-xs"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
