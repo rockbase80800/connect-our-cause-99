@@ -16,7 +16,8 @@ export function AboutSection() {
   const [s, setS] = useState<any>(null);
 
   useEffect(() => {
-    supabase.from("about_settings").select("*").limit(1).single().then(({ data }) => {
+    supabase.from("about_settings").select("*").limit(1).maybeSingle().then(({ data, error }) => {
+      if (error) console.error("About fetch error:", error);
       if (data) setS(data);
     });
   }, []);

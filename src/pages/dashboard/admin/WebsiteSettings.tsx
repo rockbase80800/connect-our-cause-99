@@ -81,21 +81,23 @@ export default function WebsiteSettings() {
   };
 
   const handleSave = async () => {
-    if (!settings) return;
     setSaving(true);
+    const payload = {
+      id: settings?.id || "00000000-0000-0000-0000-000000000001",
+      site_name: siteName,
+      description,
+      logo_url: logoPreview,
+      favicon_url: faviconPreview,
+      header_content: { tagline: headerContent },
+      footer_content: { copyright: footerCopyright, contact: footerContact },
+      updated_at: new Date().toISOString(),
+    };
     const { error } = await supabase
       .from("website_settings")
-      .update({
-        site_name: siteName,
-        description,
-        logo_url: logoPreview,
-        favicon_url: faviconPreview,
-        header_content: { tagline: headerContent },
-        footer_content: { copyright: footerCopyright, contact: footerContact },
-      })
-      .eq("id", settings.id);
+      .upsert(payload, { onConflict: "id" });
 
     if (error) {
+      console.error("Save error:", error);
       toast.error(error.message);
     } else {
       toast.success("Settings saved successfully!");

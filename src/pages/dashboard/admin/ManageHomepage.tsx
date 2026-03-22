@@ -34,8 +34,8 @@ export default function ManageHomepage() {
   useEffect(() => {
     const fetch = async () => {
       const [{ data: hero }, { data: about }] = await Promise.all([
-        supabase.from("homepage_settings").select("*").limit(1).single(),
-        supabase.from("about_settings").select("*").limit(1).single(),
+        supabase.from("homepage_settings").select("*").limit(1).maybeSingle(),
+        supabase.from("about_settings").select("*").limit(1).maybeSingle(),
       ]);
       if (hero) {
         setSettingsId(hero.id);

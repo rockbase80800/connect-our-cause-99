@@ -25,11 +25,12 @@ export function WebsiteSettingsProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchSettings = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("website_settings")
       .select("*")
       .limit(1)
-      .single();
+      .maybeSingle();
+    if (error) console.error("Settings fetch error:", error);
     if (data) setSettings(data as WebsiteSettings);
     setLoading(false);
   };
