@@ -70,7 +70,7 @@ const Auth = () => {
           referrerId = referrerRows[0].referrer_id;
         }
 
-        const { error } = await supabase.auth.signUp({
+        const { data: signUpData, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -83,6 +83,15 @@ const Auth = () => {
           },
         });
         if (error) throw error;
+        
+        // Set referred_by on profile after signup
+        if (referrerId && signUpData.user) {
+          await supabase
+            .from("profiles")
+            .update({ referred_by: referrerId })
+            .eq("id", signUpData.user.id);
+        }
+        
         toast.success("Account created! You can now sign in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
