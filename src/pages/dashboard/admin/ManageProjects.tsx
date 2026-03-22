@@ -257,6 +257,9 @@ export default function ManageProjects() {
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">{new Date(p.created_at).toLocaleDateString()}</TableCell>
                 <TableCell className="text-right space-x-1">
+                  <Link to={`/dashboard/admin/project/${p.id}`}>
+                    <Button variant="ghost" size="sm"><Eye className="h-4 w-4" /></Button>
+                  </Link>
                   <Button variant="ghost" size="sm" onClick={() => openEdit(p)}><Pencil className="h-4 w-4" /></Button>
                   <Button variant="ghost" size="sm" onClick={() => handleDelete(p.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                 </TableCell>
