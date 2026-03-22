@@ -246,7 +246,6 @@ export default function ManageApplications() {
                       {(app as any).payment_status === "paid" ? "✅ Paid" : "❌ Unpaid"}
                     </Badge>
                   </TableCell>
-                  </TableCell>
                   <TableCell className="text-sm text-muted-foreground">{new Date(app.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>
                     <Button variant="ghost" size="sm" onClick={() => { setSelected(app); setNewStatus(app.status); setReason(app.rejection_reason || ""); }}>
