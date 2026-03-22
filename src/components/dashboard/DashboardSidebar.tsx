@@ -16,6 +16,8 @@ import {
   CreditCard,
   Globe,
   Scale,
+  UserCheck,
+  FilePlus,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { NavLink } from "@/components/NavLink";
