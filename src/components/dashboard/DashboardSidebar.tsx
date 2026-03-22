@@ -54,7 +54,7 @@ export function DashboardSidebar() {
     { title: "My Referrals", url: "/dashboard/referrals", icon: Share2 },
     { title: "Notifications", url: "/dashboard/notifications", icon: Bell },
     { title: "Profile", url: "/dashboard/profile", icon: UserCircle },
-    ...(hasRole("own_page" as any) ? [{ title: "My Page", url: "/dashboard/my-page", icon: FilePlus }] : []),
+    ...(hasRole("own_page") ? [{ title: "My Page", url: "/dashboard/my-page", icon: FilePlus }] : []),
   ];
 
   const adminItems = [

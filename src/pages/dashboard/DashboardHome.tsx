@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { DashboardBanner } from "@/components/dashboard/DashboardBanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, FolderOpen, Users, Share2, Clock, CheckCircle, XCircle, Eye, Wallet } from "lucide-react";
+import { FileText, FolderOpen, Users, Share2, Clock, CheckCircle, XCircle, Eye, Wallet, FilePlus, UserCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
@@ -17,13 +17,16 @@ const cardVariants = {
 };
 
 export default function DashboardHome() {
-  const { profile, primaryRole, isAtLeast } = useAuth();
+  const { profile, primaryRole, isAtLeast, hasRole } = useAuth();
   const isAdmin = isAtLeast("admin");
   const isSuperAdmin = primaryRole === "super_admin";
+  const hasOwnPage = hasRole("own_page");
   const [stats, setStats] = useState({ projects: 0, applications: 0, referrals: 0 });
   const [adminStats, setAdminStats] = useState({ total: 0, pending: 0, under_review: 0, approved: 0, rejected: 0, users: 0 });
   const [walletBalance, setWalletBalance] = useState<number | null>(null);
   const [totalEarnings, setTotalEarnings] = useState<number | null>(null);
+  const [myPageStatus, setMyPageStatus] = useState<string | null>(null);
+  const [pendingPages, setPendingPages] = useState(0);
 
   useEffect(() => {
     if (!profile) return;
@@ -67,10 +70,24 @@ export default function DashboardHome() {
       }
     };
 
+    const fetchMyPage = async () => {
+      if (!hasOwnPage) return;
+      const { data } = await supabase.from("user_profiles").select("status").eq("user_id", profile.id).maybeSingle();
+      if (data) setMyPageStatus((data as any).status);
+    };
+
+    const fetchPendingPages = async () => {
+      if (!isSuperAdmin) return;
+      const { count } = await supabase.from("user_profiles").select("*", { count: "exact", head: true }).eq("status", "pending");
+      setPendingPages(count ?? 0);
+    };
+
     fetchUser();
     fetchAdmin();
     fetchWallet();
-  }, [profile, isAdmin, isSuperAdmin]);
+    fetchMyPage();
+    fetchPendingPages();
+  }, [profile, isAdmin, isSuperAdmin, hasOwnPage]);
 
   const roleBadge = primaryRole.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
@@ -116,6 +133,47 @@ export default function DashboardHome() {
             </Card>
           </motion.div>
         </div>
+      )}
+
+      {/* Pending User Pages for Super Admin */}
+      {isSuperAdmin && pendingPages > 0 && (
+        <motion.div custom={2} variants={cardVariants} initial="hidden" animate="visible">
+          <Link to="/dashboard/admin/user-profiles">
+            <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 border-yellow-500/20 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]">
+              <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Pending User Pages</CardTitle>
+                <UserCheck className="h-4 w-4 text-yellow-600" />
+              </CardHeader>
+              <CardContent className="px-4 pb-3">
+                <div className="text-2xl font-bold text-yellow-600">{pendingPages}</div>
+                <p className="text-xs text-muted-foreground mt-1">Awaiting approval →</p>
+              </CardContent>
+            </Card>
+          </Link>
+        </motion.div>
+      )}
+
+      {/* Own Page Status for users with own_page role */}
+      {hasOwnPage && (
+        <motion.div custom={3} variants={cardVariants} initial="hidden" animate="visible">
+          <Link to="/dashboard/my-page">
+            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]">
+              <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
+                <CardTitle className="text-xs font-medium text-muted-foreground">My Profile Page</CardTitle>
+                <FilePlus className="h-4 w-4 text-primary" />
+              </CardHeader>
+              <CardContent className="px-4 pb-3">
+                {myPageStatus ? (
+                  <div className={`text-lg font-bold ${myPageStatus === "approved" ? "text-green-600" : myPageStatus === "rejected" ? "text-destructive" : "text-yellow-600"}`}>
+                    {myPageStatus.charAt(0).toUpperCase() + myPageStatus.slice(1)}
+                  </div>
+                ) : (
+                  <div className="text-lg font-bold text-primary">Create Now →</div>
+                )}
+              </CardContent>
+            </Card>
+          </Link>
+        </motion.div>
       )}
 
       {/* Admin Application Stats */}
