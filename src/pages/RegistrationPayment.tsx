@@ -6,7 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, CheckCircle, QrCode, Upload } from "lucide-react";
+import { Loader2, CheckCircle, QrCode, Upload, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 
 export default function RegistrationPayment() {
@@ -16,10 +16,9 @@ export default function RegistrationPayment() {
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
-  const [instructions, setInstructions] = useState("कृपया नीचे दिए गए QR कोड को स्कैन करके ₹100 का भुगतान करें और Transaction ID दर्ज करें।");
+  const [instructions, setInstructions] = useState("कृपया नीचे दिए गए QR कोड को स्कैन करके ₹100 का भुगतान करें और Screenshot अपलोड करें।");
   const [loading, setLoading] = useState(true);
 
-  // Check if already paid
   const alreadySubmitted = profile?.payment_status === "pending" || profile?.payment_status === "paid";
 
   useEffect(() => {
@@ -38,7 +37,6 @@ export default function RegistrationPayment() {
     fetchSettings();
   }, []);
 
-  // Redirect approved users to dashboard
   useEffect(() => {
     if (profile?.user_status === "approved") {
       navigate("/dashboard", { replace: true });
@@ -47,33 +45,44 @@ export default function RegistrationPayment() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!transactionId.trim()) { toast.error("कृपया Transaction ID दर्ज करें"); return; }
+    if (!screenshot) {
+      toast.error("कृपया Payment Screenshot अपलोड करें");
+      return;
+    }
     if (!user) return;
 
     setSubmitting(true);
 
-    let screenshotUrl: string | null = null;
-    if (screenshot) {
-      const ext = screenshot.name.split(".").pop();
-      const path = `payment-screenshots/${user.id}_${Date.now()}.${ext}`;
-      const { error: upErr } = await supabase.storage.from("payment-assets").upload(path, screenshot);
-      if (upErr) { toast.error("Screenshot upload failed: " + upErr.message); setSubmitting(false); return; }
-      const { data: urlData } = supabase.storage.from("payment-assets").getPublicUrl(path);
-      screenshotUrl = urlData.publicUrl;
+    // Upload screenshot
+    const ext = screenshot.name.split(".").pop();
+    const path = `payment-screenshots/${user.id}_${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage.from("payment-assets").upload(path, screenshot);
+    if (upErr) {
+      toast.error("Screenshot upload failed: " + upErr.message);
+      setSubmitting(false);
+      return;
     }
+    const { data: urlData } = supabase.storage.from("payment-assets").getPublicUrl(path);
+    const screenshotUrl = urlData.publicUrl;
 
     const updateData: Record<string, any> = {
       payment_status: "pending",
-      registration_transaction_id: transactionId.trim(),
+      payment_screenshot_url: screenshotUrl,
     };
-    if (screenshotUrl) updateData.payment_screenshot_url = screenshotUrl;
+    if (transactionId.trim()) {
+      updateData.registration_transaction_id = transactionId.trim();
+    }
 
     const { error } = await supabase
       .from("profiles")
       .update(updateData)
       .eq("id", user.id);
 
-    if (error) { toast.error(error.message); setSubmitting(false); return; }
+    if (error) {
+      toast.error(error.message);
+      setSubmitting(false);
+      return;
+    }
 
     await refreshProfile();
     toast.success("भुगतान सफलतापूर्वक सबमिट हुआ! Admin approval का इंतज़ार करें।");
@@ -138,20 +147,7 @@ export default function RegistrationPayment() {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-foreground">
-                      Transaction ID <span className="text-destructive">*</span>
-                    </label>
-                    <Input
-                      placeholder="जैसे: TXN123456789"
-                      value={transactionId}
-                      onChange={(e) => setTransactionId(e.target.value)}
-                      required
-                      className="text-center text-lg font-mono tracking-wider"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
-                      Payment Screenshot (optional)
+                      Payment Screenshot <span className="text-destructive">*</span>
                     </label>
                     <div className="relative">
                       <Input
@@ -159,6 +155,7 @@ export default function RegistrationPayment() {
                         accept="image/*"
                         onChange={(e) => setScreenshot(e.target.files?.[0] || null)}
                         className="cursor-pointer"
+                        required
                       />
                       {screenshot && (
                         <p className="text-xs text-primary mt-1 flex items-center gap-1">
@@ -168,9 +165,21 @@ export default function RegistrationPayment() {
                     </div>
                   </div>
 
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">
+                      Transaction ID (optional)
+                    </label>
+                    <Input
+                      placeholder="जैसे: TXN123456789"
+                      value={transactionId}
+                      onChange={(e) => setTransactionId(e.target.value)}
+                      className="text-center text-lg font-mono tracking-wider"
+                    />
+                  </div>
+
                   <Button
                     type="submit"
-                    disabled={submitting || !transactionId.trim()}
+                    disabled={submitting || !screenshot}
                     size="lg"
                     className="w-full active:scale-[0.97] transition-all text-base"
                   >

@@ -5,9 +5,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, Search, Download, CheckCircle, XCircle, Eye } from "lucide-react";
+import { Loader2, Search, Download, CheckCircle, XCircle, Eye, Trash2, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface UserRow {
   id: string;
@@ -36,6 +37,8 @@ export default function ManageUsers() {
   const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("all");
   const [selectedUser, setSelectedUser] = useState<UserRow | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [deleteUser, setDeleteUser] = useState<UserRow | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
 
   const fetchUsers = async () => {
     let query = supabase
@@ -72,7 +75,6 @@ export default function ManageUsers() {
     if (error) toast.error(error.message);
     else {
       toast.success("User approved!");
-      // Send notification
       await supabase.from("notifications").insert({
         user_id: userId,
         message: "आपका Registration Approve हो गया है! अब आप सभी features use कर सकते हैं।",
@@ -100,14 +102,35 @@ export default function ManageUsers() {
     setActionLoading(null);
   };
 
+  const handleDelete = async () => {
+    if (!deleteUser) return;
+    setActionLoading(deleteUser.id);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await supabase.functions.invoke("delete-user", {
+        body: { user_id: deleteUser.id },
+      });
+      if (res.error) {
+        toast.error(res.error.message || "Delete failed");
+      } else {
+        toast.success("User deleted successfully");
+        await fetchUsers();
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Delete failed");
+    }
+    setDeleteUser(null);
+    setActionLoading(null);
+  };
+
   const exportCSV = (type: "phone" | "full") => {
     let csv = "";
     if (type === "phone") {
       csv = "Phone\n" + filtered.map((u) => u.phone || "").filter(Boolean).join("\n");
     } else {
-      csv = "Name,Email,Phone,Designation,State,District,Payment Status,User Status,Joined\n" +
+      csv = "Name,Email,Phone,Designation,State,District,Payment Status,User Status,Transaction ID,Joined\n" +
         filtered.map((u) =>
-          [u.name, u.email, u.phone, u.designation, u.state, u.district, u.payment_status, u.user_status, new Date(u.created_at).toLocaleDateString()]
+          [u.name, u.email, u.phone, u.designation, u.state, u.district, u.payment_status, u.user_status, u.registration_transaction_id, new Date(u.created_at).toLocaleDateString()]
             .map((v) => `"${v || ""}"`)
             .join(",")
         ).join("\n");
@@ -183,6 +206,8 @@ export default function ManageUsers() {
                 <TableHead>Phone</TableHead>
                 <TableHead>Designation</TableHead>
                 <TableHead>Payment</TableHead>
+                <TableHead>Screenshot</TableHead>
+                <TableHead>Txn ID</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Location</TableHead>
                 <TableHead>Joined</TableHead>
@@ -201,6 +226,19 @@ export default function ManageUsers() {
                   <TableCell className="text-sm font-mono">{u.phone || "—"}</TableCell>
                   <TableCell className="text-sm">{u.designation || "—"}</TableCell>
                   <TableCell>{paymentBadge(u.payment_status)}</TableCell>
+                  <TableCell>
+                    {u.payment_screenshot_url ? (
+                      <img
+                        src={u.payment_screenshot_url}
+                        alt="Screenshot"
+                        className="w-12 h-12 object-cover rounded border cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => setScreenshotPreview(u.payment_screenshot_url)}
+                      />
+                    ) : (
+                      <span className="text-xs text-muted-foreground">—</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-xs font-mono">{u.registration_transaction_id || "—"}</TableCell>
                   <TableCell>{statusBadge(u.user_status)}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">
                     {[u.state, u.district].filter(Boolean).join(", ") || "—"}
@@ -238,6 +276,16 @@ export default function ManageUsers() {
                             <XCircle className="h-3.5 w-3.5" />
                           </Button>
                         )}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 w-7 p-0 text-destructive hover:text-destructive/80"
+                          onClick={() => setDeleteUser(u)}
+                          disabled={actionLoading === u.id}
+                          title="Delete User"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
                       </div>
                     </TableCell>
                   )}
@@ -271,7 +319,12 @@ export default function ManageUsers() {
               {selectedUser.payment_screenshot_url && (
                 <div>
                   <p className="text-muted-foreground mb-1">Payment Screenshot:</p>
-                  <img src={selectedUser.payment_screenshot_url} alt="Payment Screenshot" className="rounded-lg border max-h-48 object-contain" />
+                  <img
+                    src={selectedUser.payment_screenshot_url}
+                    alt="Payment Screenshot"
+                    className="rounded-lg border max-h-48 object-contain cursor-pointer"
+                    onClick={() => setScreenshotPreview(selectedUser.payment_screenshot_url)}
+                  />
                 </div>
               )}
               <div className="flex gap-2 pt-2">
@@ -290,6 +343,33 @@ export default function ManageUsers() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Screenshot Full Preview */}
+      <Dialog open={!!screenshotPreview} onOpenChange={() => setScreenshotPreview(null)}>
+        <DialogContent className="max-w-lg p-2">
+          {screenshotPreview && (
+            <img src={screenshotPreview} alt="Payment Screenshot" className="w-full rounded-lg object-contain max-h-[80vh]" />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation */}
+      <AlertDialog open={!!deleteUser} onOpenChange={() => setDeleteUser(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>क्या आप इस User को Delete करना चाहते हैं?</AlertDialogTitle>
+            <AlertDialogDescription>
+              <strong>{deleteUser?.name || deleteUser?.email}</strong> को permanently delete किया जाएगा। यह action undo नहीं हो सकता।
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {actionLoading === deleteUser?.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
