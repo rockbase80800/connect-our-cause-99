@@ -286,6 +286,30 @@ export type Database = {
           },
         ]
       }
+      legal_documents: {
+        Row: {
+          category: string
+          created_at: string
+          file_url: string
+          id: string
+          name: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          file_url: string
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          file_url?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string

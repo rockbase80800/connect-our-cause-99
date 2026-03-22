@@ -38,6 +38,8 @@ import CoordinatorMembers from "./pages/dashboard/coordinator/CoordinatorMembers
 import Gallery from "./pages/Gallery";
 import Videos from "./pages/Videos";
 import MSMEAuditorHiring from "./pages/MSMEAuditorHiring";
+import LegalDocuments from "./pages/LegalDocuments";
+import ManageLegalDocuments from "./pages/dashboard/admin/ManageLegalDocuments";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +62,7 @@ const App = () => (
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/videos" element={<Videos />} />
               <Route path="/msme-auditor-hiring" element={<MSMEAuditorHiring />} />
+              <Route path="/legal-documents" element={<LegalDocuments />} />
               
               <Route
                 path="/dashboard"
@@ -91,6 +94,7 @@ const App = () => (
                 <Route path="admin/project/:projectId" element={<ProjectDashboard />} />
                 <Route path="coordinator/users" element={<CoordinatorUsers />} />
                 <Route path="coordinator/members" element={<CoordinatorMembers />} />
+                <Route path="admin/legal-documents" element={<ManageLegalDocuments />} />
               </Route>
               
               <Route path="*" element={<NotFound />} />
