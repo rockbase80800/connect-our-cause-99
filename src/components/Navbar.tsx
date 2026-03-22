@@ -36,6 +36,7 @@ export function Navbar() {
           <Link to="/gallery" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Gallery")}</Link>
           <Link to="/videos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Videos")}</Link>
           <Link to="/legal-documents" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Legal Docs")}</Link>
+          <Link to="/our-websites" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Our Websites")}</Link>
           <a href="/#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Contact")}</a>
           <button onClick={toggleLang} className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors active:scale-[0.95]">
             <Globe className="h-4 w-4" /> {language === "en" ? "हिंदी" : "EN"}
@@ -65,6 +66,7 @@ export function Navbar() {
             <Link to="/gallery" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Gallery</Link>
             <Link to="/videos" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Videos</Link>
             <Link to="/legal-documents" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Legal Docs</Link>
+            <Link to="/our-websites" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Our Websites</Link>
             <a href="/#contact" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Contact</a>
             <Link to="/auth" onClick={() => setMobileOpen(false)}>
               <Button size="sm" className="w-full bg-primary text-primary-foreground">Join Now</Button>
