@@ -13,6 +13,7 @@ import {
   Settings,
   Image,
 } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { NavLink } from "@/components/NavLink";
 import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
 import { useLocation } from "react-router-dom";
