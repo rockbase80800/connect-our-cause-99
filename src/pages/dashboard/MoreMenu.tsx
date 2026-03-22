@@ -100,6 +100,20 @@ const menuItems: MenuItem[] = [
     minRole: ["super_admin"],
   },
   {
+    label: "Manage Websites",
+    description: "Add/remove partner websites",
+    icon: Globe,
+    path: "/dashboard/admin/websites",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Payment Settings",
+    description: "Configure QR code and payment instructions",
+    icon: CreditCard,
+    path: "/dashboard/admin/payment",
+    minRole: ["super_admin"],
+  },
+  {
     label: "Assign Roles",
     description: "Assign roles to users across the hierarchy",
     icon: ShieldCheck,
