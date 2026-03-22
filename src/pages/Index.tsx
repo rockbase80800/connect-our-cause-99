@@ -1,19 +1,22 @@
+import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/home/HeroSection";
-import { AboutSection } from "@/components/home/AboutSection";
 import { ProjectsSection } from "@/components/home/ProjectsSection";
+import { StatsSection } from "@/components/home/StatsSection";
+import { AboutSection } from "@/components/home/AboutSection";
+import { TeamSlider } from "@/components/home/TeamSlider";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
-  console.log("Homepage Loaded");
-
   return (
-    <>
-      <div className="px-10 py-8 text-foreground">Homepage Working</div>
+    <div className="min-h-screen bg-background">
+      <Navbar />
       <HeroSection />
-      <AboutSection />
       <ProjectsSection />
+      <StatsSection />
+      <AboutSection />
+      <TeamSlider />
       <Footer />
-    </>
+    </div>
   );
 };
 
