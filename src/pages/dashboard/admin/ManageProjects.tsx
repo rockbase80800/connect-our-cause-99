@@ -341,43 +341,45 @@ export default function ManageProjects() {
                 <Button type="button" variant="outline" size="sm" onClick={addField}><Plus className="h-3 w-3 mr-1" /> Add Field</Button>
               </div>
               {formFields.map((f, i) => (
-                <div key={i} className="grid grid-cols-[1fr_auto_auto_auto] gap-2 mb-2 items-end">
-                  <Input placeholder="Field label" value={f.label} onChange={(e) => updateFormField(i, "label", e.target.value)} />
-                  <Select value={f.type} onValueChange={(v) => updateFormField(i, "type", v)}>
-                    <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="text">Text</SelectItem>
-                      <SelectItem value="email">Email</SelectItem>
-                      <SelectItem value="number">Number</SelectItem>
-                      <SelectItem value="textarea">Textarea</SelectItem>
-                      <SelectItem value="select">Select</SelectItem>
-                      <SelectItem value="checkbox">Checkbox</SelectItem>
-                      <SelectItem value="file">File Upload</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button type="button" variant={f.required ? "default" : "outline"} size="sm" onClick={() => updateFormField(i, "required", !f.required)} className="text-xs">Req</Button>
-                  <Button type="button" variant="ghost" size="sm" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
+                <div key={i} className="mb-3">
+                  <div className="grid grid-cols-[1fr_auto_auto_auto] gap-2 items-end">
+                    <Input placeholder="Field label" value={f.label} onChange={(e) => updateFormField(i, "label", e.target.value)} />
+                    <Select value={f.type} onValueChange={(v) => updateFormField(i, "type", v)}>
+                      <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="text">Text</SelectItem>
+                        <SelectItem value="email">Email</SelectItem>
+                        <SelectItem value="number">Number</SelectItem>
+                        <SelectItem value="textarea">Textarea</SelectItem>
+                        <SelectItem value="select">Select</SelectItem>
+                        <SelectItem value="checkbox">Checkbox</SelectItem>
+                        <SelectItem value="file">File Upload</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button type="button" variant={f.required ? "default" : "outline"} size="sm" onClick={() => updateFormField(i, "required", !f.required)} className="text-xs">Req</Button>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
+                  </div>
+                  {f.type === "select" && (
+                    <div className="ml-2 mt-1">
+                      <Input
+                        placeholder="Options (comma separated, e.g. Option 1, Option 2)"
+                        value={(f.options || []).join(", ")}
+                        onChange={(e) => updateFormField(i, "options", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
+                        className="text-xs"
+                      />
+                    </div>
+                  )}
+                  {f.type !== "select" && f.type !== "checkbox" && f.type !== "file" && (
+                    <div className="ml-2 mt-1">
+                      <Input
+                        placeholder="Placeholder text"
+                        value={f.placeholder || ""}
+                        onChange={(e) => updateFormField(i, "placeholder", e.target.value)}
+                        className="text-xs"
+                      />
+                    </div>
+                  )}
                 </div>
-                {f.type === "select" && (
-                  <div className="ml-2 mb-2">
-                    <Input
-                      placeholder="Options (comma separated, e.g. Option 1, Option 2)"
-                      value={(f.options || []).join(", ")}
-                      onChange={(e) => updateFormField(i, "options", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
-                      className="text-xs"
-                    />
-                  </div>
-                )}
-                {f.placeholder !== undefined && f.type !== "select" && f.type !== "checkbox" && f.type !== "file" && (
-                  <div className="ml-2 mb-2">
-                    <Input
-                      placeholder="Placeholder text"
-                      value={f.placeholder || ""}
-                      onChange={(e) => updateFormField(i, "placeholder", e.target.value)}
-                      className="text-xs"
-                    />
-                  </div>
-                )}
               ))}
             </div>
           </div>
