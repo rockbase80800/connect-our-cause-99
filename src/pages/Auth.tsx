@@ -53,12 +53,12 @@ const Auth = () => {
     e.preventDefault();
     setSubmitting(true);
 
+    const cleanEmail = email.trim().toLowerCase();
+
     try {
       if (isSignUp) {
-        // Determine referral code: input field takes priority over URL param
         const finalRefCode = (referralCode.trim() || searchParams.get("ref") || "").toUpperCase().trim();
 
-        // Validate referral code if provided
         let referrerId: string | null = null;
         if (finalRefCode) {
           const { data: referrerRows } = await supabase.rpc("lookup_referral_code", { _code: finalRefCode });
@@ -71,7 +71,7 @@ const Auth = () => {
         }
 
         const { data: signUpData, error } = await supabase.auth.signUp({
-          email,
+          email: cleanEmail,
           password,
           options: {
             data: {
@@ -82,7 +82,33 @@ const Auth = () => {
             emailRedirectTo: window.location.origin,
           },
         });
-        if (error) throw error;
+
+        if (error) {
+          console.error("Signup error:", error);
+          if (error.message?.toLowerCase().includes("user already registered")) {
+            toast.error("This email is already registered. Please login.", {
+              action: {
+                label: "Go to Login",
+                onClick: () => setIsSignUp(false),
+              },
+            });
+            setSubmitting(false);
+            return;
+          }
+          throw error;
+        }
+
+        // If Supabase returns a user with no identities, it means user already exists
+        if (signUpData.user && signUpData.user.identities && signUpData.user.identities.length === 0) {
+          toast.error("This email is already registered. Please login.", {
+            action: {
+              label: "Go to Login",
+              onClick: () => setIsSignUp(false),
+            },
+          });
+          setSubmitting(false);
+          return;
+        }
         
         // Set referred_by on profile after signup
         if (referrerId && signUpData.user) {
@@ -95,13 +121,17 @@ const Auth = () => {
         toast.success("Account created! You can now sign in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
-          email,
+          email: cleanEmail,
           password,
         });
-        if (error) throw error;
+        if (error) {
+          console.error("Login error:", error);
+          throw error;
+        }
         navigate("/dashboard");
       }
     } catch (err: any) {
+      console.error("Auth error:", err);
       toast.error(err.message || "Authentication failed");
     } finally {
       setSubmitting(false);
