@@ -8,8 +8,29 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X, ChevronUp, ChevronDown, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
+
+const DEFAULT_HINDI_FIELDS: FormField[] = [
+  { name: "full_name", label: "पूरा नाम (Full Name)", type: "text", required: true, placeholder: "अपना पूरा नाम लिखें" },
+  { name: "father_mother_name", label: "पिता/माता का नाम (Father/Mother Name)", type: "text", required: true, placeholder: "पिता या माता का नाम लिखें" },
+  { name: "age", label: "उम्र (Age)", type: "number", required: true, placeholder: "आपकी उम्र" },
+  { name: "gender", label: "लिंग (Gender)", type: "select", required: true, options: ["पुरुष (Male)", "महिला (Female)", "अन्य (Other)"] },
+  { name: "mobile_number", label: "मोबाइल नंबर (Mobile Number)", type: "text", required: true, placeholder: "10 अंकों का मोबाइल नंबर" },
+  { name: "whatsapp_number", label: "व्हाट्सएप नंबर (WhatsApp Number)", type: "text", required: false, placeholder: "व्हाट्सएप नंबर (वैकल्पिक)" },
+  { name: "email", label: "ईमेल आईडी (Email ID)", type: "email", required: false, placeholder: "example@email.com" },
+  { name: "full_address", label: "पूरा पता (Full Address)", type: "textarea", required: true, placeholder: "अपना पूरा पता लिखें" },
+  { name: "state", label: "राज्य (State)", type: "text", required: true, placeholder: "राज्य का नाम" },
+  { name: "district", label: "जिला (District)", type: "text", required: true, placeholder: "जिले का नाम" },
+  { name: "block", label: "ब्लॉक (Block)", type: "text", required: true, placeholder: "ब्लॉक का नाम" },
+  { name: "panchayat_village", label: "पंचायत/गाँव (Panchayat/Village)", type: "text", required: true, placeholder: "पंचायत या गाँव का नाम" },
+  { name: "qualification", label: "शैक्षिक योग्यता (Qualification)", type: "select", required: true, options: ["10वीं (10th)", "12वीं (12th)", "स्नातक (Graduate)", "स्नातकोत्तर (Post Graduate)", "अन्य (Other)"] },
+  { name: "position_applied", label: "आवेदित पद (Position Applied For)", type: "select", required: true, options: ["स्वयंसेवक (Volunteer)", "समन्वयक (Coordinator)", "पर्यवेक्षक (Supervisor)", "अन्य (Other)"] },
+  { name: "photo", label: "फोटो अपलोड करें (Upload Photo)", type: "file", required: true },
+  { name: "aadhar_card", label: "आधार कार्ड अपलोड करें (Upload Aadhar Card)", type: "file", required: true },
+  { name: "bank_passbook", label: "बैंक पासबुक अपलोड करें (Upload Bank Passbook)", type: "file", required: true },
+  { name: "declaration", label: "मैं पुष्टि करता/करती हूँ कि सभी जानकारी सही है और मैं दिशानिर्देशों का पालन करने के लिए सहमत हूँ।", type: "checkbox", required: true },
+];
 
 interface Project {
   id: string;
