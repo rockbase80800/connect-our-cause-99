@@ -42,7 +42,7 @@ export function DashboardSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
-  const { primaryRole, profile, signOut } = useAuth();
+  const { primaryRole, profile, signOut, hasRole } = useAuth();
   const { settings } = useWebsiteSettings();
   const siteName = settings?.site_name || "JanSeva";
   const logoUrl = settings?.logo_url;
