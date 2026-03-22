@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { FileText, Download, Loader2 } from "lucide-react";
-import { FileText, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface LegalDoc {
