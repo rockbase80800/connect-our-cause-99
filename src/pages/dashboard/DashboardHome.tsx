@@ -135,6 +135,47 @@ export default function DashboardHome() {
         </div>
       )}
 
+      {/* Pending User Pages for Super Admin */}
+      {isSuperAdmin && pendingPages > 0 && (
+        <motion.div custom={2} variants={cardVariants} initial="hidden" animate="visible">
+          <Link to="/dashboard/admin/user-profiles">
+            <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 border-yellow-500/20 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]">
+              <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Pending User Pages</CardTitle>
+                <UserCheck className="h-4 w-4 text-yellow-600" />
+              </CardHeader>
+              <CardContent className="px-4 pb-3">
+                <div className="text-2xl font-bold text-yellow-600">{pendingPages}</div>
+                <p className="text-xs text-muted-foreground mt-1">Awaiting approval →</p>
+              </CardContent>
+            </Card>
+          </Link>
+        </motion.div>
+      )}
+
+      {/* Own Page Status for users with own_page role */}
+      {hasOwnPage && (
+        <motion.div custom={3} variants={cardVariants} initial="hidden" animate="visible">
+          <Link to="/dashboard/my-page">
+            <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]">
+              <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
+                <CardTitle className="text-xs font-medium text-muted-foreground">My Profile Page</CardTitle>
+                <FilePlus className="h-4 w-4 text-primary" />
+              </CardHeader>
+              <CardContent className="px-4 pb-3">
+                {myPageStatus ? (
+                  <div className={`text-lg font-bold ${myPageStatus === "approved" ? "text-green-600" : myPageStatus === "rejected" ? "text-destructive" : "text-yellow-600"}`}>
+                    {myPageStatus.charAt(0).toUpperCase() + myPageStatus.slice(1)}
+                  </div>
+                ) : (
+                  <div className="text-lg font-bold text-primary">Create Now →</div>
+                )}
+              </CardContent>
+            </Card>
+          </Link>
+        </motion.div>
+      )}
+
       {/* Admin Application Stats */}
       {isAdmin && (
         <div className="space-y-3">

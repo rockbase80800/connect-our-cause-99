@@ -18,6 +18,7 @@ const ALL_ROLES = [
   "district_coordinator",
   "block_coordinator",
   "panchayat_coordinator",
+  "own_page",
   "user",
 ];
 
