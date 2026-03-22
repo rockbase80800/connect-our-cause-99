@@ -241,6 +241,12 @@ export default function ManageApplications() {
                   <TableCell>
                     <Badge variant="outline" className={statusColors[app.status] || ""}>{app.status.replace("_", " ")}</Badge>
                   </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className={(app as any).payment_status === "paid" ? "bg-success/10 text-success border-success/30" : "bg-warning/10 text-warning border-warning/30"}>
+                      {(app as any).payment_status === "paid" ? "✅ Paid" : "❌ Unpaid"}
+                    </Badge>
+                  </TableCell>
+                  </TableCell>
                   <TableCell className="text-sm text-muted-foreground">{new Date(app.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>
                     <Button variant="ghost" size="sm" onClick={() => { setSelected(app); setNewStatus(app.status); setReason(app.rejection_reason || ""); }}>
