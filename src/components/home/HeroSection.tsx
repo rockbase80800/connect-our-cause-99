@@ -22,6 +22,7 @@ export function HeroSection() {
   useEffect(() => {
     supabase.from("homepage_settings").select("*").limit(1).maybeSingle().then(({ data, error }) => {
       if (error) console.error("Hero fetch error:", error);
+      console.log("hero:", data);
       if (data) setS(data as HeroSettings);
       setLoading(false);
     });
@@ -65,6 +66,12 @@ export function HeroSection() {
     );
   }
 
+  const heroEyebrow = s?.hero_eyebrow || "Empowering Communities";
+  const heroTitle = s?.hero_title || "Default Title";
+  const heroSubtext = s?.hero_subtext || "Working for sustainable community development.";
+  const buttonText = s?.button_text || "Join Now";
+  const button2Text = s?.button2_text || "View Projects";
+
   return (
     <section className="relative min-h-[92vh] flex items-center overflow-hidden">
       <div className="absolute inset-0">
@@ -81,31 +88,31 @@ export function HeroSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 md:py-40">
         <div className="max-w-2xl">
-          {s.hero_eyebrow && (
+          {heroEyebrow && (
             <p className="text-accent font-semibold text-sm uppercase tracking-widest mb-4 animate-fade-in" style={{ animationDelay: "200ms" }}>
-              {s.hero_eyebrow}
+              {heroEyebrow}
             </p>
           )}
           <h1 className="text-display text-4xl md:text-6xl lg:text-7xl mb-6 animate-reveal-up whitespace-pre-line" style={{ animationDelay: "350ms", color: "hsl(40 33% 98%)" }}>
-            {s.hero_title}
+            {heroTitle}
           </h1>
-          {s.hero_subtext && (
+          {heroSubtext && (
             <p className="text-lg md:text-xl leading-relaxed mb-10 animate-reveal-up" style={{ animationDelay: "500ms", color: "hsl(40 20% 82%)" }}>
-              {s.hero_subtext}
+              {heroSubtext}
             </p>
           )}
           <div className="flex flex-wrap gap-4 animate-reveal-up" style={{ animationDelay: "650ms" }}>
-            {s.button_text && (
-              <Link to={s.button_link || "/auth"}>
+            {buttonText && (
+              <Link to={s?.button_link || "/auth"}>
                 <Button size="lg" className="bg-accent text-accent-foreground font-semibold hover:bg-accent/90 active:scale-[0.97] transition-all shadow-lg shadow-accent/25 text-base px-8 py-6">
-                  {s.button_text}
+                  {buttonText}
                 </Button>
               </Link>
             )}
-            {s.button2_text && (
-              <a href={s.button2_link || "#projects"}>
+            {button2Text && (
+              <a href={s?.button2_link || "#projects"}>
                 <Button size="lg" variant="outline" className="border-2 font-semibold text-base px-8 py-6 active:scale-[0.97] transition-all" style={{ borderColor: "hsl(40 20% 82% / 0.3)", color: "hsl(40 33% 98%)", backgroundColor: "transparent" }}>
-                  {s.button2_text}
+                  {button2Text}
                 </Button>
               </a>
             )}

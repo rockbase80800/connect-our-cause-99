@@ -25,18 +25,21 @@ export function ProjectsSection() {
       .select("id, title, description, image_url, status")
       .eq("status", "active")
       .order("created_at", { ascending: false })
-      .then(({ data }) => {
-        if (data && data.length > 0) {
-          setProjects(
-            data.map((p: any) => ({
-              id: p.id,
-              title: p.title,
-              description: p.description ?? "",
-              image: p.image_url,
-              status: "Active",
-            }))
-          );
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("Projects fetch error:", error);
         }
+
+        console.log("projects:", data);
+        setProjects(
+          (data || []).map((p: any) => ({
+            id: p.id,
+            title: p.title ?? "Untitled Project",
+            description: p.description ?? "",
+            image: p.image_url,
+            status: "Active",
+          }))
+        );
         setLoading(false);
       });
   }, []);
@@ -91,7 +94,7 @@ export function ProjectsSection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, i) => (
+          {(projects || []).map((project, i) => (
             <Link
               key={project.id}
               to={project.customLink || `/project/${project.id}`}
