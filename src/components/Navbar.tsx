@@ -30,28 +30,19 @@ export function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <a href="/#projects" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            Projects
-          </a>
-          <a href="/#about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            About
-          </a>
-          <Link to="/gallery" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            Gallery
-          </Link>
-          <Link to="/videos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            Videos
-          </Link>
-          <Link to="/legal-documents" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            Legal Docs
-          </Link>
-          <a href="/#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            Contact
-          </a>
+        <div className="hidden md:flex items-center gap-6">
+          <a href="/#projects" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Projects")}</a>
+          <a href="/#about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("About")}</a>
+          <Link to="/gallery" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Gallery")}</Link>
+          <Link to="/videos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Videos")}</Link>
+          <Link to="/legal-documents" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Legal Docs")}</Link>
+          <a href="/#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">{t("Contact")}</a>
+          <button onClick={toggleLang} className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors active:scale-[0.95]">
+            <Globe className="h-4 w-4" /> {language === "en" ? "हिंदी" : "EN"}
+          </button>
           <Link to="/auth">
             <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 active:scale-[0.97] transition-all">
-              Join Now
+              {t("Join Now")}
             </Button>
           </Link>
         </div>
