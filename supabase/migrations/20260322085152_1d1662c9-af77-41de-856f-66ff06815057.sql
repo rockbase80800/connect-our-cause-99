@@ -1,0 +1,1 @@
+ALTER TABLE public.projects ADD COLUMN form_link text DEFAULT NULL;

@@ -41,6 +41,7 @@ interface Project {
   about: string | null;
   status: string;
   created_at: string;
+  form_link: string | null;
 }
 
 interface FormField {
@@ -71,6 +72,7 @@ export default function ManageProjects() {
   const [imageUrl, setImageUrl] = useState("");
   const [about, setAbout] = useState("");
   const [status, setStatus] = useState("active");
+  const [formLink, setFormLink] = useState("");
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
@@ -96,7 +98,7 @@ export default function ManageProjects() {
 
   const openCreate = () => {
     setEditing(null);
-    setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active");
+    setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active"); setFormLink("");
     setFormFields(DEFAULT_HINDI_FIELDS.map(f => ({ ...f })));
     setGalleryImages([]);
     setDialogOpen(true);
@@ -105,7 +107,7 @@ export default function ManageProjects() {
   const openEdit = async (proj: Project) => {
     setEditing(proj);
     setTitle(proj.title); setDescription(proj.description ?? ""); setImageUrl(proj.image_url ?? "");
-    setAbout(proj.about ?? ""); setStatus(proj.status);
+    setAbout(proj.about ?? ""); setStatus(proj.status); setFormLink(proj.form_link ?? "");
     const { data } = await supabase.from("form_schemas").select("fields").eq("project_id", proj.id).single();
     setFormFields((data?.fields as unknown as FormField[]) ?? []);
     await fetchGalleryImages(proj.id);
@@ -167,7 +169,7 @@ export default function ManageProjects() {
     if (editing) {
       const { error } = await supabase
         .from("projects")
-        .update({ title, description, image_url: imageUrl || null, about, status: status as any })
+        .update({ title, description, image_url: imageUrl || null, about, status: status as any, form_link: formLink || null } as any)
         .eq("id", editing.id);
       if (error) { toast.error(error.message); setSaving(false); return; }
       await supabase.from("form_schemas").delete().eq("project_id", editing.id);
@@ -176,7 +178,7 @@ export default function ManageProjects() {
     } else {
       const { data: newProj, error } = await supabase
         .from("projects")
-        .insert({ title, description, image_url: imageUrl || null, about, status: status as any })
+        .insert({ title, description, image_url: imageUrl || null, about, status: status as any, form_link: formLink || null } as any)
         .select().single();
       if (error) { toast.error(error.message); setSaving(false); return; }
       if (newProj) {
@@ -355,6 +357,13 @@ export default function ManageProjects() {
               </Select>
             </div>
 
+            {/* Form Link */}
+            <div className="border-t border-border pt-4">
+              <Label className="text-base font-semibold">Form Link (External)</Label>
+              <p className="text-xs text-muted-foreground mb-2">अगर आप बाहरी फॉर्म लिंक देना चाहते हैं तो यहाँ URL डालें। अगर यह भरा है और नीचे कोई form field नहीं है, तो यूज़र को यह लिंक दिखेगा।</p>
+              <Input placeholder="https://forms.google.com/..." value={formLink} onChange={(e) => setFormLink(e.target.value)} />
+            </div>
+
             <div className="border-t border-border pt-4">
               <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                 <Label className="text-base font-semibold">Application Form Fields ({formFields.length})</Label>
@@ -367,12 +376,17 @@ export default function ManageProjects() {
                   </Button>
                 </div>
               </div>
-              {formFields.length === 0 && (
+              {formFields.length === 0 && !formLink && (
                 <div className="text-center py-6 border border-dashed border-border rounded-lg">
                   <p className="text-muted-foreground text-sm mb-2">कोई फील्ड नहीं है</p>
                   <Button type="button" variant="outline" size="sm" onClick={loadDefaultFields}>
                     <RotateCcw className="h-3 w-3 mr-1" /> डिफ़ॉल्ट हिंदी फॉर्म लोड करें
                   </Button>
+                </div>
+              )}
+              {formFields.length === 0 && formLink && (
+                <div className="text-center py-4 border border-dashed border-primary/30 rounded-lg bg-primary/5">
+                  <p className="text-sm text-primary font-medium">✓ External form link set — users will see "Form Link" button</p>
                 </div>
               )}
               {formFields.map((f, i) => (

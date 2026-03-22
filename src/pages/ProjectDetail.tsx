@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, ArrowLeft, CheckCircle, ChevronDown, ArrowRight, Image as ImageIcon, Upload } from "lucide-react";
+import { Loader2, ArrowLeft, CheckCircle, ChevronDown, ArrowRight, Image as ImageIcon, Upload, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -330,6 +330,18 @@ export default function ProjectDetail() {
                     </Button>
                   </form>
                 )}
+              </CardContent>
+            </Card>
+          ) : project.form_link ? (
+            <Card className="shadow-xl">
+              <CardContent className="py-10 text-center space-y-4">
+                <h3 className="font-semibold text-xl text-foreground">Apply for This Project</h3>
+                <p className="text-muted-foreground">आवेदन फॉर्म भरने के लिए नीचे बटन पर क्लिक करें</p>
+                <a href={project.form_link} target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="active:scale-[0.97] transition-all">
+                    <ExternalLink className="h-4 w-4 mr-2" /> Form Link खोलें
+                  </Button>
+                </a>
               </CardContent>
             </Card>
           ) : (
