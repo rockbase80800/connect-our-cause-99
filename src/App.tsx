@@ -43,6 +43,10 @@ import LegalDocuments from "./pages/LegalDocuments";
 import ManageLegalDocuments from "./pages/dashboard/admin/ManageLegalDocuments";
 import OurWebsites from "./pages/OurWebsites";
 import ManageWebsites from "./pages/dashboard/admin/ManageWebsites";
+import Team from "./pages/Team";
+import PublicProfile from "./pages/PublicProfile";
+import CreateMyPage from "./pages/dashboard/CreateMyPage";
+import ManageUserProfiles from "./pages/dashboard/admin/ManageUserProfiles";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,6 +72,8 @@ const App = () => (
               <Route path="/msme-auditor-hiring" element={<MSMEAuditorHiring />} />
               <Route path="/legal-documents" element={<LegalDocuments />} />
               <Route path="/our-websites" element={<OurWebsites />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/profile/:id" element={<PublicProfile />} />
               
               <Route
                 path="/dashboard"
@@ -101,6 +107,8 @@ const App = () => (
                 <Route path="coordinator/members" element={<CoordinatorMembers />} />
                 <Route path="admin/legal-documents" element={<ManageLegalDocuments />} />
                 <Route path="admin/websites" element={<ManageWebsites />} />
+                <Route path="admin/user-profiles" element={<ManageUserProfiles />} />
+                <Route path="my-page" element={<CreateMyPage />} />
               </Route>
               
               <Route path="*" element={<NotFound />} />

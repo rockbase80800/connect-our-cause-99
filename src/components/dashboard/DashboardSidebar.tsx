@@ -16,6 +16,8 @@ import {
   CreditCard,
   Globe,
   Scale,
+  UserCheck,
+  FilePlus,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { NavLink } from "@/components/NavLink";
@@ -40,7 +42,7 @@ export function DashboardSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
-  const { primaryRole, profile, signOut } = useAuth();
+  const { primaryRole, profile, signOut, hasRole } = useAuth();
   const { settings } = useWebsiteSettings();
   const siteName = settings?.site_name || "JanSeva";
   const logoUrl = settings?.logo_url;
@@ -52,6 +54,7 @@ export function DashboardSidebar() {
     { title: "My Referrals", url: "/dashboard/referrals", icon: Share2 },
     { title: "Notifications", url: "/dashboard/notifications", icon: Bell },
     { title: "Profile", url: "/dashboard/profile", icon: UserCircle },
+    ...(hasRole("own_page" as any) ? [{ title: "My Page", url: "/dashboard/my-page", icon: FilePlus }] : []),
   ];
 
   const adminItems = [
@@ -70,7 +73,8 @@ export function DashboardSidebar() {
           { title: "Videos", url: "/dashboard/admin/videos", icon: Video },
           { title: "Legal Documents", url: "/dashboard/admin/legal-documents", icon: Scale },
           { title: "Our Websites", url: "/dashboard/admin/websites", icon: Globe },
-          { title: "Payment Settings", url: "/dashboard/admin/payment", icon: CreditCard },
+           { title: "Payment Settings", url: "/dashboard/admin/payment", icon: CreditCard },
+           { title: "User Profile Pages", url: "/dashboard/admin/user-profiles", icon: UserCheck },
           { title: "Leads", url: "/dashboard/admin/leads", icon: FileText },
           { title: "Assign Roles", url: "/dashboard/admin/roles", icon: Shield },
           { title: "Website Settings", url: "/dashboard/admin/settings", icon: Settings },
