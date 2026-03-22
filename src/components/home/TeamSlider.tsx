@@ -18,12 +18,14 @@ export function TeamSlider() {
   const { ref, isVisible } = useScrollReveal(0.15);
 
   useEffect(() => {
+    console.log("TeamSlider: fetching profiles...");
     supabase
       .from("user_profiles")
       .select("id, name, photo_url, designation, bio")
       .eq("status", "approved")
       .eq("show_in_slider", true)
       .then(({ data, error }) => {
+        console.log("TeamSlider: data =", data, "error =", error);
         if (error) console.error("TeamSlider fetch error:", error);
         if (data && data.length > 0) setMembers(data);
       });
