@@ -114,7 +114,11 @@ export default function AssignRoles() {
 
   const handleEditSave = async () => {
     if (!editingRole || !editRole) return;
-    setSaving(true);
+    if (editingRole.originalRole === "super_admin" && editRole !== "super_admin") {
+      toast.error("Super Admin role cannot be changed");
+      return;
+    }
+    setS	aving(true);
 
     // Update role
     const { error } = await supabase
