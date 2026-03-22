@@ -217,13 +217,14 @@ export default function ManageApplications() {
                 <TableHead>Position</TableHead>
                 <TableHead>Project</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Payment</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filtered.length === 0 && (
-                <TableRow><TableCell colSpan={8} className="text-center py-10 text-muted-foreground">No applications found</TableCell></TableRow>
+                <TableRow><TableCell colSpan={9} className="text-center py-10 text-muted-foreground">No applications found</TableCell></TableRow>
               )}
               {filtered.map((app) => (
                 <TableRow key={app.id}>
@@ -239,6 +240,11 @@ export default function ManageApplications() {
                   <TableCell className="text-sm">{app.projects?.title ?? "—"}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className={statusColors[app.status] || ""}>{app.status.replace("_", " ")}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className={(app as any).payment_status === "paid" ? "bg-success/10 text-success border-success/30" : "bg-warning/10 text-warning border-warning/30"}>
+                      {(app as any).payment_status === "paid" ? "✅ Paid" : "❌ Unpaid"}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">{new Date(app.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>

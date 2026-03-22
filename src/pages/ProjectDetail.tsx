@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
@@ -41,6 +41,7 @@ function RevealSection({ children, className = "", delay = 0 }: { children: Reac
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { user, profile } = useAuth();
   const [project, setProject] = useState<any>(null);
   const [fields, setFields] = useState<FormField[]>([]);
@@ -89,13 +90,15 @@ export default function ProjectDetail() {
       project_id: id,
       form_data: formData,
     });
-    const { error } = await supabase.from("applications").insert({
+    const { data: appData, error } = await supabase.from("applications").insert({
       user_id: user.id,
       project_id: id,
       form_data: formData,
-    });
-    if (error) { toast.error(error.message); }
-    else { setSubmitted(true); toast.success("Application submitted!"); }
+    }).select("id").single();
+    if (error) { toast.error(error.message); setSubmitting(false); return; }
+    // Redirect to payment page
+    toast.info("अब भुगतान करें");
+    navigate(`/payment/${appData.id}`);
     setSubmitting(false);
   };
 

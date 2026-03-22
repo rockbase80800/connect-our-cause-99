@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import AuthCallback from "./pages/AuthCallback";
 import ProjectDetail from "./pages/ProjectDetail";
+import Payment from "./pages/Payment";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import ProjectsList from "./pages/dashboard/ProjectsList";
 import MyApplications from "./pages/dashboard/MyApplications";
@@ -30,6 +31,7 @@ import ManageHomepage from "./pages/dashboard/admin/ManageHomepage";
 import ManageGallery from "./pages/dashboard/admin/ManageGallery";
 import ManageLeads from "./pages/dashboard/admin/ManageLeads";
 import ManageVideos from "./pages/dashboard/admin/ManageVideos";
+import PaymentSettings from "./pages/dashboard/admin/PaymentSettings";
 import CoordinatorUsers from "./pages/dashboard/coordinator/CoordinatorUsers";
 import CoordinatorMembers from "./pages/dashboard/coordinator/CoordinatorMembers";
 import Gallery from "./pages/Gallery";
@@ -52,6 +54,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/project/:id" element={<ProjectDetail />} />
+              <Route path="/payment/:applicationId" element={<Payment />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/videos" element={<Videos />} />
               
@@ -81,6 +84,7 @@ const App = () => (
                 <Route path="admin/gallery" element={<ManageGallery />} />
                 <Route path="admin/leads" element={<ManageLeads />} />
                 <Route path="admin/videos" element={<ManageVideos />} />
+                <Route path="admin/payment" element={<PaymentSettings />} />
                 <Route path="coordinator/users" element={<CoordinatorUsers />} />
                 <Route path="coordinator/members" element={<CoordinatorMembers />} />
               </Route>
