@@ -69,7 +69,7 @@ export default function ManageUserProfiles() {
   if (loading) return <PageWrapper><p>Loading...</p></PageWrapper>;
 
   return (
-    <PageWrapper title="User Profile Pages">
+    <PageWrapper>
       {profiles.length === 0 ? (
         <p className="text-muted-foreground">No profile submissions yet.</p>
       ) : (

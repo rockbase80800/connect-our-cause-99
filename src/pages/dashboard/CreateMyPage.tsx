@@ -108,7 +108,7 @@ export default function CreateMyPage() {
   if (loading) return <PageWrapper><p>Loading...</p></PageWrapper>;
 
   return (
-    <PageWrapper title="Create My Page">
+    <PageWrapper>
       {existing?.status && (
         <div className={`mb-6 px-4 py-3 rounded-lg text-sm font-medium ${
           existing.status === "approved" ? "bg-green-100 text-green-800" :
