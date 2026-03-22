@@ -209,6 +209,33 @@ export type Database = {
         }
         Relationships: []
       }
+      homepage_admins: {
+        Row: {
+          created_at: string
+          designation: string | null
+          id: string
+          name: string
+          photo_url: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          designation?: string | null
+          id?: string
+          name: string
+          photo_url?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          designation?: string | null
+          id?: string
+          name?: string
+          photo_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       homepage_settings: {
         Row: {
           button_link: string | null
@@ -374,11 +401,14 @@ export type Database = {
           id: string
           name: string | null
           panchayat: string | null
+          payment_status: string
           phone: string | null
           referral_code: string | null
           referred_by: string | null
+          registration_transaction_id: string | null
           state: string | null
           updated_at: string
+          user_status: string
         }
         Insert: {
           address?: string | null
@@ -390,11 +420,14 @@ export type Database = {
           id: string
           name?: string | null
           panchayat?: string | null
+          payment_status?: string
           phone?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          registration_transaction_id?: string | null
           state?: string | null
           updated_at?: string
+          user_status?: string
         }
         Update: {
           address?: string | null
@@ -406,11 +439,14 @@ export type Database = {
           id?: string
           name?: string | null
           panchayat?: string | null
+          payment_status?: string
           phone?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          registration_transaction_id?: string | null
           state?: string | null
           updated_at?: string
+          user_status?: string
         }
         Relationships: [
           {
