@@ -38,6 +38,8 @@ import CoordinatorMembers from "./pages/dashboard/coordinator/CoordinatorMembers
 import Gallery from "./pages/Gallery";
 import Videos from "./pages/Videos";
 import MSMEAuditorHiring from "./pages/MSMEAuditorHiring";
+import LegalDocuments from "./pages/LegalDocuments";
+import ManageLegalDocuments from "./pages/dashboard/admin/ManageLegalDocuments";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
