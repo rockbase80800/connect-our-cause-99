@@ -86,7 +86,7 @@ export default function LegalDocuments() {
           </div>
         )}
       </main>
-      <Footer />
+      
     </div>
   );
 }

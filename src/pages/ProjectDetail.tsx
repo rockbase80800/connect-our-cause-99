@@ -369,7 +369,7 @@ export default function ProjectDetail() {
         </RevealSection>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }
