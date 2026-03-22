@@ -12,6 +12,9 @@ import {
   ImageIcon,
   Contact,
   Video,
+  Globe,
+  Wallet,
+  CreditCard,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -94,6 +97,20 @@ const menuItems: MenuItem[] = [
     description: "Manage legal documents for users",
     icon: FileText,
     path: "/dashboard/admin/legal-documents",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Manage Websites",
+    description: "Add/remove partner websites",
+    icon: Globe,
+    path: "/dashboard/admin/websites",
+    minRole: ["super_admin"],
+  },
+  {
+    label: "Payment Settings",
+    description: "Configure QR code and payment instructions",
+    icon: CreditCard,
+    path: "/dashboard/admin/payment",
     minRole: ["super_admin"],
   },
   {

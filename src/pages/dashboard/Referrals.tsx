@@ -8,13 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Copy, Check, Users, Loader2, ChevronRight, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 interface TreeNode {
   id: string;
   name: string | null;
-  email: string | null;
-  phone: string | null;
-  created_at: string;
   children: TreeNode[];
 }
 
@@ -50,7 +48,7 @@ export default function Referrals() {
     if (depth > 3) return [];
     const { data } = await supabase
       .from("profiles")
-      .select("id, name, email, phone, created_at")
+      .select("id, name")
       .eq("referred_by", parentId)
       .order("created_at", { ascending: false });
 
@@ -111,18 +109,22 @@ export default function Referrals() {
         </Card>
 
         <div className="grid grid-cols-2 gap-4">
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <p className="text-3xl font-bold text-foreground">{tree.length}</p>
-              <p className="text-xs text-muted-foreground mt-1">Direct Referrals</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <p className="text-3xl font-bold text-foreground">{totalCount}</p>
-              <p className="text-xs text-muted-foreground mt-1">Total Team</p>
-            </CardContent>
-          </Card>
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <Card>
+              <CardContent className="pt-6 text-center">
+                <p className="text-3xl font-bold text-foreground">{tree.length}</p>
+                <p className="text-xs text-muted-foreground mt-1">Direct Referrals</p>
+              </CardContent>
+            </Card>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+            <Card>
+              <CardContent className="pt-6 text-center">
+                <p className="text-3xl font-bold text-foreground">{totalCount}</p>
+                <p className="text-xs text-muted-foreground mt-1">Total Team</p>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
 
         <Card>
@@ -153,6 +155,7 @@ export default function Referrals() {
 function TreeNodeItem({ node, level }: { node: TreeNode; level: number }) {
   const [expanded, setExpanded] = useState(level === 0);
   const hasChildren = node.children.length > 0;
+  const downlineCount = countAllChildren(node.children);
 
   return (
     <div style={{ paddingLeft: `${level * 16}px` }}>
@@ -169,11 +172,9 @@ function TreeNodeItem({ node, level }: { node: TreeNode; level: number }) {
         </span>
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm text-foreground truncate">{node.name || "Unnamed"}</p>
-          <p className="text-xs text-muted-foreground truncate">{node.email} {node.phone ? `• ${node.phone}` : ""}</p>
         </div>
         <div className="text-right flex-shrink-0">
-          <p className="text-xs text-muted-foreground">{new Date(node.created_at).toLocaleDateString()}</p>
-          {hasChildren && <p className="text-xs text-primary">{node.children.length} referral{node.children.length > 1 ? "s" : ""}</p>}
+          {hasChildren && <p className="text-xs text-primary">{node.children.length} direct · {downlineCount} total</p>}
         </div>
       </button>
       {expanded && hasChildren && (
@@ -185,4 +186,10 @@ function TreeNodeItem({ node, level }: { node: TreeNode; level: number }) {
       )}
     </div>
   );
+}
+
+function countAllChildren(nodes: TreeNode[]): number {
+  let count = nodes.length;
+  for (const n of nodes) count += countAllChildren(n.children);
+  return count;
 }

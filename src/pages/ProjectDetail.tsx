@@ -179,11 +179,19 @@ export default function ProjectDetail() {
             </p>
           )}
           <div className="mt-8 flex flex-wrap gap-3 animate-reveal-up" style={{ animationDelay: "400ms" }}>
-            <a href="#apply">
-              <Button size="lg" className="bg-accent text-accent-foreground font-semibold hover:bg-accent/90 active:scale-[0.97] transition-all shadow-lg text-base px-8 py-6">
-                Apply Now <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </a>
+            {user ? (
+              <a href="#apply">
+                <Button size="lg" className="bg-accent text-accent-foreground font-semibold hover:bg-accent/90 active:scale-[0.97] transition-all shadow-lg text-base px-8 py-6">
+                  Apply Now <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </a>
+            ) : (
+              <Link to={`/auth?redirect=/project/${id}`}>
+                <Button size="lg" className="bg-accent text-accent-foreground font-semibold hover:bg-accent/90 active:scale-[0.97] transition-all shadow-lg text-base px-8 py-6">
+                  Login to Apply <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+            )}
             {project.download_file_url && (
               <a href={project.download_file_url} target="_blank" rel="noopener noreferrer" download>
                 <Button size="lg" variant="outline" className="font-semibold active:scale-[0.97] transition-all shadow-lg text-base px-8 py-6 border-emerald-400/50 bg-emerald-500 text-white hover:bg-emerald-600 hover:text-white">
@@ -361,7 +369,7 @@ export default function ProjectDetail() {
         </RevealSection>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

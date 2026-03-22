@@ -42,7 +42,7 @@ export function AboutCardSection() {
       });
   }, []);
 
-  if (!data || (!data.title && !data.description && data.images.length === 0)) return null;
+  if (!data) return null;
 
   return (
     <section className="py-20 md:py-28 section-padding bg-background">

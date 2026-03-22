@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { WebsiteSettingsProvider } from "@/contexts/WebsiteSettingsContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
@@ -40,6 +41,8 @@ import Videos from "./pages/Videos";
 import MSMEAuditorHiring from "./pages/MSMEAuditorHiring";
 import LegalDocuments from "./pages/LegalDocuments";
 import ManageLegalDocuments from "./pages/dashboard/admin/ManageLegalDocuments";
+import OurWebsites from "./pages/OurWebsites";
+import ManageWebsites from "./pages/dashboard/admin/ManageWebsites";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +54,7 @@ const App = () => (
       <Sonner />
         <BrowserRouter>
           <ScrollToTop />
+          <LanguageProvider>
           <WebsiteSettingsProvider>
           <AuthProvider>
             <Routes>
@@ -63,6 +67,7 @@ const App = () => (
               <Route path="/videos" element={<Videos />} />
               <Route path="/msme-auditor-hiring" element={<MSMEAuditorHiring />} />
               <Route path="/legal-documents" element={<LegalDocuments />} />
+              <Route path="/our-websites" element={<OurWebsites />} />
               
               <Route
                 path="/dashboard"
@@ -95,12 +100,14 @@ const App = () => (
                 <Route path="coordinator/users" element={<CoordinatorUsers />} />
                 <Route path="coordinator/members" element={<CoordinatorMembers />} />
                 <Route path="admin/legal-documents" element={<ManageLegalDocuments />} />
+                <Route path="admin/websites" element={<ManageWebsites />} />
               </Route>
               
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>
         </WebsiteSettingsProvider>
+        </LanguageProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

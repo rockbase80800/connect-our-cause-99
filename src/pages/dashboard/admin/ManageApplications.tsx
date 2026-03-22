@@ -242,9 +242,43 @@ export default function ManageApplications() {
                     <Badge variant="outline" className={statusColors[app.status] || ""}>{app.status.replace("_", " ")}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={(app as any).payment_status === "paid" ? "bg-success/10 text-success border-success/30" : "bg-warning/10 text-warning border-warning/30"}>
-                      {(app as any).payment_status === "paid" ? "✅ Paid" : "❌ Unpaid"}
-                    </Badge>
+                    <div className="flex items-center gap-1">
+                      <Badge variant="outline" className={
+                        (app as any).payment_status === "paid" ? "bg-success/10 text-success border-success/30" :
+                        (app as any).payment_status === "pending" ? "bg-blue-500/10 text-blue-500 border-blue-500/30" :
+                        "bg-warning/10 text-warning border-warning/30"
+                      }>
+                        {(app as any).payment_status === "paid" ? "✅ Paid" : (app as any).payment_status === "pending" ? "⏳ Pending" : "❌ Unpaid"}
+                      </Badge>
+                      {isSuperAdmin && (app as any).payment_status === "pending" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-xs h-6 px-2 bg-success/10 text-success border-success/30 hover:bg-success/20"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            await supabase.from("applications").update({ payment_status: "paid" } as any).eq("id", app.id);
+                            // Add to wallet
+                            const { data: existing } = await supabase.from("wallet").select("*").eq("user_id", app.user_id).maybeSingle();
+                            if (existing) {
+                              await supabase.from("wallet").update({
+                                balance: (existing as any).balance + 100,
+                                total_earned: (existing as any).total_earned + 100,
+                              } as any).eq("user_id", app.user_id);
+                            } else {
+                              await supabase.from("wallet").insert({ user_id: app.user_id, balance: 100, total_earned: 100 } as any);
+                            }
+                            toast.success("Payment approved & ₹100 added to wallet");
+                            fetchApps();
+                          }}
+                        >
+                          Approve
+                        </Button>
+                      )}
+                    </div>
+                    {(app as any).transaction_id && (
+                      <p className="text-[10px] text-muted-foreground font-mono mt-0.5">TXN: {(app as any).transaction_id}</p>
+                    )}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">{new Date(app.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>

@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -68,7 +67,7 @@ export default function Payment() {
     const { error: err } = await supabase
       .from("applications")
       .update({
-        payment_status: "paid",
+        payment_status: "pending",
         transaction_id: transactionId.trim(),
       } as any)
       .eq("id", applicationId)
@@ -187,7 +186,7 @@ export default function Payment() {
           )}
         </div>
       </div>
-      <Footer />
+      
     </div>
   );
 }

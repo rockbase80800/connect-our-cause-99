@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { FileText, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -86,7 +85,7 @@ export default function LegalDocuments() {
           </div>
         )}
       </main>
-      <Footer />
+      
     </div>
   );
 }
