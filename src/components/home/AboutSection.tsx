@@ -12,6 +12,13 @@ const values = [
   { icon: Target, title: "Measurable Impact", description: "Data-driven approach to track and maximize every initiative's reach." },
 ];
 
+const defaultAbout = {
+  eyebrow: "About Us",
+  title: "Grassroots Development, Real Results",
+  description: "We are a non-governmental organization committed to empowering rural communities through sustainable development programs.",
+  description2: "Founded in 2018, we've grown from a single district operation to a multi-district network of dedicated coordinators and volunteers.",
+};
+
 export function AboutSection() {
   const { ref, isVisible } = useScrollReveal(0.15);
   const [s, setS] = useState<any>(null);
@@ -20,7 +27,7 @@ export function AboutSection() {
   useEffect(() => {
     supabase.from("about_settings").select("*").limit(1).maybeSingle().then(({ data, error }) => {
       if (error) console.error("About fetch error:", error);
-      if (data) setS(data);
+      setS(data || defaultAbout);
       setLoading(false);
     });
   }, []);
@@ -45,8 +52,6 @@ export function AboutSection() {
       </section>
     );
   }
-
-  if (!s) return null;
 
   return (
     <section id="about" className="py-24 md:py-32 section-padding bg-secondary/50">
