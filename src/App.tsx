@@ -72,6 +72,8 @@ const App = () => (
               <Route path="/msme-auditor-hiring" element={<MSMEAuditorHiring />} />
               <Route path="/legal-documents" element={<LegalDocuments />} />
               <Route path="/our-websites" element={<OurWebsites />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/profile/:id" element={<PublicProfile />} />
               
               <Route
                 path="/dashboard"
