@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, ArrowLeft, CheckCircle, ChevronDown, ArrowRight, Image as ImageIcon } from "lucide-react";
+import { Loader2, ArrowLeft, CheckCircle, ChevronDown, ArrowRight, Image as ImageIcon, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -19,7 +19,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 interface FormField {
   name: string;
   label: string;
-  type: "text" | "email" | "number" | "textarea" | "select" | "checkbox";
+  type: "text" | "email" | "number" | "textarea" | "select" | "checkbox" | "file";
   required?: boolean;
   options?: string[];
   placeholder?: string;
