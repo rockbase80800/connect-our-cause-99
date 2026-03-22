@@ -19,7 +19,8 @@ export function HeroSection() {
   const [s, setS] = useState<HeroSettings | null>(null);
 
   useEffect(() => {
-    supabase.from("homepage_settings").select("*").limit(1).single().then(({ data }) => {
+    supabase.from("homepage_settings").select("*").limit(1).maybeSingle().then(({ data, error }) => {
+      if (error) console.error("Hero fetch error:", error);
       if (data) setS(data as HeroSettings);
     });
   }, []);

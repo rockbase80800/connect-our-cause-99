@@ -34,8 +34,8 @@ export default function ManageHomepage() {
   useEffect(() => {
     const fetch = async () => {
       const [{ data: hero }, { data: about }] = await Promise.all([
-        supabase.from("homepage_settings").select("*").limit(1).single(),
-        supabase.from("about_settings").select("*").limit(1).single(),
+        supabase.from("homepage_settings").select("*").limit(1).maybeSingle(),
+        supabase.from("about_settings").select("*").limit(1).maybeSingle(),
       ]);
       if (hero) {
         setSettingsId(hero.id);
@@ -76,20 +76,27 @@ export default function ManageHomepage() {
   const handleSave = async () => {
     setSaving(true);
     const heroPayload = {
+      id: settingsId || "00000000-0000-0000-0000-000000000002",
       hero_title: heroTitle, hero_subtext: heroSubtext, hero_eyebrow: heroEyebrow,
       hero_bg: heroBg || null, button_text: buttonText, button_link: buttonLink,
       button2_text: button2Text, button2_link: button2Link,
+      updated_at: new Date().toISOString(),
     };
-    if (settingsId) {
-      await supabase.from("homepage_settings").update(heroPayload).eq("id", settingsId);
-    }
+    const { error: e1 } = await supabase.from("homepage_settings").upsert(heroPayload, { onConflict: "id" });
+    
     const aboutPayload = {
+      id: aboutId || "00000000-0000-0000-0000-000000000003",
       title: aboutTitle, eyebrow: aboutEyebrow, description: aboutDesc, description2: aboutDesc2,
+      updated_at: new Date().toISOString(),
     };
-    if (aboutId) {
-      await supabase.from("about_settings").update(aboutPayload).eq("id", aboutId);
+    const { error: e2 } = await supabase.from("about_settings").upsert(aboutPayload, { onConflict: "id" });
+    
+    if (e1 || e2) {
+      console.error("Save errors:", e1, e2);
+      toast.error("Error saving: " + (e1?.message || e2?.message));
+    } else {
+      toast.success("Homepage settings saved!");
     }
-    toast.success("Homepage settings saved");
     setSaving(false);
   };
 
