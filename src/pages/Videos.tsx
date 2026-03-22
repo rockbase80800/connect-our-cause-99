@@ -40,9 +40,11 @@ export default function Videos() {
       });
   }, []);
 
+  const featured = videos.find((v) => v.is_featured);
+  const rest = videos.filter((v) => v.id !== featured?.id);
   const filtered = activeCategory === "All"
-    ? videos
-    : videos.filter((v) => (v.category || "General") === activeCategory);
+    ? rest
+    : rest.filter((v) => (v.category || "General") === activeCategory);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
