@@ -77,8 +77,54 @@ export default function Videos() {
           <div className="flex justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
-        ) : filtered.length === 0 ? (
-          <p className="text-muted-foreground text-center py-20">No videos in this category.</p>
+        ) : (
+          <>
+            {featured && (
+              <div className="mb-10">
+                <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  Featured Video
+                </h2>
+                <div className="grid md:grid-cols-2 gap-6 rounded-2xl border border-border bg-card shadow-md overflow-hidden">
+                  <button
+                    onClick={() => setPlaying(featured)}
+                    className="relative aspect-video overflow-hidden group"
+                  >
+                    <img
+                      src={featured.thumbnail_url || `https://img.youtube.com/vi/${featured.youtube_id}/hqdefault.jpg`}
+                      alt={featured.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="h-16 w-16 rounded-full bg-primary/90 flex items-center justify-center shadow-lg">
+                        <Play className="h-8 w-8 text-primary-foreground ml-1" fill="currentColor" />
+                      </div>
+                    </div>
+                  </button>
+                  <div className="p-6 flex flex-col justify-center space-y-3">
+                    <Badge variant="secondary" className="w-fit text-xs">{featured.category || "General"}</Badge>
+                    <h3 className="text-xl font-bold text-foreground">{featured.title}</h3>
+                    {featured.description && (
+                      <p className="text-sm text-muted-foreground line-clamp-4">{featured.description}</p>
+                    )}
+                    <div className="flex items-center gap-3 pt-2">
+                      <Button onClick={() => setPlaying(featured)}>
+                        <Play className="h-4 w-4 mr-2" /> Watch Now
+                      </Button>
+                      <a href={featured.youtube_url} target="_blank" rel="noopener noreferrer">
+                        <Button variant="outline">
+                          <ExternalLink className="h-4 w-4 mr-2" /> YouTube
+                        </Button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {filtered.length === 0 ? (
+              <p className="text-muted-foreground text-center py-20">No videos in this category.</p>
+            ) : (
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((v) => (
