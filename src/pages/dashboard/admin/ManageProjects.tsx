@@ -4,12 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 
 interface Project {
@@ -31,6 +30,11 @@ interface FormField {
   placeholder?: string;
 }
 
+interface GalleryImage {
+  id: string;
+  image_url: string;
+}
+
 export default function ManageProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +42,7 @@ export default function ManageProjects() {
   const [editing, setEditing] = useState<Project | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -45,6 +50,7 @@ export default function ManageProjects() {
   const [about, setAbout] = useState("");
   const [status, setStatus] = useState("active");
   const [formFields, setFormFields] = useState<FormField[]>([]);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
   const fetchProjects = async () => {
     const { data } = await supabase
@@ -57,10 +63,20 @@ export default function ManageProjects() {
 
   useEffect(() => { fetchProjects(); }, []);
 
+  const fetchGalleryImages = async (projectId: string) => {
+    const { data } = await supabase
+      .from("project_images")
+      .select("*")
+      .eq("project_id", projectId)
+      .order("created_at", { ascending: true });
+    setGalleryImages((data as GalleryImage[]) ?? []);
+  };
+
   const openCreate = () => {
     setEditing(null);
     setTitle(""); setDescription(""); setImageUrl(""); setAbout(""); setStatus("active");
     setFormFields([{ name: "full_name", label: "Full Name", type: "text", required: true }]);
+    setGalleryImages([]);
     setDialogOpen(true);
   };
 
@@ -70,6 +86,7 @@ export default function ManageProjects() {
     setAbout(proj.about ?? ""); setStatus(proj.status);
     const { data } = await supabase.from("form_schemas").select("fields").eq("project_id", proj.id).single();
     setFormFields((data?.fields as unknown as FormField[]) ?? []);
+    await fetchGalleryImages(proj.id);
     setDialogOpen(true);
   };
 
@@ -89,6 +106,36 @@ export default function ManageProjects() {
     setImageUrl(urlData.publicUrl);
     setUploading(false);
     toast.success("Image uploaded");
+  };
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0 || !editing) return;
+
+    setUploadingGallery(true);
+    for (const file of Array.from(files)) {
+      if (!file.type.startsWith("image/")) continue;
+      const ext = file.name.split(".").pop();
+      const path = `gallery/${editing.id}/${Date.now()}_${Math.random().toString(36).slice(2, 6)}.${ext}`;
+      const { error } = await supabase.storage.from("project-images").upload(path, file);
+      if (error) { toast.error(error.message); continue; }
+
+      const { data: urlData } = supabase.storage.from("project-images").getPublicUrl(path);
+      await supabase.from("project_images").insert({
+        project_id: editing.id,
+        image_url: urlData.publicUrl,
+      });
+    }
+    await fetchGalleryImages(editing.id);
+    setUploadingGallery(false);
+    toast.success("Gallery images uploaded");
+    e.target.value = "";
+  };
+
+  const deleteGalleryImage = async (img: GalleryImage) => {
+    await supabase.from("project_images").delete().eq("id", img.id);
+    setGalleryImages((prev) => prev.filter((g) => g.id !== img.id));
+    toast.success("Image removed");
   };
 
   const handleSave = async () => {
@@ -194,9 +241,9 @@ export default function ManageProjects() {
             <div><Label>Title *</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} /></div>
             <div><Label>Description</Label><Textarea value={description} onChange={(e) => setDescription(e.target.value)} /></div>
 
-            {/* Image Upload */}
+            {/* Cover Image Upload */}
             <div>
-              <Label>Project Image</Label>
+              <Label>Cover Image</Label>
               <div className="mt-1 space-y-2">
                 {imageUrl && (
                   <img src={imageUrl} alt="Preview" className="h-32 w-full object-cover rounded-lg border border-border" />
@@ -218,6 +265,44 @@ export default function ManageProjects() {
                 </div>
               </div>
             </div>
+
+            {/* Gallery Images — only for existing projects */}
+            {editing && (
+              <div className="border-t border-border pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <Label className="text-base">Gallery Images</Label>
+                  <Button type="button" variant="outline" size="sm" className="relative" disabled={uploadingGallery}>
+                    {uploadingGallery ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Plus className="h-4 w-4 mr-1" />}
+                    {uploadingGallery ? "Uploading..." : "Add Images"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleGalleryUpload}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                  </Button>
+                </div>
+                {galleryImages.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No gallery images yet. Add images to show on the project page.</p>
+                ) : (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    {galleryImages.map((img) => (
+                      <div key={img.id} className="relative group rounded-lg overflow-hidden border border-border">
+                        <img src={img.image_url} alt="" className="h-20 w-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => deleteGalleryImage(img)}
+                          className="absolute top-1 right-1 bg-black/60 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="h-3.5 w-3.5 text-white" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             <div><Label>About (detailed)</Label><Textarea value={about} onChange={(e) => setAbout(e.target.value)} rows={4} /></div>
             <div>
