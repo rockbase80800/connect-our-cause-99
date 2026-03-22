@@ -63,7 +63,7 @@ export default function Profile() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ name, phone, address })
+      .update({ name, phone, address, state, district })
       .eq("id", profile.id);
     if (error) toast.error(error.message);
     else {
