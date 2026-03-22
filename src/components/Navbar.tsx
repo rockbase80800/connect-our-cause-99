@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useWebsiteSettings } from "@/contexts/WebsiteSettingsContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
