@@ -39,7 +39,7 @@ export function AboutSection() {
 
             {/* Founder */}
             <div className={`mt-8 flex items-center gap-4 transition-all duration-700 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-              <img src={founderImg} alt="Founder" className="h-16 w-16 rounded-full object-cover ring-2 ring-primary/20" />
+              <img src={founderImg} alt="Founder" className="h-16 w-16 rounded-full object-cover ring-2 ring-primary/20" loading="lazy" />
               <div>
                 <p className="font-semibold text-foreground text-sm">Founder & Chairman</p>
                 <p className="text-xs text-muted-foreground">Meri Pahal Fast Help Artists Welfare Association</p>
