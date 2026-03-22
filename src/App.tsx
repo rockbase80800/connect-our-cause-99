@@ -47,6 +47,7 @@ import Team from "./pages/Team";
 import PublicProfile from "./pages/PublicProfile";
 import CreateMyPage from "./pages/dashboard/CreateMyPage";
 import ManageUserProfiles from "./pages/dashboard/admin/ManageUserProfiles";
+import RegistrationPayment from "./pages/RegistrationPayment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -76,6 +77,7 @@ const App = () => (
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/project/:id" element={<ProjectDetail />} />
               <Route path="/payment/:applicationId" element={<Payment />} />
+              <Route path="/registration-payment" element={<RegistrationPayment />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/videos" element={<Videos />} />
               <Route path="/msme-auditor-hiring" element={<MSMEAuditorHiring />} />

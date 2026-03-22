@@ -42,7 +42,8 @@ function RevealSection({ children, className = "", delay = 0 }: { children: Reac
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, isAtLeast } = useAuth();
+  const isUserApproved = profile?.user_status === "approved" || isAtLeast("admin");
   const [project, setProject] = useState<any>(null);
   const [fields, setFields] = useState<FormField[]>([]);
   const [images, setImages] = useState<string[]>([]);
@@ -298,6 +299,19 @@ export default function ProjectDetail() {
                   <div className="text-center py-8">
                     <p className="text-muted-foreground mb-4">Sign in to apply for this project</p>
                     <Link to={`/auth?redirect=/project/${id}`}><Button size="lg">Sign In to Apply</Button></Link>
+                  </div>
+                ) : !isUserApproved ? (
+                  <div className="text-center py-8">
+                    <div className="h-12 w-12 rounded-full bg-yellow-500/10 flex items-center justify-center mx-auto mb-3">
+                      <Loader2 className="h-6 w-6 text-yellow-600" />
+                    </div>
+                    <h3 className="font-semibold text-lg text-foreground mb-1">Admin Approval Pending</h3>
+                    <p className="text-muted-foreground text-sm">
+                      आपका registration approve होने के बाद आप apply कर सकते हैं।
+                    </p>
+                    {profile?.payment_status === "unpaid" && (
+                      <Link to="/registration-payment"><Button className="mt-3 active:scale-[0.97]">Registration Payment करें</Button></Link>
+                    )}
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-5">

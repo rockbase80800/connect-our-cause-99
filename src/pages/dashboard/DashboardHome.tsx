@@ -2,11 +2,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { PageWrapper } from "@/components/dashboard/PageWrapper";
 import { DashboardBanner } from "@/components/dashboard/DashboardBanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, FolderOpen, Users, Share2, Clock, CheckCircle, XCircle, Eye, Wallet, FilePlus, UserCheck } from "lucide-react";
+import { FileText, FolderOpen, Users, Share2, Clock, CheckCircle, XCircle, Eye, Wallet, FilePlus, UserCheck, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
@@ -18,7 +19,9 @@ const cardVariants = {
 
 export default function DashboardHome() {
   const { profile, primaryRole, isAtLeast, hasRole } = useAuth();
+  const navigate = useNavigate();
   const isAdmin = isAtLeast("admin");
+  const isApproved = profile?.user_status === "approved" || isAdmin;
   const isSuperAdmin = primaryRole === "super_admin";
   const hasOwnPage = hasRole("own_page");
   const [stats, setStats] = useState({ projects: 0, applications: 0, referrals: 0 });
@@ -91,6 +94,30 @@ export default function DashboardHome() {
   return (
     <PageWrapper><div className="space-y-8">
       <DashboardBanner />
+
+      {/* Waiting for approval banner */}
+      {!isApproved && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <Card className="border-yellow-500/30 bg-yellow-500/5">
+            <CardContent className="py-6 text-center">
+              <AlertCircle className="h-10 w-10 text-yellow-600 mx-auto mb-3" />
+              <h3 className="font-semibold text-lg text-foreground mb-1">Admin Approval Pending</h3>
+              <p className="text-sm text-muted-foreground mb-3">
+                आपका registration admin approval के लिए pending है। Approve होने के बाद सभी features enabled हो जाएंगे।
+              </p>
+              {profile?.payment_status === "unpaid" && (
+                <Button onClick={() => navigate("/registration-payment")} className="active:scale-[0.97]">
+                  Registration Payment करें
+                </Button>
+              )}
+              {profile?.payment_status === "pending" && (
+                <p className="text-xs text-muted-foreground">Payment submitted — approval pending</p>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

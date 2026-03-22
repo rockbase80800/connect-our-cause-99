@@ -17,6 +17,9 @@ interface Profile {
   referral_code: string | null;
   referred_by: string | null;
   avatar_url: string | null;
+  payment_status: string;
+  user_status: string;
+  designation: string | null;
 }
 
 interface AuthContextType {
