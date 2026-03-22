@@ -42,7 +42,8 @@ function RevealSection({ children, className = "", delay = 0 }: { children: Reac
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, isAtLeast } = useAuth();
+  const isUserApproved = profile?.user_status === "approved" || isAtLeast("admin");
   const [project, setProject] = useState<any>(null);
   const [fields, setFields] = useState<FormField[]>([]);
   const [images, setImages] = useState<string[]>([]);
