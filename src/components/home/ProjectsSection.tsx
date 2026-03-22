@@ -79,11 +79,11 @@ export function ProjectsSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, i) => (
             <Link
               key={project.id}
-              to={`/project/${project.id}`}
+              to={(project as any).customLink || `/project/${project.id}`}
               className={`group glass-card rounded-xl overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] ${
                 isVisible ? "animate-reveal-up" : "opacity-0"
               }`}
