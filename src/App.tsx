@@ -30,6 +30,7 @@ import ManageGallery from "./pages/dashboard/admin/ManageGallery";
 import ManageLeads from "./pages/dashboard/admin/ManageLeads";
 import CoordinatorUsers from "./pages/dashboard/coordinator/CoordinatorUsers";
 import CoordinatorMembers from "./pages/dashboard/coordinator/CoordinatorMembers";
+import Gallery from "./pages/Gallery";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/project/:id" element={<ProjectDetail />} />
+              <Route path="/gallery" element={<Gallery />} />
               
               <Route
                 path="/dashboard"
