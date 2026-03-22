@@ -206,6 +206,20 @@ export default function ManageProjects() {
 
   const removeField = (idx: number) => setFormFields(formFields.filter((_, i) => i !== idx));
 
+  const moveField = (idx: number, dir: -1 | 1) => {
+    const newIdx = idx + dir;
+    if (newIdx < 0 || newIdx >= formFields.length) return;
+    const updated = [...formFields];
+    [updated[idx], updated[newIdx]] = [updated[newIdx], updated[idx]];
+    setFormFields(updated);
+  };
+
+  const loadDefaultFields = () => {
+    if (formFields.length > 0 && !confirm("यह मौजूदा फील्ड्स को बदल देगा। क्या आप जारी रखना चाहते हैं?")) return;
+    setFormFields(DEFAULT_HINDI_FIELDS.map(f => ({ ...f })));
+    toast.success("डिफ़ॉल्ट हिंदी फील्ड्स लोड हो गई");
+  };
+
   if (loading) return <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
 
   return (
