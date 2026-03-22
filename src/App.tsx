@@ -37,6 +37,7 @@ import CoordinatorUsers from "./pages/dashboard/coordinator/CoordinatorUsers";
 import CoordinatorMembers from "./pages/dashboard/coordinator/CoordinatorMembers";
 import Gallery from "./pages/Gallery";
 import Videos from "./pages/Videos";
+import MSMEAuditorHiring from "./pages/MSMEAuditorHiring";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +59,7 @@ const App = () => (
               <Route path="/payment/:applicationId" element={<Payment />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/videos" element={<Videos />} />
+              <Route path="/msme-auditor-hiring" element={<MSMEAuditorHiring />} />
               
               <Route
                 path="/dashboard"
