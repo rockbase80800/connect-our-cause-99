@@ -72,6 +72,7 @@ export default function ManageVideos() {
       title: meta.title,
       description: editDesc || meta.description,
       thumbnail_url: meta.thumbnail_url,
+      category: selectedCategory,
     } as any);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
