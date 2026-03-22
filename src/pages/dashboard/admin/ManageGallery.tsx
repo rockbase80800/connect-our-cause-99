@@ -29,10 +29,11 @@ export default function ManageGallery() {
     setUploading(true);
     for (const file of Array.from(files)) {
       const path = `gallery-${Date.now()}-${Math.random().toString(36).slice(2)}.${file.name.split(".").pop()}`;
-      const { error } = await supabase.storage.from("gallery-images").upload(path, file);
-      if (error) { toast.error(error.message); continue; }
+      const { error: uploadErr } = await supabase.storage.from("gallery-images").upload(path, file);
+      if (uploadErr) { toast.error("Upload failed: " + uploadErr.message); continue; }
       const { data } = supabase.storage.from("gallery-images").getPublicUrl(path);
-      await supabase.from("gallery").insert({ image_url: data.publicUrl });
+      const { error: insertErr } = await supabase.from("gallery").insert({ image_url: data.publicUrl });
+      if (insertErr) { toast.error("Save failed: " + insertErr.message); continue; }
     }
     toast.success("Images uploaded");
     setUploading(false);
