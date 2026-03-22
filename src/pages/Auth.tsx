@@ -118,7 +118,8 @@ const Auth = () => {
             .eq("id", signUpData.user.id);
         }
         
-        toast.success("Account created! You can now sign in.");
+        toast.success("Account created! Please sign in to continue.");
+        setIsSignUp(false);
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email: cleanEmail,

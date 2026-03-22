@@ -47,6 +47,8 @@ import Team from "./pages/Team";
 import PublicProfile from "./pages/PublicProfile";
 import CreateMyPage from "./pages/dashboard/CreateMyPage";
 import ManageUserProfiles from "./pages/dashboard/admin/ManageUserProfiles";
+import ManageHomepageAdmins from "./pages/dashboard/admin/ManageHomepageAdmins";
+import RegistrationPayment from "./pages/RegistrationPayment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -74,6 +76,7 @@ const App = () => (
               <Route path="/our-websites" element={<OurWebsites />} />
               <Route path="/team" element={<Team />} />
               <Route path="/profile/:id" element={<PublicProfile />} />
+              <Route path="/registration-payment" element={<RegistrationPayment />} />
               
               <Route
                 path="/dashboard"
@@ -108,6 +111,7 @@ const App = () => (
                 <Route path="admin/legal-documents" element={<ManageLegalDocuments />} />
                 <Route path="admin/websites" element={<ManageWebsites />} />
                 <Route path="admin/user-profiles" element={<ManageUserProfiles />} />
+                <Route path="admin/homepage-admins" element={<ManageHomepageAdmins />} />
                 <Route path="my-page" element={<CreateMyPage />} />
               </Route>
               
