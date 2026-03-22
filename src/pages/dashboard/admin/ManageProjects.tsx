@@ -352,16 +352,32 @@ export default function ManageProjects() {
             </div>
 
             <div className="border-t border-border pt-4">
-              <div className="flex items-center justify-between mb-3">
-                <Label className="text-base">Application Form Fields</Label>
-                <Button type="button" variant="outline" size="sm" onClick={addField}><Plus className="h-3 w-3 mr-1" /> Add Field</Button>
+              <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                <Label className="text-base font-semibold">Application Form Fields ({formFields.length})</Label>
+                <div className="flex gap-2">
+                  <Button type="button" variant="outline" size="sm" onClick={loadDefaultFields}>
+                    <RotateCcw className="h-3 w-3 mr-1" /> डिफ़ॉल्ट फील्ड्स लोड करें
+                  </Button>
+                  <Button type="button" variant="outline" size="sm" onClick={addField}>
+                    <Plus className="h-3 w-3 mr-1" /> Add Field
+                  </Button>
+                </div>
               </div>
+              {formFields.length === 0 && (
+                <div className="text-center py-6 border border-dashed border-border rounded-lg">
+                  <p className="text-muted-foreground text-sm mb-2">कोई फील्ड नहीं है</p>
+                  <Button type="button" variant="outline" size="sm" onClick={loadDefaultFields}>
+                    <RotateCcw className="h-3 w-3 mr-1" /> डिफ़ॉल्ट हिंदी फॉर्म लोड करें
+                  </Button>
+                </div>
+              )}
               {formFields.map((f, i) => (
-                <div key={i} className="mb-3">
-                  <div className="grid grid-cols-[1fr_auto_auto_auto] gap-2 items-end">
-                    <Input placeholder="Field label" value={f.label} onChange={(e) => updateFormField(i, "label", e.target.value)} />
+                <div key={i} className="mb-3 p-3 border border-border rounded-lg bg-secondary/20">
+                  <div className="flex items-center gap-1 mb-2">
+                    <span className="text-xs text-muted-foreground font-mono w-6 shrink-0">{i + 1}.</span>
+                    <Input placeholder="Field label" value={f.label} onChange={(e) => updateFormField(i, "label", e.target.value)} className="text-sm" />
                     <Select value={f.type} onValueChange={(v) => updateFormField(i, "type", v)}>
-                      <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="w-28 shrink-0"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="text">Text</SelectItem>
                         <SelectItem value="email">Email</SelectItem>
@@ -372,28 +388,30 @@ export default function ManageProjects() {
                         <SelectItem value="file">File Upload</SelectItem>
                       </SelectContent>
                     </Select>
-                    <Button type="button" variant={f.required ? "default" : "outline"} size="sm" onClick={() => updateFormField(i, "required", !f.required)} className="text-xs">Req</Button>
-                    <Button type="button" variant="ghost" size="sm" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
+                    <Button type="button" variant={f.required ? "default" : "outline"} size="icon" className="h-8 w-8 shrink-0 text-xs" onClick={() => updateFormField(i, "required", !f.required)} title={f.required ? "Required" : "Optional"}>
+                      {f.required ? "R" : "O"}
+                    </Button>
+                    <div className="flex flex-col shrink-0">
+                      <Button type="button" variant="ghost" size="icon" className="h-4 w-8" onClick={() => moveField(i, -1)} disabled={i === 0}><ChevronUp className="h-3 w-3" /></Button>
+                      <Button type="button" variant="ghost" size="icon" className="h-4 w-8" onClick={() => moveField(i, 1)} disabled={i === formFields.length - 1}><ChevronDown className="h-3 w-3" /></Button>
+                    </div>
+                    <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
                   </div>
                   {f.type === "select" && (
-                    <div className="ml-2 mt-1">
-                      <Input
-                        placeholder="Options (comma separated, e.g. Option 1, Option 2)"
-                        value={(f.options || []).join(", ")}
-                        onChange={(e) => updateFormField(i, "options", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
-                        className="text-xs"
-                      />
-                    </div>
+                    <Input
+                      placeholder="Options (comma separated)"
+                      value={(f.options || []).join(", ")}
+                      onChange={(e) => updateFormField(i, "options", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
+                      className="text-xs mt-1"
+                    />
                   )}
                   {f.type !== "select" && f.type !== "checkbox" && f.type !== "file" && (
-                    <div className="ml-2 mt-1">
-                      <Input
-                        placeholder="Placeholder text"
-                        value={f.placeholder || ""}
-                        onChange={(e) => updateFormField(i, "placeholder", e.target.value)}
-                        className="text-xs"
-                      />
-                    </div>
+                    <Input
+                      placeholder="Placeholder text"
+                      value={f.placeholder || ""}
+                      onChange={(e) => updateFormField(i, "placeholder", e.target.value)}
+                      className="text-xs mt-1"
+                    />
                   )}
                 </div>
               ))}
