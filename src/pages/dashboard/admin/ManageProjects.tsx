@@ -169,7 +169,7 @@ export default function ManageProjects() {
     if (editing) {
       const { error } = await supabase
         .from("projects")
-        .update({ title, description, image_url: imageUrl || null, about, status: status as any })
+        .update({ title, description, image_url: imageUrl || null, about, status: status as any, form_link: formLink || null } as any)
         .eq("id", editing.id);
       if (error) { toast.error(error.message); setSaving(false); return; }
       await supabase.from("form_schemas").delete().eq("project_id", editing.id);
