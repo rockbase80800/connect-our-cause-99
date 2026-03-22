@@ -299,6 +299,19 @@ export default function ProjectDetail() {
                     <p className="text-muted-foreground mb-4">Sign in to apply for this project</p>
                     <Link to={`/auth?redirect=/project/${id}`}><Button size="lg">Sign In to Apply</Button></Link>
                   </div>
+                ) : profile?.user_status !== "approved" && !["super_admin", "state_admin", "admin"].includes(profile?.user_status || "") ? (
+                  <div className="text-center py-8">
+                    <div className="h-12 w-12 rounded-full bg-yellow-500/10 flex items-center justify-center mx-auto mb-3">
+                      <Loader2 className="h-6 w-6 text-yellow-600" />
+                    </div>
+                    <h3 className="font-semibold text-lg text-foreground mb-1">Admin Approval Pending</h3>
+                    <p className="text-muted-foreground text-sm">
+                      आपका registration approve होने के बाद आप apply कर सकते हैं।
+                    </p>
+                    {profile?.payment_status === "unpaid" && (
+                      <Link to="/registration-payment"><Button className="mt-3 active:scale-[0.97]">Registration Payment करें</Button></Link>
+                    )}
+                  </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-5">
                     {fields.map((field) => (
