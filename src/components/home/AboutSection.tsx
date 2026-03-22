@@ -27,6 +27,7 @@ export function AboutSection() {
   useEffect(() => {
     supabase.from("about_settings").select("*").limit(1).maybeSingle().then(({ data, error }) => {
       if (error) console.error("About fetch error:", error);
+      console.log("about:", data);
       setS(data || defaultAbout);
       setLoading(false);
     });
