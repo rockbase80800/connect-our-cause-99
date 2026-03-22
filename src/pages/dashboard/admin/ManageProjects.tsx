@@ -358,6 +358,26 @@ export default function ManageProjects() {
                   <Button type="button" variant={f.required ? "default" : "outline"} size="sm" onClick={() => updateFormField(i, "required", !f.required)} className="text-xs">Req</Button>
                   <Button type="button" variant="ghost" size="sm" onClick={() => removeField(i)}><Trash2 className="h-3.5 w-3.5 text-destructive" /></Button>
                 </div>
+                {f.type === "select" && (
+                  <div className="ml-2 mb-2">
+                    <Input
+                      placeholder="Options (comma separated, e.g. Option 1, Option 2)"
+                      value={(f.options || []).join(", ")}
+                      onChange={(e) => updateFormField(i, "options", e.target.value.split(",").map((s: string) => s.trim()).filter(Boolean))}
+                      className="text-xs"
+                    />
+                  </div>
+                )}
+                {f.placeholder !== undefined && f.type !== "select" && f.type !== "checkbox" && f.type !== "file" && (
+                  <div className="ml-2 mb-2">
+                    <Input
+                      placeholder="Placeholder text"
+                      value={f.placeholder || ""}
+                      onChange={(e) => updateFormField(i, "placeholder", e.target.value)}
+                      className="text-xs"
+                    />
+                  </div>
+                )}
               ))}
             </div>
           </div>
