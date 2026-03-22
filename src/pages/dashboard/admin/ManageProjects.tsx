@@ -42,6 +42,7 @@ interface Project {
   status: string;
   created_at: string;
   form_link: string | null;
+  download_file_url: string | null;
 }
 
 interface FormField {
