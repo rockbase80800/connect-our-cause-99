@@ -14,6 +14,8 @@ export default function Analytics() {
   const [projectStats, setProjectStats] = useState<{ name: string; applications: number }[]>([]);
   const [weeklyTrend, setWeeklyTrend] = useState<{ week: string; applications: number }[]>([]);
   const [monthlyUsers, setMonthlyUsers] = useState<{ month: string; users: number }[]>([]);
+  const [stateStats, setStateStats] = useState<{ name: string; count: number }[]>([]);
+  const [districtStats, setDistrictStats] = useState<{ name: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -62,8 +64,8 @@ export default function Analytics() {
         setWeeklyTrend(weeklyData);
       }
 
-      // Monthly user registration trend (last 6 months)
-      const { data: profiles } = await supabase.from("profiles").select("created_at");
+      // Monthly user registration trend + geographic breakdown
+      const { data: profiles } = await supabase.from("profiles").select("created_at, state, district");
       if (profiles) {
         const now = new Date();
         const months = eachMonthOfInterval({ start: subMonths(now, 5), end: now });
@@ -76,6 +78,18 @@ export default function Analytics() {
           return { month: format(monthStart, "MMM yyyy"), users: count };
         });
         setMonthlyUsers(monthlyData);
+
+        // State breakdown
+        const sMap = new Map<string, number>();
+        const dMap = new Map<string, number>();
+        profiles.forEach((p: any) => {
+          const s = p.state?.trim();
+          const d = p.district?.trim();
+          if (s) sMap.set(s, (sMap.get(s) || 0) + 1);
+          if (d) dMap.set(d, (dMap.get(d) || 0) + 1);
+        });
+        setStateStats(Array.from(sMap.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count));
+        setDistrictStats(Array.from(dMap.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 15));
       }
 
       setLoading(false);
@@ -200,6 +214,47 @@ export default function Analytics() {
                   </Pie>
                   <Tooltip />
                 </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Geographic Breakdown */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        {stateStats.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Users by State</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={stateStats} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis type="number" fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
+                  <YAxis type="category" dataKey="name" fontSize={11} tick={{ fill: "hsl(var(--muted-foreground))" }} width={120} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="hsl(200, 70%, 50%)" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        )}
+
+        {districtStats.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Top Districts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={districtStats} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis type="number" fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
+                  <YAxis type="category" dataKey="name" fontSize={11} tick={{ fill: "hsl(var(--muted-foreground))" }} width={120} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="hsl(36, 85%, 55%)" radius={[0, 4, 4, 0]} />
+                </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
