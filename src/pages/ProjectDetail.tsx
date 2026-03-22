@@ -332,6 +332,18 @@ export default function ProjectDetail() {
                 )}
               </CardContent>
             </Card>
+          ) : project.form_link ? (
+            <Card className="shadow-xl">
+              <CardContent className="py-10 text-center space-y-4">
+                <h3 className="font-semibold text-xl text-foreground">Apply for This Project</h3>
+                <p className="text-muted-foreground">आवेदन फॉर्म भरने के लिए नीचे बटन पर क्लिक करें</p>
+                <a href={project.form_link} target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="active:scale-[0.97] transition-all">
+                    <ExternalLink className="h-4 w-4 mr-2" /> Form Link खोलें
+                  </Button>
+                </a>
+              </CardContent>
+            </Card>
           ) : (
             <Card className="shadow-lg">
               <CardContent className="py-10 text-center text-muted-foreground">

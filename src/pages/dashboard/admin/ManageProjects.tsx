@@ -357,6 +357,13 @@ export default function ManageProjects() {
               </Select>
             </div>
 
+            {/* Form Link */}
+            <div className="border-t border-border pt-4">
+              <Label className="text-base font-semibold">Form Link (External)</Label>
+              <p className="text-xs text-muted-foreground mb-2">अगर आप बाहरी फॉर्म लिंक देना चाहते हैं तो यहाँ URL डालें। अगर यह भरा है और नीचे कोई form field नहीं है, तो यूज़र को यह लिंक दिखेगा।</p>
+              <Input placeholder="https://forms.google.com/..." value={formLink} onChange={(e) => setFormLink(e.target.value)} />
+            </div>
+
             <div className="border-t border-border pt-4">
               <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                 <Label className="text-base font-semibold">Application Form Fields ({formFields.length})</Label>
@@ -369,12 +376,17 @@ export default function ManageProjects() {
                   </Button>
                 </div>
               </div>
-              {formFields.length === 0 && (
+              {formFields.length === 0 && !formLink && (
                 <div className="text-center py-6 border border-dashed border-border rounded-lg">
                   <p className="text-muted-foreground text-sm mb-2">कोई फील्ड नहीं है</p>
                   <Button type="button" variant="outline" size="sm" onClick={loadDefaultFields}>
                     <RotateCcw className="h-3 w-3 mr-1" /> डिफ़ॉल्ट हिंदी फॉर्म लोड करें
                   </Button>
+                </div>
+              )}
+              {formFields.length === 0 && formLink && (
+                <div className="text-center py-4 border border-dashed border-primary/30 rounded-lg bg-primary/5">
+                  <p className="text-sm text-primary font-medium">✓ External form link set — users will see "Form Link" button</p>
                 </div>
               )}
               {formFields.map((f, i) => (
