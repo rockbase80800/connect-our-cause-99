@@ -352,6 +352,7 @@ export default function ManageProjects() {
                       <SelectItem value="textarea">Textarea</SelectItem>
                       <SelectItem value="select">Select</SelectItem>
                       <SelectItem value="checkbox">Checkbox</SelectItem>
+                      <SelectItem value="file">File Upload</SelectItem>
                     </SelectContent>
                   </Select>
                   <Button type="button" variant={f.required ? "default" : "outline"} size="sm" onClick={() => updateFormField(i, "required", !f.required)} className="text-xs">Req</Button>
