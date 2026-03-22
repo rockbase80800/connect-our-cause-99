@@ -31,6 +31,7 @@ import ManageHomepage from "./pages/dashboard/admin/ManageHomepage";
 import ManageGallery from "./pages/dashboard/admin/ManageGallery";
 import ManageLeads from "./pages/dashboard/admin/ManageLeads";
 import ManageVideos from "./pages/dashboard/admin/ManageVideos";
+import PaymentSettings from "./pages/dashboard/admin/PaymentSettings";
 import CoordinatorUsers from "./pages/dashboard/coordinator/CoordinatorUsers";
 import CoordinatorMembers from "./pages/dashboard/coordinator/CoordinatorMembers";
 import Gallery from "./pages/Gallery";
