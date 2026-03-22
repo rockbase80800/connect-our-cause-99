@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X, ChevronUp, ChevronDown, RotateCcw, Eye } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Upload, ImageIcon, X, ChevronUp, ChevronDown, RotateCcw, Eye, Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 
 const DEFAULT_HINDI_FIELDS: FormField[] = [
