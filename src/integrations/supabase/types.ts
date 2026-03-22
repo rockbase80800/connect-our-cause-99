@@ -209,33 +209,6 @@ export type Database = {
         }
         Relationships: []
       }
-      homepage_admins: {
-        Row: {
-          created_at: string
-          designation: string | null
-          id: string
-          name: string
-          photo_url: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          designation?: string | null
-          id?: string
-          name: string
-          photo_url?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          designation?: string | null
-          id?: string
-          name?: string
-          photo_url?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
       homepage_settings: {
         Row: {
           button_link: string | null
