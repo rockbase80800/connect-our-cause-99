@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { WebsiteSettingsProvider } from "@/contexts/WebsiteSettingsContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -42,8 +43,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <WebsiteSettingsProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <WebsiteSettingsProvider>
           <AuthProvider>
             <Routes>
               <Route path="/" element={<Index />} />
