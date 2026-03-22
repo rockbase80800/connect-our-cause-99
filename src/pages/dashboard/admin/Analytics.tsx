@@ -219,6 +219,47 @@ export default function Analytics() {
           </Card>
         )}
       </div>
+
+      {/* Geographic Breakdown */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        {stateStats.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Users by State</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={stateStats} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis type="number" fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
+                  <YAxis type="category" dataKey="name" fontSize={11} tick={{ fill: "hsl(var(--muted-foreground))" }} width={120} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="hsl(200, 70%, 50%)" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        )}
+
+        {districtStats.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Top Districts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={districtStats} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis type="number" fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
+                  <YAxis type="category" dataKey="name" fontSize={11} tick={{ fill: "hsl(var(--muted-foreground))" }} width={120} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="hsl(36, 85%, 55%)" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }
