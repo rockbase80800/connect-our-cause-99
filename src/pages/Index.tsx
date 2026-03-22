@@ -20,4 +20,6 @@ const Index = () => {
   );
 };
 
+// sync trigger
+
 export default Index;
