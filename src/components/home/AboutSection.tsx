@@ -59,10 +59,10 @@ export function AboutSection() {
       <div ref={ref} className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className={`transition-all duration-700 ${isVisible ? "animate-slide-in-left" : "opacity-0"}`}>
-            {s.eyebrow && <p className="text-accent font-semibold text-sm uppercase tracking-widest mb-3">{s.eyebrow}</p>}
-            <h2 className="text-display text-2xl md:text-4xl text-foreground mb-6 whitespace-pre-line leading-tight">{s.title}</h2>
-            {s.description && <p className="text-muted-foreground text-lg leading-relaxed mb-6">{s.description}</p>}
-            {s.description2 && <p className="text-muted-foreground leading-relaxed">{s.description2}</p>}
+            {(s?.eyebrow || defaultAbout.eyebrow) && <p className="text-accent font-semibold text-sm uppercase tracking-widest mb-3">{s?.eyebrow || defaultAbout.eyebrow}</p>}
+            <h2 className="text-display text-2xl md:text-4xl text-foreground mb-6 whitespace-pre-line leading-tight">{s?.title || defaultAbout.title}</h2>
+            {(s?.description || defaultAbout.description) && <p className="text-muted-foreground text-lg leading-relaxed mb-6">{s?.description || defaultAbout.description}</p>}
+            {(s?.description2 || defaultAbout.description2) && <p className="text-muted-foreground leading-relaxed">{s?.description2 || defaultAbout.description2}</p>
 
             <div className={`mt-8 flex items-center gap-4 transition-all duration-700 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               <img src={founderImg} alt="Founder" className="h-16 w-16 rounded-full object-cover ring-2 ring-primary/20" loading="lazy" />
