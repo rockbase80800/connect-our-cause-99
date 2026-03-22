@@ -83,6 +83,7 @@ export default function ProjectDetail() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !id) { toast.error("Please sign in to apply"); return; }
+    if (!isUserApproved) { toast.error("कृपया पहले registration approval पूरा करें"); return; }
     setSubmitting(true);
     await supabase.from("leads").insert({
       name: profile?.name || formData["full_name"] || null,
@@ -91,15 +92,15 @@ export default function ProjectDetail() {
       project_id: id,
       form_data: formData,
     });
-    const { data: appData, error } = await supabase.from("applications").insert({
+    const { error } = await supabase.from("applications").insert({
       user_id: user.id,
       project_id: id,
       form_data: formData,
-    }).select("id").single();
+    });
     if (error) { toast.error(error.message); setSubmitting(false); return; }
-    // Redirect to payment page
-    toast.info("अब भुगतान करें");
-    navigate(`/payment/${appData.id}`);
+    setSubmitted(true);
+    setAlreadyApplied(true);
+    toast.success("आवेदन सफलतापूर्वक सबमिट हुआ!");
     setSubmitting(false);
   };
 
