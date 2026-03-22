@@ -15,6 +15,7 @@ interface Video {
   description: string | null;
   thumbnail_url: string | null;
   category: string | null;
+  is_featured: boolean;
   created_at: string;
 }
 
