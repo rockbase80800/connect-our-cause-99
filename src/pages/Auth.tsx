@@ -59,6 +59,7 @@ const Auth = () => {
         const finalRefCode = (referralCode.trim() || searchParams.get("ref") || "").toUpperCase().trim();
 
         // Validate referral code if provided
+        let referrerId: string | null = null;
         if (finalRefCode) {
           const { data: referrerRows } = await supabase.rpc("lookup_referral_code", { _code: finalRefCode });
           if (!referrerRows || referrerRows.length === 0) {
@@ -66,6 +67,7 @@ const Auth = () => {
             setSubmitting(false);
             return;
           }
+          referrerId = referrerRows[0].referrer_id;
         }
 
         const { error } = await supabase.auth.signUp({
