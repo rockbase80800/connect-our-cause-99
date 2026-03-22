@@ -59,9 +59,10 @@ export function Navbar() {
       {mobileOpen && (
         <div className="md:hidden bg-background border-b border-border px-6 pb-4 animate-reveal-up">
           <div className="flex flex-col gap-3">
-            <a href="#projects" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Projects</a>
-            <a href="#about" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>About</a>
-            <a href="#contact" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Contact</a>
+            <a href="/#projects" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Projects</a>
+            <a href="/#about" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>About</a>
+            <Link to="/gallery" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Gallery</Link>
+            <a href="/#contact" className="text-sm font-medium text-muted-foreground py-2" onClick={() => setMobileOpen(false)}>Contact</a>
             <Link to="/auth" onClick={() => setMobileOpen(false)}>
               <Button size="sm" className="w-full bg-primary text-primary-foreground">Join Now</Button>
             </Link>

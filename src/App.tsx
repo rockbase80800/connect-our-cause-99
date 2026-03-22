@@ -48,6 +48,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/project/:id" element={<ProjectDetail />} />
+              <Route path="/gallery" element={<Gallery />} />
               
               <Route
                 path="/dashboard"
