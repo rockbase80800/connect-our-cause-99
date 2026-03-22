@@ -224,7 +224,7 @@ export default function ManageApplications() {
             </TableHeader>
             <TableBody>
               {filtered.length === 0 && (
-                <TableRow><TableCell colSpan={8} className="text-center py-10 text-muted-foreground">No applications found</TableCell></TableRow>
+                <TableRow><TableCell colSpan={9} className="text-center py-10 text-muted-foreground">No applications found</TableCell></TableRow>
               )}
               {filtered.map((app) => (
                 <TableRow key={app.id}>
