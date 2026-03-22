@@ -594,6 +594,30 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet: {
+        Row: {
+          balance: number
+          id: string
+          total_earned: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          balance?: number
+          id?: string
+          total_earned?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          balance?: number
+          id?: string
+          total_earned?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       website_settings: {
         Row: {
           description: string | null
@@ -624,6 +648,30 @@ export type Database = {
           logo_url?: string | null
           site_name?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      websites: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          name: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name?: string
+          url?: string
         }
         Relationships: []
       }
