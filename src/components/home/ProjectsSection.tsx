@@ -44,18 +44,17 @@ export function ProjectsSection() {
       .select("id, title, description, image_url, status")
       .eq("status", "active")
       .order("created_at", { ascending: false })
-      .limit(3)
       .then(({ data }) => {
         if (data && data.length > 0) {
-          setProjects(
-            data.map((p: any) => ({
-              id: p.id,
-              title: p.title,
-              description: p.description ?? "",
-              image: p.image_url,
-              status: p.status === "active" ? "Active" : "Inactive",
-            }))
-          );
+          const dbProjects = data.map((p: any) => ({
+            id: p.id,
+            title: p.title,
+            description: p.description ?? "",
+            image: p.image_url,
+            status: p.status === "active" ? "Active" : "Inactive",
+            customLink: undefined as string | undefined,
+          }));
+          setProjects(dbProjects);
         }
       });
   }, []);
