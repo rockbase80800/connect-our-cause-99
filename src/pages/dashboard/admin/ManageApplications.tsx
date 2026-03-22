@@ -217,6 +217,7 @@ export default function ManageApplications() {
                 <TableHead>Position</TableHead>
                 <TableHead>Project</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Payment</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
