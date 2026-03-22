@@ -471,6 +471,7 @@ export type Database = {
           about: string | null
           created_at: string
           description: string | null
+          form_link: string | null
           id: string
           image_url: string | null
           status: Database["public"]["Enums"]["project_status"]
@@ -481,6 +482,7 @@ export type Database = {
           about?: string | null
           created_at?: string
           description?: string | null
+          form_link?: string | null
           id?: string
           image_url?: string | null
           status?: Database["public"]["Enums"]["project_status"]
@@ -491,6 +493,7 @@ export type Database = {
           about?: string | null
           created_at?: string
           description?: string | null
+          form_link?: string | null
           id?: string
           image_url?: string | null
           status?: Database["public"]["Enums"]["project_status"]
