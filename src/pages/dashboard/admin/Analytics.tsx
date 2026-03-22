@@ -140,6 +140,31 @@ export default function Analytics() {
         </Card>
       )}
 
+      {monthlyUsers.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Monthly User Registrations</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={monthlyUsers}>
+                <defs>
+                  <linearGradient id="userFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(200, 70%, 50%)" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(200, 70%, 50%)" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} />
+                <YAxis fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
+                <Tooltip />
+                <Area type="monotone" dataKey="users" stroke="hsl(200, 70%, 50%)" fill="url(#userFill)" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="grid lg:grid-cols-2 gap-6">
         {projectStats.length > 0 && (
           <Card>
