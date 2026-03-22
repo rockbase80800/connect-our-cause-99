@@ -94,6 +94,15 @@ export default function ManageVideos() {
     fetchVideos();
   };
 
+  const toggleFeatured = async (id: string, current: boolean) => {
+    if (!current) {
+      // Unfeature all others first
+      await supabase.from("videos").update({ is_featured: false } as any).neq("id", id);
+    }
+    await supabase.from("videos").update({ is_featured: !current } as any).eq("id", id);
+    fetchVideos();
+  };
+
   const deleteVideo = async (id: string) => {
     if (!confirm("Delete this video?")) return;
     await supabase.from("videos").delete().eq("id", id);
