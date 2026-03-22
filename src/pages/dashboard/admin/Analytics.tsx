@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, FileText, CheckCircle, XCircle, FolderOpen, Loader2 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
-import { format, subWeeks, endOfWeek, eachWeekOfInterval } from "date-fns";
+import { format, subWeeks, subMonths, endOfWeek, endOfMonth, eachWeekOfInterval, eachMonthOfInterval } from "date-fns";
 
 const COLORS = ["hsl(158, 35%, 25%)", "hsl(36, 85%, 55%)", "hsl(0, 72%, 51%)", "hsl(200, 70%, 50%)"];
 
@@ -13,6 +13,7 @@ export default function Analytics() {
   });
   const [projectStats, setProjectStats] = useState<{ name: string; applications: number }[]>([]);
   const [weeklyTrend, setWeeklyTrend] = useState<{ week: string; applications: number }[]>([]);
+  const [monthlyUsers, setMonthlyUsers] = useState<{ month: string; users: number }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,6 +60,22 @@ export default function Analytics() {
           return { week: format(weekStart, "dd MMM"), applications: count };
         });
         setWeeklyTrend(weeklyData);
+      }
+
+      // Monthly user registration trend (last 6 months)
+      const { data: profiles } = await supabase.from("profiles").select("created_at");
+      if (profiles) {
+        const now = new Date();
+        const months = eachMonthOfInterval({ start: subMonths(now, 5), end: now });
+        const monthlyData = months.map((monthStart) => {
+          const mEnd = endOfMonth(monthStart);
+          const count = profiles.filter((p: any) => {
+            const d = new Date(p.created_at);
+            return d >= monthStart && d <= mEnd;
+          }).length;
+          return { month: format(monthStart, "MMM yyyy"), users: count };
+        });
+        setMonthlyUsers(monthlyData);
       }
 
       setLoading(false);
@@ -117,6 +134,31 @@ export default function Analytics() {
                 <YAxis fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
                 <Tooltip />
                 <Area type="monotone" dataKey="applications" stroke="hsl(158, 35%, 25%)" fill="url(#trendFill)" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
+
+      {monthlyUsers.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Monthly User Registrations</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={monthlyUsers}>
+                <defs>
+                  <linearGradient id="userFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(200, 70%, 50%)" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(200, 70%, 50%)" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} />
+                <YAxis fontSize={12} tick={{ fill: "hsl(var(--muted-foreground))" }} allowDecimals={false} />
+                <Tooltip />
+                <Area type="monotone" dataKey="users" stroke="hsl(200, 70%, 50%)" fill="url(#userFill)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
