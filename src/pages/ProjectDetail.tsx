@@ -325,7 +325,6 @@ export default function ProjectDetail() {
                     <Button type="submit" disabled={submitting} size="lg" className="w-full active:scale-[0.97] transition-all">
                       {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Submit Application"}
                     </Button>
-                    </Button>
                   </form>
                 )}
               </CardContent>
