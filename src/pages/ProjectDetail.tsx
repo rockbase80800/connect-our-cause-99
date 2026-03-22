@@ -300,7 +300,7 @@ export default function ProjectDetail() {
                     <p className="text-muted-foreground mb-4">Sign in to apply for this project</p>
                     <Link to={`/auth?redirect=/project/${id}`}><Button size="lg">Sign In to Apply</Button></Link>
                   </div>
-                ) : profile?.user_status !== "approved" && !["super_admin", "state_admin", "admin"].includes(profile?.user_status || "") ? (
+                ) : !isUserApproved ? (
                   <div className="text-center py-8">
                     <div className="h-12 w-12 rounded-full bg-yellow-500/10 flex items-center justify-center mx-auto mb-3">
                       <Loader2 className="h-6 w-6 text-yellow-600" />
