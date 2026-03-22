@@ -360,6 +360,44 @@ export default function ManageProjects() {
               </Select>
             </div>
 
+            {/* Download File Upload */}
+            <div className="border-t border-border pt-4">
+              <Label className="text-base font-semibold">Download File (for users)</Label>
+              <p className="text-xs text-muted-foreground mb-2">यूज़र के लिए डाउनलोड करने योग्य फ़ाइल अपलोड करें (PDF, Image, Doc आदि)। यह Project Detail page पर Download बटन में दिखेगा।</p>
+              <div className="space-y-2">
+                {downloadFileUrl && (
+                  <div className="flex items-center gap-2 p-2 bg-success/10 border border-success/30 rounded-lg text-sm">
+                    <FileText className="h-4 w-4 text-success shrink-0" />
+                    <a href={downloadFileUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate flex-1">{downloadFileUrl.split("/").pop()}</a>
+                    <Button type="button" variant="ghost" size="sm" className="text-xs shrink-0" onClick={() => setDownloadFileUrl("")}>Remove</Button>
+                  </div>
+                )}
+                <Button type="button" variant="outline" size="sm" className="relative" disabled={uploadingDownloadFile}>
+                  {uploadingDownloadFile ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Upload className="h-4 w-4 mr-1" />}
+                  {uploadingDownloadFile ? "Uploading..." : "Upload File"}
+                  <input
+                    type="file"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      if (file.size > 10 * 1024 * 1024) { toast.error("File must be under 10MB"); return; }
+                      setUploadingDownloadFile(true);
+                      const ext = file.name.split(".").pop();
+                      const path = `downloads/${Date.now()}_${Math.random().toString(36).slice(2, 6)}.${ext}`;
+                      const { error } = await supabase.storage.from("project-images").upload(path, file);
+                      if (error) { toast.error(error.message); setUploadingDownloadFile(false); return; }
+                      const { data: urlData } = supabase.storage.from("project-images").getPublicUrl(path);
+                      setDownloadFileUrl(urlData.publicUrl);
+                      setUploadingDownloadFile(false);
+                      toast.success("File uploaded");
+                      e.target.value = "";
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </Button>
+              </div>
+            </div>
+
             {/* Form Link */}
             <div className="border-t border-border pt-4">
               <Label className="text-base font-semibold">Form Link (External)</Label>
