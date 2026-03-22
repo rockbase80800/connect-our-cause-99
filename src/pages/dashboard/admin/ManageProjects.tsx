@@ -72,6 +72,7 @@ export default function ManageProjects() {
   const [imageUrl, setImageUrl] = useState("");
   const [about, setAbout] = useState("");
   const [status, setStatus] = useState("active");
+  const [formLink, setFormLink] = useState("");
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
