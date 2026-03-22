@@ -32,6 +32,7 @@ import ManageGallery from "./pages/dashboard/admin/ManageGallery";
 import ManageLeads from "./pages/dashboard/admin/ManageLeads";
 import ManageVideos from "./pages/dashboard/admin/ManageVideos";
 import PaymentSettings from "./pages/dashboard/admin/PaymentSettings";
+import ProjectDashboard from "./pages/dashboard/admin/ProjectDashboard";
 import CoordinatorUsers from "./pages/dashboard/coordinator/CoordinatorUsers";
 import CoordinatorMembers from "./pages/dashboard/coordinator/CoordinatorMembers";
 import Gallery from "./pages/Gallery";
@@ -85,6 +86,7 @@ const App = () => (
                 <Route path="admin/leads" element={<ManageLeads />} />
                 <Route path="admin/videos" element={<ManageVideos />} />
                 <Route path="admin/payment" element={<PaymentSettings />} />
+                <Route path="admin/project/:projectId" element={<ProjectDashboard />} />
                 <Route path="coordinator/users" element={<CoordinatorUsers />} />
                 <Route path="coordinator/members" element={<CoordinatorMembers />} />
               </Route>
